@@ -633,7 +633,7 @@ surveys_scored = apply_labels(surveys_scored,
 ```{r b_edit}
 surveys_scored_dict <- create_dictionary(surveys_scored, remove_repeated = F, use_references = F)
 
-write.csv(surveys_scored, here("outputs", "LTAW_data_scored.csv"), row.names = F)
-write.csv(surveys_scored_dict, here("outputs", "LTAW_data_scored_dict.csv"), row.names = F)
+#write.csv(surveys_scored, here("outputs", "LTAW_data_scored.csv"), row.names = F)
+#write.csv(surveys_scored_dict, here("outputs", "LTAW_data_scored_dict.csv"), row.names = F)
 ```
 
