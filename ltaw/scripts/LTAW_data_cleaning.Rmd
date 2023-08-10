@@ -409,20 +409,25 @@ table(surveys_scored$demo_ethnicity, useNA = "ifany")
 
 ```
 
-
 ## SWLS
 A total score is calculated by adding up the scores for each item. The possible range of scores is 5-35, with a score of 20 representing a neutral point on the scale. Scores between 5-9 indicate the respondent is extremely dissatisfied with life, whereas scores between 31-35 indicate the respondent is extremely satisfied.
 ```{r}
-surveys_scored <- cbind(surveys_scored, SWLS_tot = rowSums(surveys_scored[, grepl("SWLS_", names(surveys_scored))]))
+# calculate life satisfaction sum score & recode categories
+surveys_scored <- surveys_scored %>%
+  mutate(SWLS_tot = rowSums(select(., contains("SWLS_"))), # compute the sum score
+         SWLS_tot_f = case_when(5 <= SWLS_tot & SWLS_tot <= 9 ~ "Extremely Dissatisfied",  # categorize the sum score
+                                10 <= SWLS_tot & SWLS_tot <= 14 ~ "Dissatisfied",
+                                15 <= SWLS_tot & SWLS_tot <= 19 ~ "Slightly Dissatisfied",
+                                SWLS_tot == 20 ~ "Neutral",
+                                21 <= SWLS_tot & SWLS_tot <= 25 ~ "Slightly Satisfied",
+                                26 <= SWLS_tot & SWLS_tot <= 30 ~ "Satisfied",
+                                31 <= SWLS_tot & SWLS_tot <= 35 ~ "Extremely Satisfied")) %>%
+  mutate(SWLS_tot_f = as.factor(SWLS_tot_f))
 
-var_lab(surveys_scored$SWLS_tot) = "Satisfaction with Life Scale Total"
-val_lab(surveys_scored$SWLS_tot) = c("Extremely Dissatisfied" = c(5,6,7,8,9),
-                   "Dissatisfied" = c(10,11,12,13,14),
-                   "Slightly Dissatisfied" = c(15,16,17,18,19),
-                   "Neutral" = 20,
-                   "Slightly Satisfied" = c(21,22,23,24,25),
-                   "Satisfied" = c(26,27,28,29,30),
-                   "Extremely Satisfied" = c(31,32,33,34,35))
+# add variable labels
+var_lab(surveys_scored$SWLS_tot) <- "total life satisfaction score"
+var_lab(surveys_scored$SWLS_tot_f) <- "life satisfaction categories"
+
 ```
 
 ## PERMA
@@ -570,6 +575,6 @@ surveys_scored = apply_labels(surveys_scored,
 ```{r b_edit}
 surveys_scored_dict <- create_dictionary(surveys_scored, remove_repeated = F, use_references = F)
 
-#write.csv(surveys_scored, here("outputs", "LTAW_data_scored.csv"), row.names = F)
-#write.csv(surveys_scored_dict, here("outputs", "LTAW_data_scored_dict.csv"), row.names = F)
+#write.csv(surveys_scored, here("outputs", "ltaw_data_scored.csv"), row.names = F)
+#write.csv(surveys_scored_dict, here("outputs", "ltaw_data_scored_dict.csv"), row.names = F)
 ```
