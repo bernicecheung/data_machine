@@ -1,0 +1,1012 @@
+"variable","value","label","meta"
+"Consent_confirm",NA,"In this study we will ask you to record your voice while answering free-response prompts about your thoughts, feelings, activities, and memories. To confirm that you are eligible to participate, please answer the question below:
+
+
+
+Are you willing to let this study record your voice when responding to questions?","varlab"
+"Consent_confirm",1,"Yes",NA
+"Consent_confirm",0,"No",NA
+"Recording_test",NA,"Using the microphone widget below, please record the following: ""Hello, this is a test recording."" Please make sure to allow access to your device's microphone. After recording, please click on Review Recording to check that you can hear your voice playing back. If you can't hear your voice, please make sure you have allowed access to your microphone, and that your device's volume is on.
+
+
+
+
+
+
+
+
+
+You may proceed if you were able to successfully record. Were you able to hear your voice playing back on the recording?","varlab"
+"Recording_test",1,"Yes",NA
+"Recording_test",0,"No",NA
+"SWLS_1",NA,"In most ways my life is close to my ideal.","varlab"
+"SWLS_1",1,"Strongly disagree",NA
+"SWLS_1",2,"Moderately disagree",NA
+"SWLS_1",3,"Slightly disagree",NA
+"SWLS_1",4,"Neither agree nor disagree",NA
+"SWLS_1",5,"Slightly agree",NA
+"SWLS_1",6,"Moderately agree",NA
+"SWLS_1",7,"Strongly agree",NA
+"SWLS_2",NA,"The conditions of my life are excellent.","varlab"
+"SWLS_2",1,"Strongly disagree",NA
+"SWLS_2",2,"Moderately disagree",NA
+"SWLS_2",3,"Slightly disagree",NA
+"SWLS_2",4,"Neither agree nor disagree",NA
+"SWLS_2",5,"Slightly agree",NA
+"SWLS_2",6,"Moderately agree",NA
+"SWLS_2",7,"Strongly agree",NA
+"SWLS_3",NA,"I am satisfied with my life.","varlab"
+"SWLS_3",1,"Strongly disagree",NA
+"SWLS_3",2,"Moderately disagree",NA
+"SWLS_3",3,"Slightly disagree",NA
+"SWLS_3",4,"Neither agree nor disagree",NA
+"SWLS_3",5,"Slightly agree",NA
+"SWLS_3",6,"Moderately agree",NA
+"SWLS_3",7,"Strongly agree",NA
+"SWLS_4",NA,"So far I have gotten the important things I want in life.","varlab"
+"SWLS_4",1,"Strongly disagree",NA
+"SWLS_4",2,"Moderately disagree",NA
+"SWLS_4",3,"Slightly disagree",NA
+"SWLS_4",4,"Neither agree nor disagree",NA
+"SWLS_4",5,"Slightly agree",NA
+"SWLS_4",6,"Moderately agree",NA
+"SWLS_4",7,"Strongly agree",NA
+"SWLS_5",NA,"If I could live my life over, I would change almost nothing.","varlab"
+"SWLS_5",1,"Strongly disagree",NA
+"SWLS_5",2,"Moderately disagree",NA
+"SWLS_5",3,"Slightly disagree",NA
+"SWLS_5",4,"Neither agree nor disagree",NA
+"SWLS_5",5,"Slightly agree",NA
+"SWLS_5",6,"Moderately agree",NA
+"SWLS_5",7,"Strongly agree",NA
+"PERMA_1",NA,"In general, how often do you feel the following emotions? - Joyful","varlab"
+"PERMA_1",0,"Never",NA
+"PERMA_1",1,"Sometimes",NA
+"PERMA_1",2,"About half the time",NA
+"PERMA_1",3,"Most of the time",NA
+"PERMA_1",4,"Always",NA
+"PERMA_2",NA,"In general, how often do you feel the following emotions? - Anxious","varlab"
+"PERMA_2",0,"Never",NA
+"PERMA_2",1,"Sometimes",NA
+"PERMA_2",2,"About half the time",NA
+"PERMA_2",3,"Most of the time",NA
+"PERMA_2",4,"Always",NA
+"PERMA_3",NA,"In general, how often do you feel the following emotions? - Positive","varlab"
+"PERMA_3",0,"Never",NA
+"PERMA_3",1,"Sometimes",NA
+"PERMA_3",2,"About half the time",NA
+"PERMA_3",3,"Most of the time",NA
+"PERMA_3",4,"Always",NA
+"PERMA_4",NA,"In general, how often do you feel the following emotions? - Angry","varlab"
+"PERMA_4",0,"Never",NA
+"PERMA_4",1,"Sometimes",NA
+"PERMA_4",2,"About half the time",NA
+"PERMA_4",3,"Most of the time",NA
+"PERMA_4",4,"Always",NA
+"PERMA_5",NA,"In general, how often do you feel the following emotions? - Sad","varlab"
+"PERMA_5",0,"Never",NA
+"PERMA_5",1,"Sometimes",NA
+"PERMA_5",2,"About half the time",NA
+"PERMA_5",3,"Most of the time",NA
+"PERMA_5",4,"Always",NA
+"PERMA_6",NA,"In general, how often do you feel the following emotions? - Content","varlab"
+"PERMA_6",0,"Never",NA
+"PERMA_6",1,"Sometimes",NA
+"PERMA_6",2,"About half the time",NA
+"PERMA_6",3,"Most of the time",NA
+"PERMA_6",4,"Always",NA
+"PWB_1",NA,"I like most parts of my personality.","varlab"
+"PWB_1",1,"Strongly disagree",NA
+"PWB_1",2,"Somewhat disagree",NA
+"PWB_1",3,"A little disagree",NA
+"PWB_1",4,"Neither agree or disagree",NA
+"PWB_1",5,"A little agree",NA
+"PWB_1",6,"Somewhat agree",NA
+"PWB_1",7,"Strongly agree",NA
+"PWB_2",NA,"When I look at the story of my life, I am pleased with how things have turned out so far.","varlab"
+"PWB_2",1,"Strongly disagree",NA
+"PWB_2",2,"Somewhat disagree",NA
+"PWB_2",3,"A little disagree",NA
+"PWB_2",4,"Neither agree or disagree",NA
+"PWB_2",5,"A little agree",NA
+"PWB_2",6,"Somewhat agree",NA
+"PWB_2",7,"Strongly agree",NA
+"PWB_3",NA,"Some people wander aimlessly through life, but I am not one of them.","varlab"
+"PWB_3",1,"Strongly disagree",NA
+"PWB_3",2,"Somewhat disagree",NA
+"PWB_3",3,"A little disagree",NA
+"PWB_3",4,"Neither agree or disagree",NA
+"PWB_3",5,"A little agree",NA
+"PWB_3",6,"Somewhat agree",NA
+"PWB_3",7,"Strongly agree",NA
+"PWB_4",NA,"The demands of everyday life often get me down.","varlab"
+"PWB_4",1,"Strongly disagree",NA
+"PWB_4",2,"Somewhat disagree",NA
+"PWB_4",3,"A little disagree",NA
+"PWB_4",4,"Neither agree or disagree",NA
+"PWB_4",5,"A little agree",NA
+"PWB_4",6,"Somewhat agree",NA
+"PWB_4",7,"Strongly agree",NA
+"PWB_5",NA,"In many ways I feel disappointed about my achievements in life.","varlab"
+"PWB_5",1,"Strongly disagree",NA
+"PWB_5",2,"Somewhat disagree",NA
+"PWB_5",3,"A little disagree",NA
+"PWB_5",4,"Neither agree or disagree",NA
+"PWB_5",5,"A little agree",NA
+"PWB_5",6,"Somewhat agree",NA
+"PWB_5",7,"Strongly agree",NA
+"PWB_6",NA,"Maintaining close relationships has been difficult and frustrating for me.","varlab"
+"PWB_6",1,"Strongly disagree",NA
+"PWB_6",2,"Somewhat disagree",NA
+"PWB_6",3,"A little disagree",NA
+"PWB_6",4,"Neither agree or disagree",NA
+"PWB_6",5,"A little agree",NA
+"PWB_6",6,"Somewhat agree",NA
+"PWB_6",7,"Strongly agree",NA
+"PWB_7",NA,"I live life one day at a time and don't really think about the future.","varlab"
+"PWB_7",1,"Strongly disagree",NA
+"PWB_7",2,"Somewhat disagree",NA
+"PWB_7",3,"A little disagree",NA
+"PWB_7",4,"Neither agree or disagree",NA
+"PWB_7",5,"A little agree",NA
+"PWB_7",6,"Somewhat agree",NA
+"PWB_7",7,"Strongly agree",NA
+"PWB_8",NA,"In general, I feel I am in charge of the situation in which I live.","varlab"
+"PWB_8",1,"Strongly disagree",NA
+"PWB_8",2,"Somewhat disagree",NA
+"PWB_8",3,"A little disagree",NA
+"PWB_8",4,"Neither agree or disagree",NA
+"PWB_8",5,"A little agree",NA
+"PWB_8",6,"Somewhat agree",NA
+"PWB_8",7,"Strongly agree",NA
+"PWB_9",NA,"I am good at managing the responsibilities of daily life.","varlab"
+"PWB_9",1,"Strongly disagree",NA
+"PWB_9",2,"Somewhat disagree",NA
+"PWB_9",3,"A little disagree",NA
+"PWB_9",4,"Neither agree or disagree",NA
+"PWB_9",5,"A little agree",NA
+"PWB_9",6,"Somewhat agree",NA
+"PWB_9",7,"Strongly agree",NA
+"PWB_10",NA,"I sometimes feel as if I've done all there is to do in life.","varlab"
+"PWB_10",1,"Strongly disagree",NA
+"PWB_10",2,"Somewhat disagree",NA
+"PWB_10",3,"A little disagree",NA
+"PWB_10",4,"Neither agree or disagree",NA
+"PWB_10",5,"A little agree",NA
+"PWB_10",6,"Somewhat agree",NA
+"PWB_10",7,"Strongly agree",NA
+"PWB_11",NA,"For me, life has been a continuous process of learning, changing, and growth.","varlab"
+"PWB_11",1,"Strongly disagree",NA
+"PWB_11",2,"Somewhat disagree",NA
+"PWB_11",3,"A little disagree",NA
+"PWB_11",4,"Neither agree or disagree",NA
+"PWB_11",5,"A little agree",NA
+"PWB_11",6,"Somewhat agree",NA
+"PWB_11",7,"Strongly agree",NA
+"Attention1",NA,"This is an attention check - please answer ""A little disagree""","varlab"
+"Attention1",1,"Strongly disagree",NA
+"Attention1",2,"Somewhat disagree",NA
+"Attention1",3,"A little disagree",NA
+"Attention1",4,"Neither agree or disagree",NA
+"Attention1",5,"A little agree",NA
+"Attention1",6,"Somewhat agree",NA
+"Attention1",7,"Strongly agree",NA
+"PWB_12",NA,"I think it is important to have new experiences that challenge how I think about myself and the world.","varlab"
+"PWB_12",1,"Strongly disagree",NA
+"PWB_12",2,"Somewhat disagree",NA
+"PWB_12",3,"A little disagree",NA
+"PWB_12",4,"Neither agree or disagree",NA
+"PWB_12",5,"A little agree",NA
+"PWB_12",6,"Somewhat agree",NA
+"PWB_12",7,"Strongly agree",NA
+"PWB_13",NA,"People would describe me as a giving person, willing to share my time with others.","varlab"
+"PWB_13",1,"Strongly disagree",NA
+"PWB_13",2,"Somewhat disagree",NA
+"PWB_13",3,"A little disagree",NA
+"PWB_13",4,"Neither agree or disagree",NA
+"PWB_13",5,"A little agree",NA
+"PWB_13",6,"Somewhat agree",NA
+"PWB_13",7,"Strongly agree",NA
+"PWB_14",NA,"I gave up trying to make big improvements or changes in my life a long time ago.","varlab"
+"PWB_14",1,"Strongly disagree",NA
+"PWB_14",2,"Somewhat disagree",NA
+"PWB_14",3,"A little disagree",NA
+"PWB_14",4,"Neither agree or disagree",NA
+"PWB_14",5,"A little agree",NA
+"PWB_14",6,"Somewhat agree",NA
+"PWB_14",7,"Strongly agree",NA
+"PWB_15",NA,"I tend to be influenced by people with strong opinions.","varlab"
+"PWB_15",1,"Strongly disagree",NA
+"PWB_15",2,"Somewhat disagree",NA
+"PWB_15",3,"A little disagree",NA
+"PWB_15",4,"Neither agree or disagree",NA
+"PWB_15",5,"A little agree",NA
+"PWB_15",6,"Somewhat agree",NA
+"PWB_15",7,"Strongly agree",NA
+"PWB_16",NA,"I have not experienced many warm and trusting relationships with others.","varlab"
+"PWB_16",1,"Strongly disagree",NA
+"PWB_16",2,"Somewhat disagree",NA
+"PWB_16",3,"A little disagree",NA
+"PWB_16",4,"Neither agree or disagree",NA
+"PWB_16",5,"A little agree",NA
+"PWB_16",6,"Somewhat agree",NA
+"PWB_16",7,"Strongly agree",NA
+"PWB_17",NA,"I have confidence in my own opinions, even if they are different from the way most other people think.","varlab"
+"PWB_17",1,"Strongly disagree",NA
+"PWB_17",2,"Somewhat disagree",NA
+"PWB_17",3,"A little disagree",NA
+"PWB_17",4,"Neither agree or disagree",NA
+"PWB_17",5,"A little agree",NA
+"PWB_17",6,"Somewhat agree",NA
+"PWB_17",7,"Strongly agree",NA
+"PWB_18",NA,"I judge myself by what I think is important, not by the values of what others think is important.","varlab"
+"PWB_18",1,"Strongly disagree",NA
+"PWB_18",2,"Somewhat disagree",NA
+"PWB_18",3,"A little disagree",NA
+"PWB_18",4,"Neither agree or disagree",NA
+"PWB_18",5,"A little agree",NA
+"PWB_18",6,"Somewhat agree",NA
+"PWB_18",7,"Strongly agree",NA
+"PWB_0",NA,"In general, I feel good about my well-being.","varlab"
+"PWB_0",1,"Strongly disagree",NA
+"PWB_0",2,"Somewhat disagree",NA
+"PWB_0",3,"A little disagree",NA
+"PWB_0",4,"Neither agree or disagree",NA
+"PWB_0",5,"A little agree",NA
+"PWB_0",6,"Somewhat agree",NA
+"PWB_0",7,"Strongly agree",NA
+"ANIQ_1",NA,"My memories are like stories that help me understand my identity.","varlab"
+"ANIQ_1",0,"0
+Completely disagree",NA
+"ANIQ_1",1,"1",NA
+"ANIQ_1",2,"2",NA
+"ANIQ_1",3,"3",NA
+"ANIQ_1",4,"4",NA
+"ANIQ_1",5,"5",NA
+"ANIQ_1",6,"6",NA
+"ANIQ_1",7,"7",NA
+"ANIQ_1",8,"8",NA
+"ANIQ_1",9,"9",NA
+"ANIQ_1",10,"10
+Completely agree",NA
+"ANIQ_2",NA,"I use my stories about my life to work out the kind of person I am.","varlab"
+"ANIQ_2",0,"0
+Completely disagree",NA
+"ANIQ_2",1,"1",NA
+"ANIQ_2",2,"2",NA
+"ANIQ_2",3,"3",NA
+"ANIQ_2",4,"4",NA
+"ANIQ_2",5,"5",NA
+"ANIQ_2",6,"6",NA
+"ANIQ_2",7,"7",NA
+"ANIQ_2",8,"8",NA
+"ANIQ_2",9,"9",NA
+"ANIQ_2",10,"10
+Completely agree",NA
+"ANIQ_3",NA,"The experiences from my past make the story of who I am.","varlab"
+"ANIQ_3",0,"0
+Completely disagree",NA
+"ANIQ_3",1,"1",NA
+"ANIQ_3",2,"2",NA
+"ANIQ_3",3,"3",NA
+"ANIQ_3",4,"4",NA
+"ANIQ_3",5,"5",NA
+"ANIQ_3",6,"6",NA
+"ANIQ_3",7,"7",NA
+"ANIQ_3",8,"8",NA
+"ANIQ_3",9,"9",NA
+"ANIQ_3",10,"10
+Completely agree",NA
+"ANIQ_4",NA,"My sense of self is embedded in memories of my life.","varlab"
+"ANIQ_4",0,"0
+Completely disagree",NA
+"ANIQ_4",1,"1",NA
+"ANIQ_4",2,"2",NA
+"ANIQ_4",3,"3",NA
+"ANIQ_4",4,"4",NA
+"ANIQ_4",5,"5",NA
+"ANIQ_4",6,"6",NA
+"ANIQ_4",7,"7",NA
+"ANIQ_4",8,"8",NA
+"ANIQ_4",9,"9",NA
+"ANIQ_4",10,"10 Completely agree",NA
+"ANIQ_5",NA,"When I think over my life, I can observe how there is a story that tells me who I am.","varlab"
+"ANIQ_5",0,"0 Completely disagree",NA
+"ANIQ_5",11,"1",NA
+"ANIQ_5",1,"2",NA
+"ANIQ_5",2,"3",NA
+"ANIQ_5",3,"4",NA
+"ANIQ_5",4,"5",NA
+"ANIQ_5",5,"6",NA
+"ANIQ_5",6,"7",NA
+"ANIQ_5",7,"8",NA
+"ANIQ_5",8,"9",NA
+"ANIQ_5",10,"10
+Completely agree",NA
+"ANIQ_6",NA,"I can put the events of my life in order of when they occurred.","varlab"
+"ANIQ_6",0,"0
+Completely disagree",NA
+"ANIQ_6",1,"1",NA
+"ANIQ_6",2,"2",NA
+"ANIQ_6",3,"3",NA
+"ANIQ_6",4,"4",NA
+"ANIQ_6",5,"5",NA
+"ANIQ_6",6,"6",NA
+"ANIQ_6",7,"7",NA
+"ANIQ_6",8,"8",NA
+"ANIQ_6",9,"9",NA
+"ANIQ_6",10,"10 Completely agree",NA
+"ANIQ_7",NA,"Knowing the order in which my life events occurred is easy for me.","varlab"
+"ANIQ_7",0,"0 Completely disagree",NA
+"ANIQ_7",11,"1",NA
+"ANIQ_7",1,"2",NA
+"ANIQ_7",2,"3",NA
+"ANIQ_7",3,"4",NA
+"ANIQ_7",4,"5",NA
+"ANIQ_7",5,"6",NA
+"ANIQ_7",6,"7",NA
+"ANIQ_7",7,"8",NA
+"ANIQ_7",8,"9",NA
+"ANIQ_7",10,"10  Completely agree",NA
+"ANIQ_8",NA,"When I’m thinking back over experiences I have had, I know when they occurred in my life.","varlab"
+"ANIQ_8",0,"0
+Completely disagree",NA
+"ANIQ_8",1,"1",NA
+"ANIQ_8",2,"2",NA
+"ANIQ_8",3,"3",NA
+"ANIQ_8",4,"4",NA
+"ANIQ_8",5,"5",NA
+"ANIQ_8",6,"6",NA
+"ANIQ_8",7,"7",NA
+"ANIQ_8",8,"8",NA
+"ANIQ_8",9,"9",NA
+"ANIQ_8",10,"10 Completely agree",NA
+"ANIQ_9",NA,"I have a good awareness of the sequence in which events and experiences in my life happened.","varlab"
+"ANIQ_9",0,"0
+Completely disagree",NA
+"ANIQ_9",1,"1",NA
+"ANIQ_9",2,"2",NA
+"ANIQ_9",3,"3",NA
+"ANIQ_9",4,"4",NA
+"ANIQ_9",5,"5",NA
+"ANIQ_9",6,"6",NA
+"ANIQ_9",7,"7",NA
+"ANIQ_9",8,"8",NA
+"ANIQ_9",9,"9",NA
+"ANIQ_9",10,"10  Completely agree",NA
+"ANIQ_10",NA,"When I think about experiences in my past, I find it easy to remember what came before and after them.","varlab"
+"ANIQ_10",0,"0
+Completely disagree",NA
+"ANIQ_10",1,"1",NA
+"ANIQ_10",2,"2",NA
+"ANIQ_10",3,"3",NA
+"ANIQ_10",4,"4",NA
+"ANIQ_10",5,"5",NA
+"ANIQ_10",6,"6",NA
+"ANIQ_10",7,"7",NA
+"ANIQ_10",8,"8",NA
+"ANIQ_10",9,"9",NA
+"ANIQ_10",10,"10  Completely agree",NA
+"ANIQ_11",NA,"I understand how the story of my life has unfolded.","varlab"
+"ANIQ_11",0,"0
+Completely disagree",NA
+"ANIQ_11",1,"1",NA
+"ANIQ_11",2,"2",NA
+"ANIQ_11",3,"3",NA
+"ANIQ_11",4,"4",NA
+"ANIQ_11",5,"5",NA
+"ANIQ_11",6,"6",NA
+"ANIQ_11",7,"7",NA
+"ANIQ_11",8,"8",NA
+"ANIQ_11",9,"9",NA
+"ANIQ_11",10,"1 Completely agree",NA
+"ANIQ_12",NA,"I understand how my life experiences are associated with one another.","varlab"
+"ANIQ_12",0,"0
+Completely disagree",NA
+"ANIQ_12",1,"1",NA
+"ANIQ_12",2,"2",NA
+"ANIQ_12",3,"3",NA
+"ANIQ_12",4,"4",NA
+"ANIQ_12",5,"5",NA
+"ANIQ_12",6,"6",NA
+"ANIQ_12",7,"7",NA
+"ANIQ_12",8,"8",NA
+"ANIQ_12",9,"9",NA
+"ANIQ_12",10,"10 Completely agree",NA
+"ANIQ_13",NA,"Things that have happened over the course of my life are meaningfully tied together.","varlab"
+"ANIQ_13",0,"0
+Completely disagree",NA
+"ANIQ_13",1,"1",NA
+"ANIQ_13",2,"2",NA
+"ANIQ_13",3,"3",NA
+"ANIQ_13",4,"4",NA
+"ANIQ_13",5,"5",NA
+"ANIQ_13",6,"6",NA
+"ANIQ_13",7,"7",NA
+"ANIQ_13",8,"8",NA
+"ANIQ_13",9,"9",NA
+"ANIQ_13",10,"10  Completely agree",NA
+"ANIQ_14",NA,"I am aware of how events in my life are interrelated.","varlab"
+"ANIQ_14",0,"0
+Completely disagree",NA
+"ANIQ_14",1,"1",NA
+"ANIQ_14",2,"2",NA
+"ANIQ_14",3,"3",NA
+"ANIQ_14",4,"4",NA
+"ANIQ_14",5,"5",NA
+"ANIQ_14",6,"6",NA
+"ANIQ_14",7,"7",NA
+"ANIQ_14",8,"8",NA
+"ANIQ_14",9,"9",NA
+"ANIQ_14",10,"10  Completely agree",NA
+"ANIQ_15",NA,"I can understand how experiences in my life have occurred, with one thing leading to another.","varlab"
+"ANIQ_15",0,"0  Completely disagree",NA
+"ANIQ_15",1,"1",NA
+"ANIQ_15",2,"2",NA
+"ANIQ_15",3,"3",NA
+"ANIQ_15",4,"4",NA
+"ANIQ_15",5,"5",NA
+"ANIQ_15",6,"6",NA
+"ANIQ_15",7,"7",NA
+"ANIQ_15",8,"8",NA
+"ANIQ_15",9,"9",NA
+"ANIQ_15",10,"10  Completely agree",NA
+"ANIQ_16",NA,"When I think or talk about experiences in my past I can see themes about the kind of person that I am.","varlab"
+"ANIQ_16",0,"0 Completely disagree",NA
+"ANIQ_16",1,"1",NA
+"ANIQ_16",2,"2",NA
+"ANIQ_16",3,"3",NA
+"ANIQ_16",4,"4",NA
+"ANIQ_16",5,"5",NA
+"ANIQ_16",6,"6",NA
+"ANIQ_16",7,"7",NA
+"ANIQ_16",8,"8",NA
+"ANIQ_16",9,"9",NA
+"ANIQ_16",10,"10 Completely agree",NA
+"ANIQ_17",NA,"I can perceive common themes about who I am across memories of my life.","varlab"
+"ANIQ_17",0,"0 Completely disagree",NA
+"ANIQ_17",1,"1",NA
+"ANIQ_17",2,"2",NA
+"ANIQ_17",3,"3",NA
+"ANIQ_17",4,"4",NA
+"ANIQ_17",5,"5",NA
+"ANIQ_17",6,"6",NA
+"ANIQ_17",7,"7",NA
+"ANIQ_17",8,"8",NA
+"ANIQ_17",9,"9",NA
+"ANIQ_17",10,"10 Completely agree",NA
+"ANIQ_18",NA,"I notice themes in the personal memories of my life that relate to the kind of person that I am.","varlab"
+"ANIQ_18",0,"0 Completely disagree",NA
+"ANIQ_18",1,"1",NA
+"ANIQ_18",2,"2",NA
+"ANIQ_18",3,"3",NA
+"ANIQ_18",4,"4",NA
+"ANIQ_18",5,"5",NA
+"ANIQ_18",6,"6",NA
+"ANIQ_18",7,"7",NA
+"ANIQ_18",8,"8",NA
+"ANIQ_18",9,"9",NA
+"ANIQ_18",10,"10 Completely agree",NA
+"ANIQ_19",NA,"When I recall events and experiences across my lifetime, I can see consistent patterns in the way that I think, feel, and act.","varlab"
+"ANIQ_19",0,"0 Completely disagree",NA
+"ANIQ_19",1,"1",NA
+"ANIQ_19",2,"2",NA
+"ANIQ_19",3,"3",NA
+"ANIQ_19",4,"4",NA
+"ANIQ_19",5,"5",NA
+"ANIQ_19",6,"6",NA
+"ANIQ_19",7,"7",NA
+"ANIQ_19",8,"8",NA
+"ANIQ_19",9,"9",NA
+"ANIQ_19",10,"10 Completely agree",NA
+"ANIQ_20",NA,"There are clear themes relating to who I am that can be found in my personal memories.","varlab"
+"ANIQ_20",0,"0 Completely disagree",NA
+"ANIQ_20",1,"1",NA
+"ANIQ_20",2,"2",NA
+"ANIQ_20",3,"3",NA
+"ANIQ_20",4,"4",NA
+"ANIQ_20",5,"5",NA
+"ANIQ_20",6,"6",NA
+"ANIQ_20",7,"7",NA
+"ANIQ_20",8,"8",NA
+"ANIQ_20",9,"9",NA
+"ANIQ_20",10,"10 Completely agree",NA
+"ANIQ_0",NA,"In general, I feel like I use my memories to better understand myself.","varlab"
+"ANIQ_0",0,"0
+Completely disagree",NA
+"ANIQ_0",11,"1",NA
+"ANIQ_0",1,"2",NA
+"ANIQ_0",2,"3",NA
+"ANIQ_0",3,"4",NA
+"ANIQ_0",4,"5",NA
+"ANIQ_0",5,"6",NA
+"ANIQ_0",6,"7",NA
+"ANIQ_0",7,"8",NA
+"ANIQ_0",8,"9",NA
+"ANIQ_0",9,"10
+Completely agree",NA
+"WBpro_Autonomy",NA,"I feel free to make my own choices.","varlab"
+"WBpro_Autonomy",1,"Completely disagree",NA
+"WBpro_Autonomy",2,"Strongly disagree",NA
+"WBpro_Autonomy",3,"Disagree",NA
+"WBpro_Autonomy",4,"Somewhat disagree",NA
+"WBpro_Autonomy",5,"Neither agree nor disagree",NA
+"WBpro_Autonomy",6,"Somewhat agree",NA
+"WBpro_Autonomy",7,"Agree",NA
+"WBpro_Autonomy",8,"Strongly agree",NA
+"WBpro_Autonomy",9,"Completely agree",NA
+"WBpro_Clear Thinking",NA,"I am easily able to concentrate when necessary.","varlab"
+"WBpro_Clear Thinking",1,"Completely disagree",NA
+"WBpro_Clear Thinking",2,"Strongly disagree",NA
+"WBpro_Clear Thinking",3,"Disagree",NA
+"WBpro_Clear Thinking",4,"Somewhat disagree",NA
+"WBpro_Clear Thinking",5,"Neither agree nor disagree",NA
+"WBpro_Clear Thinking",6,"Somewhat agree",NA
+"WBpro_Clear Thinking",7,"Agree",NA
+"WBpro_Clear Thinking",8,"Strongly agree",NA
+"WBpro_Clear Thinking",9,"Completely agree",NA
+"WBpro_Competence",NA,"Most things I do, I do well.","varlab"
+"WBpro_Competence",1,"Completely disagree",NA
+"WBpro_Competence",2,"Strongly disagree",NA
+"WBpro_Competence",3,"Disagree",NA
+"WBpro_Competence",4,"Somewhat disagree",NA
+"WBpro_Competence",5,"Neither agree nor disagree",NA
+"WBpro_Competence",6,"Somewhat agree",NA
+"WBpro_Competence",7,"Agree",NA
+"WBpro_Competence",8,"Strongly agree",NA
+"WBpro_Competence",9,"Completely agree",NA
+"WBpro_Emotional Stability",NA,"I do not get easily upset.","varlab"
+"WBpro_Emotional Stability",1,"Completely disagree",NA
+"WBpro_Emotional Stability",2,"Strongly disagree",NA
+"WBpro_Emotional Stability",3,"Disagree",NA
+"WBpro_Emotional Stability",4,"Somewhat disagree",NA
+"WBpro_Emotional Stability",5,"Neither agree nor disagree",NA
+"WBpro_Emotional Stability",6,"Somewhat agree",NA
+"WBpro_Emotional Stability",7,"Agree",NA
+"WBpro_Emotional Stability",8,"Strongly agree",NA
+"WBpro_Emotional Stability",9,"Completely agree",NA
+"WBpro_Empathy",NA,"I easily get caught up in other people's feelings.","varlab"
+"WBpro_Empathy",1,"Completely disagree",NA
+"WBpro_Empathy",2,"Strongly disagree",NA
+"WBpro_Empathy",3,"Disagree",NA
+"WBpro_Empathy",4,"Somewhat disagree",NA
+"WBpro_Empathy",5,"Neither agree nor disagree",NA
+"WBpro_Empathy",6,"Somewhat agree",NA
+"WBpro_Empathy",7,"Agree",NA
+"WBpro_Empathy",8,"Strongly agree",NA
+"WBpro_Empathy",9,"Completely agree",NA
+"WBpro_Engagement",NA,"Most of the time I am really interested in what I am doing.","varlab"
+"WBpro_Engagement",1,"Completely disagree",NA
+"WBpro_Engagement",2,"Strongly disagree",NA
+"WBpro_Engagement",3,"Disagree",NA
+"WBpro_Engagement",4,"Somewhat disagree",NA
+"WBpro_Engagement",5,"Neither agree nor disagree",NA
+"WBpro_Engagement",6,"Somewhat agree",NA
+"WBpro_Engagement",7,"Agree",NA
+"WBpro_Engagement",8,"Strongly agree",NA
+"WBpro_Engagement",9,"Completely agree",NA
+"WBpro_Meaning",NA,"My life has a clear sense of purpose.","varlab"
+"WBpro_Meaning",1,"Completely disagree",NA
+"WBpro_Meaning",2,"Strongly disagree",NA
+"WBpro_Meaning",3,"Disagree",NA
+"WBpro_Meaning",4,"Somewhat disagree",NA
+"WBpro_Meaning",5,"Neither agree nor disagree",NA
+"WBpro_Meaning",6,"Somewhat agree",NA
+"WBpro_Meaning",7,"Agree",NA
+"WBpro_Meaning",8,"Strongly agree",NA
+"WBpro_Meaning",9,"Completely agree",NA
+"WBpro_Optimism",NA,"I feel very optimistic about my future.","varlab"
+"WBpro_Optimism",1,"Completely disagree",NA
+"WBpro_Optimism",2,"Strongly disagree",NA
+"WBpro_Optimism",3,"Disagree",NA
+"WBpro_Optimism",4,"Somewhat disagree",NA
+"WBpro_Optimism",5,"Neither agree nor disagree",NA
+"WBpro_Optimism",6,"Somewhat agree",NA
+"WBpro_Optimism",7,"Agree",NA
+"WBpro_Optimism",8,"Strongly agree",NA
+"WBpro_Optimism",9,"Completely agree",NA
+"WBpro_Positive Emotions",NA,"All things considered, I would describe myself as a happy person.","varlab"
+"WBpro_Positive Emotions",1,"Completely disagree",NA
+"WBpro_Positive Emotions",2,"Strongly disagree",NA
+"WBpro_Positive Emotions",3,"Disagree",NA
+"WBpro_Positive Emotions",4,"Somewhat disagree",NA
+"WBpro_Positive Emotions",5,"Neither agree nor disagree",NA
+"WBpro_Positive Emotions",6,"Somewhat agree",NA
+"WBpro_Positive Emotions",7,"Agree",NA
+"WBpro_Positive Emotions",8,"Strongly agree",NA
+"WBpro_Positive Emotions",9,"Completely agree",NA
+"WBpro_Positive Relationships",NA,"There are people in my life who really care about me.","varlab"
+"WBpro_Positive Relationships",1,"Completely disagree",NA
+"WBpro_Positive Relationships",2,"Strongly disagree",NA
+"WBpro_Positive Relationships",3,"Disagree",NA
+"WBpro_Positive Relationships",4,"Somewhat disagree",NA
+"WBpro_Positive Relationships",5,"Neither agree nor disagree",NA
+"WBpro_Positive Relationships",6,"Somewhat agree",NA
+"WBpro_Positive Relationships",7,"Agree",NA
+"WBpro_Positive Relationships",8,"Strongly agree",NA
+"WBpro_Positive Relationships",9,"Completely agree",NA
+"WBpro_Prosocial Behavior",NA,"I willingly give of my time to others in need.","varlab"
+"WBpro_Prosocial Behavior",1,"Completely disagree",NA
+"WBpro_Prosocial Behavior",2,"Strongly disagree",NA
+"WBpro_Prosocial Behavior",3,"Disagree",NA
+"WBpro_Prosocial Behavior",4,"Somewhat disagree",NA
+"WBpro_Prosocial Behavior",5,"Neither agree nor disagree",NA
+"WBpro_Prosocial Behavior",6,"Somewhat agree",NA
+"WBpro_Prosocial Behavior",7,"Agree",NA
+"WBpro_Prosocial Behavior",8,"Strongly agree",NA
+"WBpro_Prosocial Behavior",9,"Completely agree",NA
+"WBpro_Resilience",NA,"I quickly get over and recover from significant life difficulties.","varlab"
+"WBpro_Resilience",1,"Completely disagree",NA
+"WBpro_Resilience",2,"Strongly disagree",NA
+"WBpro_Resilience",3,"Disagree",NA
+"WBpro_Resilience",4,"Somewhat disagree",NA
+"WBpro_Resilience",5,"Neither agree nor disagree",NA
+"WBpro_Resilience",6,"Somewhat agree",NA
+"WBpro_Resilience",7,"Agree",NA
+"WBpro_Resilience",8,"Strongly agree",NA
+"WBpro_Resilience",9,"Completely agree",NA
+"WBpro_Self-Acceptance",NA,"I can admit my shortcomings without shame or embarrassment.","varlab"
+"WBpro_Self-Acceptance",1,"Completely disagree",NA
+"WBpro_Self-Acceptance",2,"Strongly disagree",NA
+"WBpro_Self-Acceptance",3,"Disagree",NA
+"WBpro_Self-Acceptance",4,"Somewhat disagree",NA
+"WBpro_Self-Acceptance",5,"Neither agree nor disagree",NA
+"WBpro_Self-Acceptance",6,"Somewhat agree",NA
+"WBpro_Self-Acceptance",7,"Agree",NA
+"WBpro_Self-Acceptance",8,"Strongly agree",NA
+"WBpro_Self-Acceptance",9,"Completely agree",NA
+"WBpro_Self-Esteem",NA,"I feel that I’m a person of worth.","varlab"
+"WBpro_Self-Esteem",1,"Completely disagree",NA
+"WBpro_Self-Esteem",2,"Strongly disagree",NA
+"WBpro_Self-Esteem",3,"Disagree",NA
+"WBpro_Self-Esteem",4,"Somewhat disagree",NA
+"WBpro_Self-Esteem",5,"Neither agree nor disagree",NA
+"WBpro_Self-Esteem",6,"Somewhat agree",NA
+"WBpro_Self-Esteem",7,"Agree",NA
+"WBpro_Self-Esteem",8,"Strongly agree",NA
+"WBpro_Self-Esteem",9,"Completely agree",NA
+"WBpro_Vitality",NA,"I generally have a lot of energy.","varlab"
+"WBpro_Vitality",1,"Completely disagree",NA
+"WBpro_Vitality",2,"Strongly disagree",NA
+"WBpro_Vitality",3,"Disagree",NA
+"WBpro_Vitality",4,"Somewhat disagree",NA
+"WBpro_Vitality",5,"Neither agree nor disagree",NA
+"WBpro_Vitality",6,"Somewhat agree",NA
+"WBpro_Vitality",7,"Agree",NA
+"WBpro_Vitality",8,"Strongly agree",NA
+"WBpro_Vitality",9,"Completely agree",NA
+"SRIS12_1",NA,"I am very interested in examining what I think about.","varlab"
+"SRIS12_1",1,"Strongly disagree",NA
+"SRIS12_1",2,"Somewhat disagree",NA
+"SRIS12_1",3,"A little disagree",NA
+"SRIS12_1",4,"Neither agree or disagree",NA
+"SRIS12_1",5,"A little agree",NA
+"SRIS12_1",6,"Somewhat agree",NA
+"SRIS12_1",7,"Strongly agree",NA
+"SRIS12_2",NA,"My behavior often puzzles me.","varlab"
+"SRIS12_2",1,"Strongly disagree",NA
+"SRIS12_2",2,"Somewhat disagree",NA
+"SRIS12_2",3,"A little disagree",NA
+"SRIS12_2",4,"Neither agree or disagree",NA
+"SRIS12_2",5,"A little agree",NA
+"SRIS12_2",6,"Somewhat agree",NA
+"SRIS12_2",7,"Strongly agree",NA
+"SRIS12_3",NA,"I’m often aware that I’m having a feeling, but I often don’t quite know what it is.","varlab"
+"SRIS12_3",1,"Strongly disagree",NA
+"SRIS12_3",2,"Somewhat disagree",NA
+"SRIS12_3",3,"A little disagree",NA
+"SRIS12_3",4,"Neither agree or disagree",NA
+"SRIS12_3",5,"A little agree",NA
+"SRIS12_3",6,"Somewhat agree",NA
+"SRIS12_3",7,"Strongly agree",NA
+"SRIS12_4",NA,"I frequently examine my feelings.","varlab"
+"SRIS12_4",1,"Strongly disagree",NA
+"SRIS12_4",2,"Somewhat disagree",NA
+"SRIS12_4",3,"A little disagree",NA
+"SRIS12_4",4,"Neither agree or disagree",NA
+"SRIS12_4",5,"A little agree",NA
+"SRIS12_4",6,"Somewhat agree",NA
+"SRIS12_4",7,"Strongly agree",NA
+"SRIS12_5",NA,"I usually know why I feel the way I do.","varlab"
+"SRIS12_5",1,"Strongly disagree",NA
+"SRIS12_5",2,"Somewhat disagree",NA
+"SRIS12_5",3,"A little disagree",NA
+"SRIS12_5",4,"Neither agree or disagree",NA
+"SRIS12_5",5,"A little agree",NA
+"SRIS12_5",6,"Somewhat agree",NA
+"SRIS12_5",7,"Strongly agree",NA
+"SRIS12_6",NA,"It is important to me to try to understand what my feelings mean.","varlab"
+"SRIS12_6",1,"Strongly disagree",NA
+"SRIS12_6",2,"Somewhat disagree",NA
+"SRIS12_6",3,"A little disagree",NA
+"SRIS12_6",4,"Neither agree or disagree",NA
+"SRIS12_6",5,"A little agree",NA
+"SRIS12_6",6,"Somewhat agree",NA
+"SRIS12_6",7,"Strongly agree",NA
+"SRIS12_7",NA,"I’m often confused about the way that I really feel about things.","varlab"
+"SRIS12_7",1,"Strongly disagree",NA
+"SRIS12_7",2,"Somewhat disagree",NA
+"SRIS12_7",3,"A little disagree",NA
+"SRIS12_7",4,"Neither agree or disagree",NA
+"SRIS12_7",5,"A little agree",NA
+"SRIS12_7",6,"Somewhat agree",NA
+"SRIS12_7",7,"Strongly agree",NA
+"SRIS12_8",NA,"Often I find it difficult to make sense of the way I feel about things.","varlab"
+"SRIS12_8",1,"Strongly disagree",NA
+"SRIS12_8",2,"Somewhat disagree",NA
+"SRIS12_8",3,"A little disagree",NA
+"SRIS12_8",4,"Neither agree or disagree",NA
+"SRIS12_8",5,"A little agree",NA
+"SRIS12_8",6,"Somewhat agree",NA
+"SRIS12_8",7,"Strongly agree",NA
+"SRIS12_9",NA,"Thinking about my thoughts makes me more confused.","varlab"
+"SRIS12_9",1,"Strongly disagree",NA
+"SRIS12_9",2,"Somewhat disagree",NA
+"SRIS12_9",3,"A little disagree",NA
+"SRIS12_9",4,"Neither agree or disagree",NA
+"SRIS12_9",5,"A little agree",NA
+"SRIS12_9",6,"Somewhat agree",NA
+"SRIS12_9",7,"Strongly agree",NA
+"SRIS12_10",NA,"I frequently take time to reflect on my thoughts.","varlab"
+"SRIS12_10",1,"Strongly disagree",NA
+"SRIS12_10",2,"Somewhat disagree",NA
+"SRIS12_10",3,"A little disagree",NA
+"SRIS12_10",4,"Neither agree or disagree",NA
+"SRIS12_10",5,"A little agree",NA
+"SRIS12_10",6,"Somewhat agree",NA
+"SRIS12_10",7,"Strongly agree",NA
+"SRIS12_11",NA,"It is important to me to evaluate the things that I do.","varlab"
+"SRIS12_11",1,"Strongly disagree",NA
+"SRIS12_11",2,"Somewhat disagree",NA
+"SRIS12_11",3,"A little disagree",NA
+"SRIS12_11",4,"Neither agree or disagree",NA
+"SRIS12_11",5,"A little agree",NA
+"SRIS12_11",6,"Somewhat agree",NA
+"SRIS12_11",7,"Strongly agree",NA
+"SRIS12_12",NA,"I often think about the way I feel about things.","varlab"
+"SRIS12_12",1,"Strongly disagree",NA
+"SRIS12_12",2,"Somewhat disagree",NA
+"SRIS12_12",3,"A little disagree",NA
+"SRIS12_12",4,"Neither agree or disagree",NA
+"SRIS12_12",5,"A little agree",NA
+"SRIS12_12",6,"Somewhat agree",NA
+"SRIS12_12",7,"Strongly agree",NA
+"PromptNarr_1_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptNarr_1_confirm",1,"Yes",NA
+"PromptNarr_1_confirm",2,"No",NA
+"PromptNarr_2_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptNarr_2_confirm",1,"Yes",NA
+"PromptNarr_2_confirm",2,"No",NA
+"PromptNarr_3_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptNarr_3_confirm",1,"Yes",NA
+"PromptNarr_3_confirm",2,"No",NA
+"PromptNarr_4_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptNarr_4_confirm",1,"Yes",NA
+"PromptNarr_4_confirm",2,"No",NA
+"PromptNarr_5_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptNarr_5_confirm",1,"Yes",NA
+"PromptNarr_5_confirm",2,"No",NA
+"PromptWB_1_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_1_confirm",1,"Yes",NA
+"PromptWB_1_confirm",2,"No",NA
+"PromptWB_2_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_2_confirm",1,"Yes",NA
+"PromptWB_2_confirm",2,"No",NA
+"PromptWB_3_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_3_confirm",1,"Yes",NA
+"PromptWB_3_confirm",2,"No",NA
+"PromptWB_4_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_4_confirm",1,"Yes",NA
+"PromptWB_4_confirm",2,"No",NA
+"PromptWB_5_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_5_confirm",1,"Yes",NA
+"PromptWB_5_confirm",2,"No",NA
+"PromptWB_6_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_6_confirm",1,"Yes",NA
+"PromptWB_6_confirm",2,"No",NA
+"PromptWB_7_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_7_confirm",1,"Yes",NA
+"PromptWB_7_confirm",2,"No",NA
+"PromptWB_8_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_8_confirm",1,"Yes",NA
+"PromptWB_8_confirm",2,"No",NA
+"PromptWB_9_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_9_confirm",1,"Yes",NA
+"PromptWB_9_confirm",2,"No",NA
+"PromptWB_10_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_10_confirm",1,"Yes",NA
+"PromptWB_10_confirm",2,"No",NA
+"PromptWB_11_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_11_confirm",1,"Yes",NA
+"PromptWB_11_confirm",2,"No",NA
+"PromptWB_12_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_12_confirm",1,"Yes",NA
+"PromptWB_12_confirm",2,"No",NA
+"PromptWB_13_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_13_confirm",1,"Yes",NA
+"PromptWB_13_confirm",2,"No",NA
+"PromptWB_14_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_14_confirm",1,"Yes",NA
+"PromptWB_14_confirm",2,"No",NA
+"PromptWB_15_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptWB_15_confirm",1,"Yes",NA
+"PromptWB_15_confirm",2,"No",NA
+"PromptGoal_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
+"PromptGoal_confirm",1,"Yes",NA
+"PromptGoal_confirm",2,"No",NA
+"ResourceHelp_1",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Educational or learning materials","varlab"
+"ResourceHelp_1",1,"Educational or learning materials",NA
+"ResourceHelp_2",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Financial resources","varlab"
+"ResourceHelp_2",1,"Financial resources",NA
+"ResourceHelp_3",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Friends or family","varlab"
+"ResourceHelp_3",1,"Friends or family",NA
+"ResourceHelp_4",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Mentorship or supervision","varlab"
+"ResourceHelp_4",1,"Mentorship or supervision",NA
+"ResourceHelp_5",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Mobile apps for goal/wellness tracking","varlab"
+"ResourceHelp_5",1,"Mobile apps for goal/wellness tracking",NA
+"ResourceHelp_7",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Online communities","varlab"
+"ResourceHelp_7",1,"Online communities",NA
+"ResourceHelp_8",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Religious or spiritual communities","varlab"
+"ResourceHelp_8",1,"Religious or spiritual communities",NA
+"ResourceHelp_9",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Something else not on this list","varlab"
+"ResourceHelp_9",1,"Something else not on this list",NA
+"ContentHelp_1",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Goal setting","varlab"
+"ContentHelp_1",1,"Goal setting",NA
+"ContentHelp_2",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Habit building","varlab"
+"ContentHelp_2",1,"Habit building",NA
+"ContentHelp_3",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Problem solving","varlab"
+"ContentHelp_3",1,"Problem solving",NA
+"ContentHelp_4",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Time management","varlab"
+"ContentHelp_4",1,"Time management",NA
+"ContentHelp_5",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Belonging","varlab"
+"ContentHelp_5",1,"Belonging",NA
+"ContentHelp_6",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Finding support among friends or family","varlab"
+"ContentHelp_6",1,"Finding support among friends or family",NA
+"ContentHelp_7",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Finding purpose","varlab"
+"ContentHelp_7",1,"Finding purpose",NA
+"ContentHelp_8",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Understanding who I am","varlab"
+"ContentHelp_8",1,"Understanding who I am",NA
+"ContentHelp_9",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Self-compassion","varlab"
+"ContentHelp_9",1,"Self-compassion",NA
+"ContentHelp_10",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Understanding my emotions","varlab"
+"ContentHelp_10",1,"Understanding my emotions",NA
+"ContentHelp_11",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Coping skills","varlab"
+"ContentHelp_11",1,"Coping skills",NA
+"ContentHelp_12",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Something else not on this list","varlab"
+"ContentHelp_12",1,"Something else not on this list",NA
+"Languishing_1",NA,"In the last month, have you felt like any of the following? Select all that apply: Empty","varlab"
+"Languishing_1",1,"Empty",NA
+"Languishing_2",NA,"In the last month, have you felt like any of the following? Select all that apply: Unsatisfied with life","varlab"
+"Languishing_2",1,"Unsatisfied with life",NA
+"Languishing_3",NA,"In the last month, have you felt like any of the following? Select all that apply: Disappointed in your achievements","varlab"
+"Languishing_3",1,"Disappointed in your achievements",NA
+"Languishing_4",NA,"In the last month, have you felt like any of the following? Select all that apply: Isolated from others","varlab"
+"Languishing_4",1,"Isolated from others",NA
+"Languishing_5",NA,"In the last month, have you felt like any of the following? Select all that apply: Disinterested","varlab"
+"Languishing_5",1,"Disinterested",NA
+"Languishing_6",NA,"In the last month, have you felt like any of the following? Select all that apply: Stuck","varlab"
+"Languishing_6",1,"Stuck",NA
+"Languishing_7",NA,"In the last month, have you felt like any of the following? Select all that apply: Purposeless","varlab"
+"Languishing_7",1,"Purposeless",NA
+"Languishing_8",NA,"In the last month, have you felt like any of the following? Select all that apply: Powerless","varlab"
+"Languishing_8",1,"Powerless",NA
+"Languishing_9",NA,"In the last month, have you felt like any of the following? Select all that apply: Pessimistic about the future","varlab"
+"Languishing_9",1,"Pessimistic about the future",NA
+"Languishing_10",NA,"In the last month, have you felt like any of the following? Select all that apply: Alienated from society","varlab"
+"Languishing_10",1,"Alienated from society",NA
+"Document_Tools_1",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Social media","varlab"
+"Document_Tools_1",1,"Social media",NA
+"Document_Tools_2",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Pen and paper","varlab"
+"Document_Tools_2",1,"Pen and paper",NA
+"Document_Tools_3",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Audio","varlab"
+"Document_Tools_3",1,"Audio",NA
+"Document_Tools_4",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Video","varlab"
+"Document_Tools_4",1,"Video",NA
+"Document_Tools_5",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Photography","varlab"
+"Document_Tools_5",1,"Photography",NA
+"Document_Tools_6",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Other","varlab"
+"Document_Tools_6",1,"Other",NA
+"Document_Tools_7",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice None/I don't document my life","varlab"
+"Document_Tools_7",1,"None/I don't document my life",NA
+"Document_Freq",NA,"How often do you document your life?","varlab"
+"Document_Freq",1,"Less than once a month",NA
+"Document_Freq",2,"At least monthly",NA
+"Document_Freq",3,"At least weekly",NA
+"Document_Freq",4,"At least daily",NA
+"Document_Freq",5,"Multiple times a day",NA
+"Document_Benefits_1",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Reduces stress","varlab"
+"Document_Benefits_1",1,"Reduces stress",NA
+"Document_Benefits_2",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Improves mood","varlab"
+"Document_Benefits_2",1,"Improves mood",NA
+"Document_Benefits_3",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Provides a sense of accomplishment","varlab"
+"Document_Benefits_3",1,"Provides a sense of accomplishment",NA
+"Document_Benefits_4",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Better understand myself and my experiences","varlab"
+"Document_Benefits_4",1,"Better understand myself and my experiences",NA
+"Document_Benefits_5",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Improves my memory","varlab"
+"Document_Benefits_5",1,"Improves my memory",NA
+"Document_Benefits_6",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Gain clarity about my thoughts and feelings","varlab"
+"Document_Benefits_6",1,"Gain clarity about my thoughts and feelings",NA
+"Document_Benefits_7",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Identify patterns or underlying themes in my thoughts and emotions","varlab"
+"Document_Benefits_7",1,"Identify patterns or underlying themes in my thoughts and emotions",NA
+"Document_Benefits_8",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Provides a creative outlet for self-expression","varlab"
+"Document_Benefits_8",1,"Provides a creative outlet for self-expression",NA
+"Document_Benefits_9",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Set and achieve goals","varlab"
+"Document_Benefits_9",1,"Set and achieve goals",NA
+"Document_Benefits_10",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Track personal growth and development","varlab"
+"Document_Benefits_10",1,"Track personal growth and development",NA
+"Document_Benefits_11",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Other","varlab"
+"Document_Benefits_11",1,"Other",NA
+"StoryInterest",NA,"Sharing your story can help you learn more about yourself. If you were going to share your story, would you be interested in a safe and secure digital place where you could self-reflect and talk openly about your life?","varlab"
+"StoryInterest",1,"Very disinterested",NA
+"StoryInterest",2,"Somewhat disinterested",NA
+"StoryInterest",3,"Neutral",NA
+"StoryInterest",4,"Somewhat interested",NA
+"StoryInterest",5,"Very interested",NA
+"content_recruit",NA,"Would you be interested in being contacted about a later Prolific study where you provide voice recordings for us to use in our company’s future projects? These voice recordings would be used publicly, but we would otherwise be careful about protecting your anonymity.
+
+
+
+(Note: this is for a future study, where you will first have the opportunity to learn all details of the study, and provide consent at that time. Also, a reminder that the recordings you provided today in the current study will NOT be used for anything other than our internal company research.)","varlab"
+"content_recruit",1,"Yes",NA
+"content_recruit",0,"No",NA
+"SWLS_tot",NA,"Satisfaction with Life Scale Total","varlab"
+"SWLS_tot",5,"Extremely Dissatisfied1",NA
+"SWLS_tot",6,"Extremely Dissatisfied2",NA
+"SWLS_tot",7,"Extremely Dissatisfied3",NA
+"SWLS_tot",8,"Extremely Dissatisfied4",NA
+"SWLS_tot",9,"Extremely Dissatisfied5",NA
+"SWLS_tot",10,"Dissatisfied1",NA
+"SWLS_tot",11,"Dissatisfied2",NA
+"SWLS_tot",12,"Dissatisfied3",NA
+"SWLS_tot",13,"Dissatisfied4",NA
+"SWLS_tot",14,"Dissatisfied5",NA
+"SWLS_tot",15,"Slightly Dissatisfied1",NA
+"SWLS_tot",16,"Slightly Dissatisfied2",NA
+"SWLS_tot",17,"Slightly Dissatisfied3",NA
+"SWLS_tot",18,"Slightly Dissatisfied4",NA
+"SWLS_tot",19,"Slightly Dissatisfied5",NA
+"SWLS_tot",20,"Neutral",NA
+"SWLS_tot",21,"Slightly Satisfied1",NA
+"SWLS_tot",22,"Slightly Satisfied2",NA
+"SWLS_tot",23,"Slightly Satisfied3",NA
+"SWLS_tot",24,"Slightly Satisfied4",NA
+"SWLS_tot",25,"Slightly Satisfied5",NA
+"SWLS_tot",26,"Satisfied1",NA
+"SWLS_tot",27,"Satisfied2",NA
+"SWLS_tot",28,"Satisfied3",NA
+"SWLS_tot",29,"Satisfied4",NA
+"SWLS_tot",30,"Satisfied5",NA
+"SWLS_tot",31,"Extremely Satisfied1",NA
+"SWLS_tot",32,"Extremely Satisfied2",NA
+"SWLS_tot",33,"Extremely Satisfied3",NA
+"SWLS_tot",34,"Extremely Satisfied4",NA
+"SWLS_tot",35,"Extremely Satisfied5",NA
+"PERMA_pos_tot",NA,"PERMA Positive Affect","varlab"
+"PERMA_neg_tot",NA,"PERMA Negative Affect","varlab"
+"PWB_4_R",NA,"PWB_4 Reverse Scored","varlab"
+"PWB_5_R",NA,"PWB_5 Reverse Scored","varlab"
+"PWB_6_R",NA,"PWB_6 Reverse Scored","varlab"
+"PWB_7_R",NA,"PWB_7 Reverse Scored","varlab"
+"PWB_10_R",NA,"PWB_10 Reverse Scored","varlab"
+"PWB_14_R",NA,"PWB_14 Reverse Scored","varlab"
+"PWB_15_R",NA,"PWB_15 Reverse Scored","varlab"
+"PWB_16_R",NA,"PWB_16 Reverse Scored","varlab"
+"PWB_Autonomy_tot",NA,"PWB18 Autonomy Subscale","varlab"
+"PWB_EnvMas_tot",NA,"PWB18 Environmental Mastery Subscale","varlab"
+"PWB_Growth_tot",NA,"PWB18 Growth Subscale","varlab"
+"PWB_PosRelations_tot",NA,"PWB18 Positive Relations with Others Subscale","varlab"
+"PWB_Purpose_tot",NA,"PWB18 Purpose in Life Subscale","varlab"
+"PWB_PurposeFULL_tot",NA,"PWB42 Purpose in Life Subscale","varlab"
+"PWB_SelfAccept_tot",NA,"PWB18 Self Acceptance Subscale","varlab"
+"SRIS12_2_R",NA,"SRIS12_2 Reverse Scored","varlab"
+"SRIS12_3_R",NA,"SRIS12_3 Reverse Scored","varlab"
+"SRIS12_7_R",NA,"SRIS12_7 Reverse Scored","varlab"
+"SRIS12_8_R",NA,"SRIS12_8 Reverse Scored","varlab"
+"SRIS12_9_R",NA,"SRIS12_9 Reverse Scored","varlab"
+"SRIS_reflection_tot",NA,"SRIS Self Reflection Scale","varlab"
+"SRIS_insight_tot",NA,"SRIS Insight Scale","varlab"
+"ANIQ_awareness_tot",NA,"ANIQ Awareness","varlab"
+"ANIQ_temp_coherence_tot",NA,"ANIQ Temporal Coherence","varlab"
+"ANIQ_causal_coherence_tot",NA,"ANIQ Causal Coherence","varlab"
+"ANIQ_thematic_coherence_tot",NA,"ANIQ Thematic Coherence","varlab"
+"ANIQ_tot",NA,"ANIQ Total Score","varlab"
