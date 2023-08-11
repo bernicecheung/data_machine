@@ -29,7 +29,7 @@ if(!require('pacman')) {
 }
 
 # added here and psych package
-pacman::p_load(tidyverse, labelled, devtools, plyr, haven, expss, DT, qwraps2, remotes, readxl, retidytext, openxlsx, reactable, reactablefmtr, ggwordcloud, topicmodels,here,psych, install = TRUE)
+pacman::p_load(tidyverse, labelled, devtools, plyr, haven, expss, DT, qwraps2, remotes, readxl, retidytext, openxlsx, reactable, reactablefmtr, ggwordcloud, topicmodels,here,psych,rio, install = TRUE)
 ```
 
 # define aesthetics
@@ -60,7 +60,7 @@ plot_aes = theme_minimal() +
 *notes: (1) this is pretty specific to prolific studies, can be adapted as needed [see calarts for example] (2)select line @ end will need to be adapted slightly based on any additional PII collected [see calarts]*
 ```{r}
 #survey <- read_sav("/Users/kristina/Downloads/Let's Talk About Well-Being_August 2, 2023_07.59.sav")
-survey <- read_sav(here("inputs", "Let's Talk About Well-Being_August 2, 2023_07.59.sav"))
+survey <- import(here("inputs", "Let's Talk About Well-Being_August 2, 2023_07.59.sav"))
 survey$survey_name <- "survey"
 
 #missing ID check
@@ -82,9 +82,13 @@ survey_tidy = survey %>%
 survey_tidy <- survey_tidy[c(267,6,7,1:5,8:266,268)] #move userID to front
 colnames(survey_tidy)[1] <- "userid"
 
-survey_tidy <- survey_tidy %>% #fills demo + consent for multi-day studies 
-  group_by(userid) %>% 
-  fill(starts_with("Demo"), Consent_confirm, .direction = "downup") %>% ungroup
+# survey_tidy <- survey_tidy %>% #fills demo + consent for multi-day studies
+#   group_by(userid) %>%
+#   fill(starts_with("Demo"), Consent_confirm, .direction = "downup") %>% ungroup
+# 
+# class(survey)
+# class(survey_tidy)
+
 ```
 
 ## Prolific status check
@@ -96,7 +100,9 @@ prolific <- read.csv(here("inputs","prolific_export_639e73b38884ae6555e593ca.csv
 colnames(prolific)<-paste(colnames(prolific),"prolific",sep="_")
 colnames(prolific)[2] <- "userid"
 
-survey_tidy <- merge(survey_tidy, prolific, all = T)
+#survey_tidy <- merge(survey_tidy, prolific, all = T)
+survey_tidy <- survey_tidy %>% left_join(prolific, by = "userid")
+
 survey_tidy$Status_prolific <-survey_tidy$Status_prolific %>% replace_na('TIMEDOUT')
 
 #summarize returned responses
@@ -125,58 +131,97 @@ survey_tidy = survey_tidy %>%
 
 ## deduplication & duplicates summary
 There were 108 total duplicate reponses, from 53 unique participants, **thus in this study, data was collected from 2895 unique participants**. Duplication in survey data could have happened if the participant accessed and started the Qualtrics study multiple times. Here, we retain all duplicated data and flag each response, responses are also flagged based on completion. See below for details.
-```{r}
+
+```{r test}
 ID_counts <- data.frame(table(survey_tidy$userid))
 survey_dupes <- ID_counts[ID_counts$Freq > 1,] 
 colnames(survey_dupes) <- c("userid", "Freq")
+dup_id <- as.vector(survey_dupes$userid)
 
-#get & flag duplicate data 
-dupes <- c(survey_dupes$userid)
-dupes <- survey_tidy[survey_tidy$userid %in% dupes,] 
-dupes$dupe_survey <- TRUE
 
-#this worked and then it didnt lol 
-##these should be boolean but didnt know what to do with equal completion; need to make decision for these cases (e.g., first response or most recent) 
-#dupes<- dupes %>%
-#  group_by(userid) %>%
-#  mutate(most_complete_survey = case_when(Progress == max(Progress) & Progress == min(Progress) ~ 2, # equivalent
-#                                Progress == max(Progress) ~ 1,
-#                               TRUE ~ 0))
-
-dupes <- as.data.table(dupes)
-
-dupe_same <- dupes %>% 
-   group_by(userid, Progress) %>% 
-   filter(n() > 1) %>%
-   ungroup
-dupe_same$most_complete_survey <- "SAME"
-dupes <- dupes[!dupes$ResponseId %in% dupe_same$ResponseId,] #use response Id, unique 
-
-dupe_max <- dupes[dupes[, .I[which.max(Progress)], by=userid]$V1]
-dupe_max$most_complete_survey <- "TRUE"
-dupes <- dupes[!dupes$ResponseId %in% dupe_max$ResponseId,] 
-
-dupes$most_complete_survey <- "FALSE"
-
-dupes <- rbind(dupes,dupe_same,dupe_max)
-
-#merge flagged dupes back into tidy df & flag non-dupes in tidy df 
-survey_tidy <- survey_tidy[!survey_tidy$userid %in% dupes$userid,] 
-survey_tidy$dupe_survey <- FALSE
-survey_tidy$most_complete_survey <- TRUE
-survey_tidy <- merge(survey_tidy, dupes, all = T)
-survey_tidy <- survey_tidy[order(survey_tidy$userid),]
-
-#summarize duplicate responses
-survey_tidy %>%
-  select(userid, Progress, RecordedDate,Status_prolific, most_complete_survey, dupe_survey) %>%
-  unique() %>%
-  filter(dupe_survey ==TRUE) %>%
+survey_tidy <- survey_tidy %>%
+  mutate(dupe_survey = case_when(userid %in% dup_id ~ TRUE,
+                                  TRUE ~ FALSE)) %>%
   group_by(userid) %>%
-  group_by(userid) %>%
-  add_count(userid)
+  dplyr::mutate(
+    max_progress = max(Progress),
+    distinct_progress = n_distinct(Progress),
+    total_rows = nrow(.)
+  ) %>%
+  mutate(
+    most_complete_survey = case_when(
+      # Unique userid cases
+      dupe_survey == F ~ "TRUE",
+      
+      # Duplicated userid but identical progress
+      dupe_survey == T & total_rows > 1 & distinct_progress == 1 ~ "SAME",
+      
+      # Duplicated userid with non-identical progress
+      dupe_survey == T & Progress == max_progress & distinct_progress > 1 ~ "TRUE",
+      dupe_survey == T & Progress != max_progress & distinct_progress > 1 ~ "FALSE",
+      
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  select(-max_progress, -distinct_progress, -total_rows) %>%
+  ungroup()
+```
 
-dupes[order(dupes$userid)]
+
+
+```{r}
+# ID_counts <- data.frame(table(survey_tidy$userid))
+# survey_dupes <- ID_counts[ID_counts$Freq > 1,] 
+# colnames(survey_dupes) <- c("userid", "Freq")
+# 
+# #get & flag duplicate data 
+# dupes <- c(survey_dupes$userid)
+# dupes <- survey_tidy[survey_tidy$userid %in% dupes,] 
+# dupes$dupe_survey <- TRUE
+# 
+# #this worked and then it didnt lol 
+# ##these should be boolean but didnt know what to do with equal completion; need to make decision for these cases (e.g., first response or most recent) 
+# #dupes<- dupes %>%
+# #  group_by(userid) %>%
+# #  mutate(most_complete_survey = case_when(Progress == max(Progress) & Progress == min(Progress) ~ 2, # equivalent
+# #                                Progress == max(Progress) ~ 1,
+# #                               TRUE ~ 0))
+# 
+# dupes <- as.data.table(dupes)
+# 
+# dupe_same <- dupes %>% 
+#    group_by(userid, Progress) %>% 
+#    filter(n() > 1) %>%
+#    ungroup
+# dupe_same$most_complete_survey <- "SAME"
+# dupes <- dupes[!dupes$ResponseId %in% dupe_same$ResponseId,] #use response Id, unique 
+# 
+# dupe_max <- dupes[dupes[, .I[which.max(Progress)], by=userid]$V1]
+# dupe_max$most_complete_survey <- "TRUE"
+# dupes <- dupes[!dupes$ResponseId %in% dupe_max$ResponseId,] 
+# 
+# dupes$most_complete_survey <- "FALSE"
+# 
+# dupes <- rbind(dupes,dupe_same,dupe_max)
+# 
+# #merge flagged dupes back into tidy df & flag non-dupes in tidy df 
+# survey_tidy <- survey_tidy[!survey_tidy$userid %in% dupes$userid,] 
+# survey_tidy$dupe_survey <- FALSE
+# survey_tidy$most_complete_survey <- TRUE
+# survey_tidy <- survey_tidy %>% left_join(dupes, by = "userid")
+# #survey_tidy <- merge(survey_tidy, dupes, all = T)
+# survey_tidy <- survey_tidy[order(survey_tidy$userid),]
+# 
+# #summarize duplicate responses
+# survey_tidy %>%
+#   select(userid, Progress, RecordedDate,Status_prolific, most_complete_survey, dupe_survey) %>%
+#   unique() %>%
+#   filter(dupe_survey ==TRUE) %>%
+#   group_by(userid) %>%
+#   group_by(userid) %>%
+#   add_count(userid)
+# 
+# dupes[order(dupes$userid)]
 
 ```
 
@@ -229,8 +274,8 @@ Here, there were 2 attention checks, correct responses for each are noted in the
 61 observations had 1 failed attention check question, 2 observations had 2 (failed both questions), 177 had at least 1 attention check missing data without an explicit failure (so either passed 1 or both NA)
 ```{r k_edit}
 #correct flags
-survey_tidy$attention1_correct <- 3
-survey_tidy$attention2_correct <- 9
+attention1_correct <- 3
+attention2_correct <- 9
 
 # add a flag for failed attention check question and a flag for the number of attention check
 survey_tidy <- survey_tidy %>%
@@ -244,7 +289,9 @@ survey_tidy <- survey_tidy %>%
   mutate(flag_failed_attention_n = case_when(
     flag_failed_attention == T & (is.na(Attention1) | is.na(Attention2)) ~ 1, # if there's a missing data, and an incorrect answer, mark 1
     TRUE ~ (Attention1 != attention1_correct) + (Attention2 != attention2_correct) # if no missing attention check question, add the number of failed question
-  ))
+  )) %>%
+  ungroup() %>%
+  as.data.frame()
 
 table(survey_tidy$flag_failed_attention_n, useNA = "ifany")
 ```
@@ -276,13 +323,13 @@ DT::datatable(content_recruit)
 
 ### Missing all survey data
 
-133 observation didn't provide any survey item data
+129 observation didn't provide any survey item data
 ```{r b_edit}
 survey_tidy <- survey_tidy %>%
-  rowwise() %>%
-  mutate(flag_no_survey = (rowSums(is.na(dplyr::select(., SWLS_1:SRIS12_12))) == length(dplyr::select(., SWLS_1:SRIS12_12)))) %>%
-  ungroup()
+  mutate(flag_no_survey = (rowSums(is.na(dplyr::select(., SWLS_1:SRIS12_12))) == length(dplyr::select(., SWLS_1:SRIS12_12))))
+
 table(survey_tidy$flag_no_survey, useNA = "ifany")
+
 ```
 
 ### Data quality: repetitive responses in a sequence
@@ -376,38 +423,107 @@ survey_tidy %>%
 # code & score qualtrics data {.tabset}
 1. recode demographics to character
 2. psychological surveys
+
+## recode numbers into variable names
+```{r}
+# generate a dictionary
+survey_tidy_dict <- create_dictionary(survey_tidy, remove_repeated = F, use_references = F)
+
+# transform the dictionary into a list 
+dict_list <- split(survey_tidy_dict[-4], survey_tidy_dict$variable)
+
+# extract all variable numbers for the "select all that apply" questions
+varname <- names(dict_list)
+
+# all demographic from the survey item
+demo_idx <- which(grepl("Demo_", varname))
+response_idx <- which(grepl("^ResourceHelp_", varname) & !grepl("_TEXT$", varname))
+content_idx <- which(grepl("^ContentHelp_", varname) & !grepl("_TEXT$", varname))
+languish_idx <- which(grepl("^Languishing_", varname))
+doc_tool_idx <- which(grepl("^Document_Tools_", varname) & !grepl("_TEXT$", varname))
+doc_benefic_idx <- which(grepl("^Document_Benefits", varname) & !grepl("_TEXT$", varname))
+doc_freq_idx <- which(varname == "Document_Freq")
+
+multi_resposne_idx <- c(demo_idx, response_idx,content_idx,languish_idx,doc_tool_idx,doc_benefic_idx, doc_freq_idx)
+
+# subset these variables from the dictionary list
+recode_dict_list <- dict_list[multi_resposne_idx]
+
+# replace response with variable label
+surveys_scored <- survey_tidy
+surveys_scored[names(recode_dict_list)] <- Map(function(x, y) {
+    tmp <- with(y,  setNames(label, value)[as.character(x)])
+     tmp[is.na(tmp)] <- x[is.na(tmp)]
+     tmp}, survey_tidy[names(recode_dict_list)], recode_dict_list)
+
+
+```
+
+## coalesce multiple responses
+
+```{r}
+surveys_scored <- surveys_scored %>%
+   mutate(
+          resource_help = case_when(
+            rowSums(!is.na(select(., ResourceHelp_1:ResourceHelp_9))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., ResourceHelp_1:ResourceHelp_9))) == 1 ~ as.character(do.call(coalesce, select(., ResourceHelp_1:ResourceHelp_9))),
+            rowSums(!is.na(select(., ResourceHelp_1:ResourceHelp_9))) > 1 ~ "multi"), 
+          
+          content_help = case_when(
+            rowSums(!is.na(select(., ContentHelp_1:ContentHelp_12))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., ContentHelp_1:ContentHelp_12))) == 1 ~ as.character(do.call(coalesce, select(., ContentHelp_1:ContentHelp_12))),
+            rowSums(!is.na(select(., ContentHelp_1:ContentHelp_12))) > 1 ~ "multiple"), 
+          
+          languishing = case_when(
+            rowSums(!is.na(select(., Languishing_1:Languishing_10))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., Languishing_1:Languishing_10))) == 1 ~ as.character(do.call(coalesce, select(., Languishing_1:Languishing_10))),
+            rowSums(!is.na(select(., Languishing_1:Languishing_10))) > 1 ~ "multiple"),
+          
+          document_tools = case_when(
+            rowSums(!is.na(select(., Document_Tools_1:Document_Tools_7))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., Document_Tools_1:Document_Tools_7))) == 1 ~ as.character(do.call(coalesce, select(., Document_Tools_1:Document_Tools_7))),
+            rowSums(!is.na(select(., Document_Tools_1:Document_Tools_7))) > 1 ~ "multiple"),
+          
+          document_benefits = case_when(
+            rowSums(!is.na(select(., Document_Benefits_1:Document_Benefits_11))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., Document_Benefits_1:Document_Benefits_11))) == 1 ~ as.character(do.call(coalesce, select(., Document_Benefits_1:Document_Benefits_11))),
+            rowSums(!is.na(select(., Document_Benefits_1:Document_Benefits_11))) > 1 ~ "multiple"))
+
+```
+
+
 ## demographics
 recoded from numeric to character; parse race/ethnicity variables 
 ```{r k_edit}
-survey_tidy_dict <- create_dictionary(survey_tidy, remove_repeated = F, use_references = F)
-demo_lst <- split(survey_tidy_dict[-4], survey_tidy_dict$variable)
-demo_lst <- demo_lst[grepl("Demo_",names(demo_lst))]
-
-survey_tidy[names(demo_lst)] <- Map(function(x, y) {
-    tmp <- with(y,  setNames(label, value)[as.character(x)])
-     tmp[is.na(tmp)] <- x[is.na(tmp)]
-     tmp}, survey_tidy[names(demo_lst)], demo_lst)
-surveys_scored <- survey_tidy
-
-# recode race & ethnicity
-surveys_scored <- surveys_scored %>% 
-  mutate(demo_race = case_when(rowSums(!is.na(select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))) >= 2 ~ "multi-race", 
-                          !is.na(Demo_ethnicity_1) ~ Demo_ethnicity_1, # White/Caucasian
-                          !is.na(Demo_ethnicity_2) ~ Demo_ethnicity_2, # Black/African-American
-                          !is.na(Demo_ethnicity_4) ~ Demo_ethnicity_4, # Asian
-                          !is.na(Demo_ethnicity_5) ~ Demo_ethnicity_5, # Native American
-                          !is.na(Demo_ethnicity_6) ~ Demo_ethnicity_6, # Native Hawaiian/Pacific Islander
-                          !is.na(Demo_ethnicity_7) ~ Demo_ethnicity_7, # Other/Unknown
-                          !is.na(Demo_ethnicity__99) ~ NA, # recode "I prefer not to answer" into NA
-                          TRUE ~ NA), 
-         demo_ethnicity = case_when(!is.na(Demo_ethnicity_3) ~ "Latinx/Hispanic", 
-                               TRUE ~ NA)) %>%
-  select(-c(Demo_ethnicity_1:Demo_ethnicity__99))
+surveys_scored <- surveys_scored %>%
+  mutate(Demo_ethnicity__99 = NA) %>% # "I prefer not to answer" into NA
+  mutate(demo_race = case_when( # coalesce race
+    rowSums(!is.na(select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))) == 0 ~ NA_character_,
+    rowSums(!is.na(select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))) == 1 ~ as.character(do.call(coalesce, select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))),
+    rowSums(!is.na(select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))) > 1 ~ "multiracial")) %>% # ethnicity is not considered for multiracial
+  dplyr::rename(demo_ethnicity = Demo_ethnicity_3) # differciate between race and ethnicity
   
-table(surveys_scored$demo_race, useNA = "ifany")
-table(surveys_scored$demo_ethnicity, useNA = "ifany")
+
+# # recode race & ethnicity
+# surveys_scored <- surveys_scored %>%
+#   mutate(across(Demo_ethnicity_1:Demo_ethnicity__99, ~ case_match(., 1 ~ TRUE))) %>%
+#   mutate(demo_race = case_when(rowSums(!is.na(select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))) >= 2 ~ "multi-race", 
+#                           !is.na(Demo_ethnicity_1) ~ Demo_ethnicity_1, # White/Caucasian
+#                           !is.na(Demo_ethnicity_2) ~ Demo_ethnicity_2, # Black/African-American
+#                           !is.na(Demo_ethnicity_4) ~ Demo_ethnicity_4, # Asian
+#                           !is.na(Demo_ethnicity_5) ~ Demo_ethnicity_5, # Native American
+#                           !is.na(Demo_ethnicity_6) ~ Demo_ethnicity_6, # Native Hawaiian/Pacific Islander
+#                           !is.na(Demo_ethnicity_7) ~ Demo_ethnicity_7, # Other/Unknown
+#                           !is.na(Demo_ethnicity__99) ~ NA, # recode "I prefer not to answer" into NA
+#                           TRUE ~ NA), 
+#          demo_ethnicity = case_when(!is.na(Demo_ethnicity_3) ~ "Latinx/Hispanic", 
+#                                TRUE ~ NA)) 
+#   
+# table(surveys_scored$demo_race, useNA = "ifany")
+# table(surveys_scored$demo_ethnicity, useNA = "ifany")
 
 ```
+
 
 ## SWLS
 A total score is calculated by adding up the scores for each item. The possible range of scores is 5-35, with a score of 20 representing a neutral point on the scale. Scores between 5-9 indicate the respondent is extremely dissatisfied with life, whereas scores between 31-35 indicate the respondent is extremely satisfied.
@@ -425,8 +541,8 @@ surveys_scored <- surveys_scored %>%
   mutate(SWLS_tot_f = as.factor(SWLS_tot_f))
 
 # add variable labels
-var_lab(surveys_scored$SWLS_tot) <- "total life satisfaction score"
-var_lab(surveys_scored$SWLS_tot_f) <- "life satisfaction categories"
+attr(surveys_scored$SWLS_tot, "label") <- "total life satisfaction score"
+attr(surveys_scored$SWLS_tot_f, "label")  <- "life satisfaction categories"
 
 ```
 
@@ -434,11 +550,11 @@ var_lab(surveys_scored$SWLS_tot_f) <- "life satisfaction categories"
 Positive affect is calculated as the average of PERMA positive emotions items 1,3,6
 Negative affect is calculated as the average of PERMA positive emotions items 2,4,5
 ```{r}
-surveys_scored <- cbind(surveys_scored, PERMA_pos_tot = rowSums(surveys_scored[, grepl("PERMA_1|PERMA_3|PERMA_6", names(surveys_scored))])/3)
-var_lab(surveys_scored$PERMA_pos_tot) = "PERMA Positive Affect"
+surveys_scored <- cbind(surveys_scored, PERMA_pos = rowSums(surveys_scored[, grepl("PERMA_1|PERMA_3|PERMA_6", names(surveys_scored))])/3)
+attr(surveys_scored$PERMA_pos, "label") = "PERMA Positive Affect"
 
-surveys_scored <- cbind(surveys_scored, PERMA_neg_tot = rowSums(surveys_scored[, grepl("PERMA_2|PERMA_4|PERMA_5", names(surveys_scored))])/3)
-var_lab(surveys_scored$PERMA_neg_tot) = "PERMA Negative Affect"
+surveys_scored <- cbind(surveys_scored, PERMA_neg = rowSums(surveys_scored[, grepl("PERMA_2|PERMA_4|PERMA_5", names(surveys_scored))])/3)
+attr(surveys_scored$PERMA_neg, "label") = "PERMA Negative Affect"
 
 ```
 
@@ -465,17 +581,17 @@ surveys_scored <- surveys_scored %>% #reverse score
          PWB_15_R = 8 - PWB_15,
          PWB_16_R = 8 - PWB_16)
 
-surveys_scored = apply_labels(surveys_scored,
-                      PWB_4_R = "PWB_4 Reverse Scored",
-                      PWB_5_R = "PWB_5 Reverse Scored",
-                      PWB_6_R = "PWB_6 Reverse Scored",
-                      PWB_7_R = "PWB_7 Reverse Scored",
-                      PWB_10_R = "PWB_10 Reverse Scored",
-                      PWB_14_R = "PWB_14 Reverse Scored",
-                      PWB_15_R = "PWB_15 Reverse Scored",
-                      PWB_16_R = "PWB_16 Reverse Scored",
-                      PWB_Purpose2_R = "PWB_Purpose4 Reverse Scored",
-                      PWB_Purpose3_R = "PWB_Purpose3 Reverse Scored")
+# surveys_scored = apply_labels(surveys_scored,
+#                       PWB_4_R = "PWB_4 Reverse Scored",
+#                       PWB_5_R = "PWB_5 Reverse Scored",
+#                       PWB_6_R = "PWB_6 Reverse Scored",
+#                       PWB_7_R = "PWB_7 Reverse Scored",
+#                       PWB_10_R = "PWB_10 Reverse Scored",
+#                       PWB_14_R = "PWB_14 Reverse Scored",
+#                       PWB_15_R = "PWB_15 Reverse Scored",
+#                       PWB_16_R = "PWB_16 Reverse Scored",
+#                       PWB_Purpose2_R = "PWB_Purpose4 Reverse Scored",
+#                       PWB_Purpose3_R = "PWB_Purpose3 Reverse Scored")
 
 #autonomy Q15R,Q17,Q18.
 surveys_scored <- cbind(surveys_scored, PWB_Autonomy_tot = rowSums(surveys_scored[,  grepl("\\bPWB_15_R\\b|\\bPWB_17\\b|\\bPWB_18\\b", names(surveys_scored))]))
@@ -497,14 +613,24 @@ surveys_scored <- cbind(surveys_scored, PWB_PurposeFULL_tot = rowSums(surveys_sc
 #Self-Acceptance Q1, Q2, Q5R
 surveys_scored <- cbind(surveys_scored, PWB_SelfAccept_tot = rowSums(surveys_scored[,  grepl("\\bPWB_1\\b|\\bPWB_2\\b|\\bPWB_5_R\\b", names(surveys_scored))]))
 
-surveys_scored = apply_labels(surveys_scored,
-                      PWB_Autonomy_tot = "PWB18 Autonomy Subscale",
-                      PWB_EnvMas_tot = "PWB18 Environmental Mastery Subscale",
-                      PWB_Growth_tot = "PWB18 Growth Subscale",
-                      PWB_PosRelations_tot = "PWB18 Positive Relations with Others Subscale",
-                      PWB_Purpose_tot = "PWB18 Purpose in Life Subscale",
-                      PWB_PurposeFULL_tot = "PWB42 Purpose in Life Subscale",
-                      PWB_SelfAccept_tot = "PWB18 Self Acceptance Subscale")
+# assign label to subscale sum score
+attr(surveys_scored$PWB_Autonomy_tot, "label") <- "PWB18 Autonomy Subscale Sum Score"
+attr(surveys_scored$PWB_EnvMas_tot, "label") <- "PWB18 Environmental Subscale Sum Score"
+attr(surveys_scored$PWB_Growth_tot, "label") <- "PWB18 Growth Subscale Sum Score"
+attr(surveys_scored$PWB_PosRelations_tot, "label") <- "PWB18 ositive Relations with Others Subscale Sum Score"
+attr(surveys_scored$PWB_Purpose_tot, "label") <- "PWB18 Purpose in Life Subscale Sum Score"
+attr(surveys_scored$PWB_PurposeFULL_tot, "label") <- "PWB42 Purpose in Life Subscale Sum Score"
+attr(surveys_scored$PWB_SelfAccept_tot, "label") <- "PWB18 Acceptance Subscale Sum Score"
+
+
+# surveys_scored = apply_labels(surveys_scored,
+#                       PWB_Autonomy_tot = "PWB18 Autonomy Subscale",
+#                       PWB_EnvMas_tot = "PWB18 Environmental Mastery Subscale",
+#                       PWB_Growth_tot = "PWB18 Growth Subscale",
+#                       PWB_PosRelations_tot = "PWB18 Positive Relations with Others Subscale",
+#                       PWB_Purpose_tot = "PWB18 Purpose in Life Subscale",
+#                       PWB_PurposeFULL_tot = "PWB42 Purpose in Life Subscale",
+#                       PWB_SelfAccept_tot = "PWB18 Self Acceptance Subscale")
 ```
 
 ## SRIS
@@ -518,21 +644,25 @@ surveys_scored <- surveys_scored %>% #reverse score
          SRIS12_8_R = 8 - SRIS12_8,
          SRIS12_9_R = 8 - SRIS12_9) 
 
-surveys_scored = apply_labels(surveys_scored,
-         SRIS12_2_R = "SRIS12_2 Reverse Scored",
-         SRIS12_3_R = "SRIS12_3 Reverse Scored",
-         SRIS12_7_R = "SRIS12_7 Reverse Scored",
-         SRIS12_8_R = "SRIS12_8 Reverse Scored",
-         SRIS12_9_R = "SRIS12_9 Reverse Scored")
+# surveys_scored = apply_labels(surveys_scored,
+#          SRIS12_2_R = "SRIS12_2 Reverse Scored",
+#          SRIS12_3_R = "SRIS12_3 Reverse Scored",
+#          SRIS12_7_R = "SRIS12_7 Reverse Scored",
+#          SRIS12_8_R = "SRIS12_8 Reverse Scored",
+#          SRIS12_9_R = "SRIS12_9 Reverse Scored")
 
 #self-reflection 
 surveys_scored <- cbind(surveys_scored, SRIS_reflection_tot = rowSums(surveys_scored[,  grepl("\\bSRIS12_1\\b|\\bSRIS12_4\\b|\\bSRIS12_6\\b|\\bSRIS12_10\\b|\\bSRIS12_11\\b|\\bSRIS12_12\\b", names(surveys_scored))]))
 
 surveys_scored <- cbind(surveys_scored, SRIS_insight_tot = rowSums(surveys_scored[,  grepl("\\bSRIS12_2_R\\b|\\bSRIS12_3_R\\b|\\bSRIS12_5\\b|\\bSRIS12_7_R\\b|\\bSRIS12_8_R\\b|\\bSRIS12_9_R\\b", names(surveys_scored))]))
 
-surveys_scored = apply_labels(surveys_scored,
-         SRIS_reflection_tot = "SRIS Self Reflection Scale",
-         SRIS_insight_tot = "SRIS Insight Scale")
+attr(surveys_scored$SRIS_reflection_tot, "label") <- "SRIS Self Reflection Scale Sum Score"
+attr(surveys_scored$SRIS_insight_tot, "label") <- "SRIS Self Insight Scale Sum Score"
+
+
+# surveys_scored = apply_labels(surveys_scored,
+#          SRIS_reflection_tot = "SRIS Self Reflection Scale",
+#          SRIS_insight_tot = "SRIS Insight Scale")
 
 ```
 
@@ -563,12 +693,21 @@ surveys_scored <- cbind(surveys_scored, ANIQ_thematic_coherence_tot = rowSums(su
 
 surveys_scored <- cbind(surveys_scored, ANIQ_tot = rowSums(surveys_scored[,  grepl("\\bANIQ_temp_coherence_tot\\b|\\bANIQ_causal_coherence_tot\\b|\\bANIQ_thematic_coherence_tot\\b|\\bANIQ_awareness_tot\\b", names(surveys_scored))]))
 
-surveys_scored = apply_labels(surveys_scored,
-         ANIQ_awareness_tot = "ANIQ Awareness",
-         ANIQ_temp_coherence_tot = "ANIQ Temporal Coherence",
-        ANIQ_causal_coherence_tot = "ANIQ Causal Coherence",          
-        ANIQ_thematic_coherence_tot = "ANIQ Thematic Coherence",
-         ANIQ_tot = "ANIQ Total Score")
+
+# assign subscale labels 
+attr(surveys_scored$ANIQ_awareness_tot, "label") <- "ANIQ Awareness Subscale Sum Score"
+attr(surveys_scored$ANIQ_temp_coherence_tot, "label") <- "ANIQ Temporal Coherence Subscale Sum Score"
+attr(surveys_scored$ANIQ_causal_coherence_tot, "label") <- "ANIQ Causal Coherence Subscale Sum Score"
+attr(surveys_scored$ANIQ_thematic_coherence_tot, "label") <- "ANIQ Thematic Coherence Subscale Sum Score"
+attr(surveys_scored$ANIQ_tot, "label") <- "ANIQ Total Score"
+
+
+# surveys_scored = apply_labels(surveys_scored,
+#          ANIQ_awareness_tot = "ANIQ Awareness",
+#          ANIQ_temp_coherence_tot = "ANIQ Temporal Coherence",
+#         ANIQ_causal_coherence_tot = "ANIQ Causal Coherence",          
+#         ANIQ_thematic_coherence_tot = "ANIQ Thematic Coherence",
+#          ANIQ_tot = "ANIQ Total Score")
 ```
 
 # export cleaned dataset
