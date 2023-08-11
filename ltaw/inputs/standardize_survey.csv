@@ -1,0 +1,52 @@
+﻿scale_prefix,scale_name,construct,subscale_n,item_suffix,var_name,function,calculation
+aniq,Awareness of Narrative Identity questionnaire,"Awareness of
+narrative identity",4,,aniq_tot,"It measures the awareness of
+narrative identity and how globally coherent one’s autobiographical memories are perceived to be",all_item_sum
+aniq,Awareness of Narrative Identity questionnaire,"Awareness of
+narrative identity",4,awareness_tot,aniq_awareness_tot,It measures awareness of life stories about the self and the perception of globally coherent personal memories,sum
+aniq,Awareness of Narrative Identity questionnaire,"Awareness of
+narrative identity",4,temp_coherence_tot,aniq_temp_coherence_tot,"It measures the ability to accurately perceive the order in which
+experiences have occurred over the lifetime to date.",sum
+aniq,Awareness of Narrative Identity questionnaire,"Awareness of
+narrative identity",4,causal_coherence_tot,aniq_causal_coherence_tot,"It measures the perception that experiences are
+meaningfully associated and that events have causal connections with self-identity. ",sum
+aniq,Awareness of Narrative Identity questionnaire,"Awareness of
+narrative identity",4,thematic_coherence_tot,aniq_thematic_coherence_tot,"It measuresthe ability to draw out similarities
+between episodes in life, and identify overarching themes
+that act as integrated interpretations of these events or circumstances",sum
+perma,PERMA positive and negative Affect,emotion,2,,,It measures general emotion,
+perma,PERMA positive and negative Affect,emotion,2,pos,perma_pos,It measures general tendencies toward feeling contentment and joy,mean
+perma,PERMA positive and negative Affect,emotion,2,neg,perma_neg,"It  measures tendencies toward feeling, sad, anxious, and angry",mean
+pwb,Psychological Well-Being Scale,Psychological Well-being,6,,,It measures eudaimonic well-being(psychological well-being),
+pwb,Psychological Well-Being Scale,Psychological Well-being,6,autonomy_tot,pwb_autonomy_tot,"It measures the individual’s ability to function free from the influence and control of others, to regulate emotions
+and behavior from within",sum
+pwb,Psychological Well-Being Scale,Psychological Well-being,6,envmas_tot,pwb_envmas_tot,"It measures s a person’s capacity to
+design environments appropriate for their own propensities, the ability to “manipulate and control complex environments” ",sum
+pwb,Psychological Well-Being Scale,Psychological Well-being,6,growth_tot,pwb_growth_tot,"It measures the capacity to realize our potentials, to perceive life as a process of continuous
+change, challenges, and opportunities, through which we
+continuously grow",sum
+pwb,Psychological Well-Being Scale,Psychological Well-being,6,posrelations_tot,pwb_posrelations_tot,"It measures  the capacity to develop and maintain warm, affectionate, and trusting human relationships",sum
+pwb,Psychological Well-Being Scale,Psychological Well-being,6,purpose_tot,pwb_purpose_tot,It measures the capacity to determine and (re)construct meaning in life.,sum
+pwb,Psychological Well-Being Scale,purposefull_tot,6,selfaccept_tot,pwb_selfaccept_tot,"It measures acceptance of one’s internal states (i.e., thoughts and emotions) ",sum
+sris12,Self-reflection and insight scale (short form),selfaccept_tot,2,,,It measures individual differences in private self-consciousness,
+sris13,Self-reflection and insight scale (short form),selfaccept_tot,2,self-reflection,sris_reflection_tot,"It measures the inspection and evaluation of one’s thoughts, feelings, and behavior",sum
+sris14,Self-reflection and insight scale (short form),selfaccept_tot,2,insight,sris_insight_tot,"It measures the the clarity of understanding of one’s thoughts, feelings, and behavior",sum
+swls,Satisfaction with Life Scale (SWLS),Subjective Well-being,1,,swls_tot,It measures global life satisfaction,sum
+wbpro,Well-being Profile,Subjective Well-being,14,,,A multidimensional measure of well-being,
+wbpro,Well-being Profile,Subjective Well-being,,autonomy,wbpro_autonomy,"It measures the individual’s ability to function free from the influence and control of others, to regulate emotions
+and behavior from within",single_item
+wbpro,Well-being Profile,Subjective Well-being,,clear_thinking,wbpro_clear_thinking,"It measures  the ability to think, concentrate, and make decisions",single_item
+wbpro,Well-being Profile,Subjective Well-being,,competence,wbpro_competence,It measures  a sense of general competence,single_item
+wbpro,Well-being Profile,Subjective Well-being,,emotional_stability,wbpro_emotional_stability,,single_item
+wbpro,Well-being Profile,Subjective Well-being,,empathy,wbpro_empathy,"It measures  the tendency to vicariously experience
+other individuals’ emotional states",single_item
+wbpro,Well-being Profile,Subjective Well-being,,engagement,wbpro_engagement,,single_item
+wbpro,Well-being Profile,Subjective Well-being,,meaning,wbpro_meaning,,single_item
+wbpro,Well-being Profile,Subjective Well-being,,optimism,wbpro_optimism,,single_item
+wbpro,Well-being Profile,Subjective Well-being,,positive_emotions,wbpro_positive_emotions,,single_item
+wbpro,Well-being Profile,Subjective Well-being,,positive_relationships,wbpro_positive_relationships,,single_item
+wbpro,Well-being Profile,Subjective Well-being,,prosocial_behavior,wbpro_prosocial_behavior,It measures voluntary behavior intended to benefit another,single_item
+wbpro,Well-being Profile,Subjective Well-being,,resilience,wbpro_resilience,,single_item
+wbpro,Well-being Profile,Subjective Well-being,,self_acceptance,wbpro_self_acceptance,"It measures acceptance of one’s internal states (i.e., thoughts and emotions) ",single_item
+wbpro,Well-being Profile,Subjective Well-being,,self_esteem,wbpro_self_esteem,,single_item
+wbpro,Well-being Profile,Subjective Well-being,,vitality,wbpro_vitality,,single_item

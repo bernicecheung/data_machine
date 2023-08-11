@@ -1,0 +1,362 @@
+"var_name","var_class","item_type","ori_name","label"
+"userid","character","metadata","userid",NA
+"prolific_id","character","metadata","Prolific_ID","What is your Prolific ID? Please note that this response should auto-fill with the correct ID"
+"id_check","character","metadata","ID_check","Please confirm your 24 digit Prolific ID by entering it below."
+"progress","integer","metadata","Progress","Progress"
+"duration__in_seconds_","integer","metadata","Duration__in_seconds_","Duration (in seconds)"
+"recordeddate","character","metadata","RecordedDate","Recorded Date"
+"responseid","character","metadata","ResponseId","Response ID"
+"externalreference","logical","metadata","ExternalReference","External Data Reference"
+"consent_confirm","factor","metadata","Consent_confirm","In this study we will ask you to record your voice while answering free-response prompts about your thoughts, feelings, activities, and memories. To confirm that you are eligible to participate, please answer the question below:
+
+
+
+Are you willing to let this study record your voice when responding to questions?"
+"consent_no","logical","metadata","Consent_no","We appreciate your willingness to participate, unfortunately one or more of your responses or your device settings indicate that you are not eligible to participate in this study. Please close this window and return this study on Prolific so that your account is not penalized by a rejection."
+"recording_test","factor","metadata","Recording_test","Using the microphone widget below, please record the following: ""Hello, this is a test recording."" Please make sure to allow access to your device's microphone. After recording, please click on Review Recording to check that you can hear your voice playing back. If you can't hear your voice, please make sure you have allowed access to your microphone, and that your device's volume is on.
+
+
+
+
+
+
+
+
+
+You may proceed if you were able to successfully record. Were you able to hear your voice playing back on the recording?"
+"demo_gender","factor","demo","Demo_gender",NA
+"demo_age","factor","demo","Demo_age",NA
+"demo_ethnicity_01","factor","demo_raw","Demo_ethnicity_1",NA
+"demo_ethnicity_02","factor","demo_raw","Demo_ethnicity_2",NA
+"demo_ethnicity","factor","demo","demo_ethnicity",NA
+"demo_ethnicity_04","factor","demo_raw","Demo_ethnicity_4",NA
+"demo_ethnicity_05","factor","demo_raw","Demo_ethnicity_5",NA
+"demo_ethnicity_06","factor","demo_raw","Demo_ethnicity_6",NA
+"demo_ethnicity_07","factor","demo_raw","Demo_ethnicity_7",NA
+"demo_ethnicity__99","logical","demo_raw","Demo_ethnicity__99",NA
+"demo_education","factor","demo","Demo_education",NA
+"demo_marital","factor","demo","Demo_marital",NA
+"demo_income","factor","demo","Demo_income",NA
+"demo_family","factor","demo","Demo_family",NA
+"swls_01","integer","item","SWLS_1","In most ways my life is close to my ideal."
+"swls_02","integer","item","SWLS_2","The conditions of my life are excellent."
+"swls_03","integer","item","SWLS_3","I am satisfied with my life."
+"swls_04","integer","item","SWLS_4","So far I have gotten the important things I want in life."
+"swls_05","integer","item","SWLS_5","If I could live my life over, I would change almost nothing."
+"perma_01","integer","item","PERMA_1","In general, how often do you feel the following emotions? - Joyful"
+"perma_02","integer","item","PERMA_2","In general, how often do you feel the following emotions? - Anxious"
+"perma_03","integer","item","PERMA_3","In general, how often do you feel the following emotions? - Positive"
+"perma_04","integer","item","PERMA_4","In general, how often do you feel the following emotions? - Angry"
+"perma_05","integer","item","PERMA_5","In general, how often do you feel the following emotions? - Sad"
+"perma_06","integer","item","PERMA_6","In general, how often do you feel the following emotions? - Content"
+"pwb_01","integer","item","PWB_1","I like most parts of my personality."
+"pwb_02","integer","item","PWB_2","When I look at the story of my life, I am pleased with how things have turned out so far."
+"pwb_03","integer","item","PWB_3","Some people wander aimlessly through life, but I am not one of them."
+"pwb_04","integer","item","PWB_4","The demands of everyday life often get me down."
+"pwb_05","integer","item","PWB_5","In many ways I feel disappointed about my achievements in life."
+"pwb_06","integer","item","PWB_6","Maintaining close relationships has been difficult and frustrating for me."
+"pwb_07","integer","item","PWB_7","I live life one day at a time and don't really think about the future."
+"pwb_08","integer","item","PWB_8","In general, I feel I am in charge of the situation in which I live."
+"pwb_09","integer","item","PWB_9","I am good at managing the responsibilities of daily life."
+"pwb_10","integer","item","PWB_10","I sometimes feel as if I've done all there is to do in life."
+"pwb_11","integer","item","PWB_11","For me, life has been a continuous process of learning, changing, and growth."
+"attention01","integer","attention_check","Attention1","This is an attention check - please answer ""A little disagree"""
+"pwb_12","integer","item","PWB_12","I think it is important to have new experiences that challenge how I think about myself and the world."
+"pwb_13","integer","item","PWB_13","People would describe me as a giving person, willing to share my time with others."
+"pwb_14","integer","item","PWB_14","I gave up trying to make big improvements or changes in my life a long time ago."
+"pwb_15","integer","item","PWB_15","I tend to be influenced by people with strong opinions."
+"pwb_16","integer","item","PWB_16","I have not experienced many warm and trusting relationships with others."
+"pwb_17","integer","item","PWB_17","I have confidence in my own opinions, even if they are different from the way most other people think."
+"pwb_18","integer","item","PWB_18","I judge myself by what I think is important, not by the values of what others think is important."
+"pwb_00","integer","item","PWB_0","In general, I feel good about my well-being."
+"aniq_01","integer","item","ANIQ_1","My memories are like stories that help me understand my identity."
+"aniq_02","integer","item","ANIQ_2","I use my stories about my life to work out the kind of person I am."
+"aniq_03","integer","item","ANIQ_3","The experiences from my past make the story of who I am."
+"aniq_04","integer","item","ANIQ_4","My sense of self is embedded in memories of my life."
+"aniq_05","integer","item","ANIQ_5","When I think over my life, I can observe how there is a story that tells me who I am."
+"aniq_06","integer","item","ANIQ_6","I can put the events of my life in order of when they occurred."
+"aniq_07","integer","item","ANIQ_7","Knowing the order in which my life events occurred is easy for me."
+"aniq_08","integer","item","ANIQ_8","When I’m thinking back over experiences I have had, I know when they occurred in my life."
+"aniq_09","integer","item","ANIQ_9","I have a good awareness of the sequence in which events and experiences in my life happened."
+"aniq_10","integer","item","ANIQ_10","When I think about experiences in my past, I find it easy to remember what came before and after them."
+"aniq_11","integer","item","ANIQ_11","I understand how the story of my life has unfolded."
+"aniq_12","integer","item","ANIQ_12","I understand how my life experiences are associated with one another."
+"aniq_13","integer","item","ANIQ_13","Things that have happened over the course of my life are meaningfully tied together."
+"aniq_14","integer","item","ANIQ_14","I am aware of how events in my life are interrelated."
+"aniq_15","integer","item","ANIQ_15","I can understand how experiences in my life have occurred, with one thing leading to another."
+"aniq_16","integer","item","ANIQ_16","When I think or talk about experiences in my past I can see themes about the kind of person that I am."
+"aniq_17","integer","item","ANIQ_17","I can perceive common themes about who I am across memories of my life."
+"aniq_18","integer","item","ANIQ_18","I notice themes in the personal memories of my life that relate to the kind of person that I am."
+"aniq_19","integer","item","ANIQ_19","When I recall events and experiences across my lifetime, I can see consistent patterns in the way that I think, feel, and act."
+"aniq_20","integer","item","ANIQ_20","There are clear themes relating to who I am that can be found in my personal memories."
+"aniq_00","integer","item","ANIQ_0","In general, I feel like I use my memories to better understand myself."
+"wbpro_autonomy","integer","subscale","WBpro_Autonomy","I feel free to make my own choices."
+"wbpro_clear_thinking","integer","subscale","WBpro_Clear.Thinking",NA
+"wbpro_competence","integer","subscale","WBpro_Competence","Most things I do, I do well."
+"wbpro_emotional_stability","integer","subscale","WBpro_Emotional.Stability",NA
+"wbpro_empathy","integer","subscale","WBpro_Empathy","I easily get caught up in other people's feelings."
+"wbpro_engagement","integer","subscale","WBpro_Engagement","Most of the time I am really interested in what I am doing."
+"wbpro_meaning","integer","subscale","WBpro_Meaning","My life has a clear sense of purpose."
+"wbpro_optimism","integer","subscale","WBpro_Optimism","I feel very optimistic about my future."
+"wbpro_positive_emotions","integer","subscale","WBpro_Positive.Emotions",NA
+"attention02","integer","attention_check","Attention2","This is an attention check - please answer ""Completely agree"""
+"wbpro_positive_relationships","integer","recoded_item","WBpro_Positive.Relationships",NA
+"wbpro_prosocial_behavior","integer","subscale","WBpro_Prosocial.Behavior",NA
+"wbpro_resilience","integer","subscale","WBpro_Resilience","I quickly get over and recover from significant life difficulties."
+"wbpro_self_acceptance","integer","subscale","WBpro_Self.Acceptance",NA
+"wbpro_self_esteem","integer","subscale","WBpro_Self.Esteem",NA
+"wbpro_vitality","integer","subscale","WBpro_Vitality","I generally have a lot of energy."
+"sris12_1","integer","item","SRIS12_1","I am very interested in examining what I think about."
+"sris12_2","integer","item","SRIS12_2","My behavior often puzzles me."
+"sris12_3","integer","item","SRIS12_3","I’m often aware that I’m having a feeling, but I often don’t quite know what it is."
+"sris12_4","integer","item","SRIS12_4","I frequently examine my feelings."
+"sris12_5","integer","item","SRIS12_5","I usually know why I feel the way I do."
+"sris12_6","integer","item","SRIS12_6","It is important to me to try to understand what my feelings mean."
+"sris12_7","integer","item","SRIS12_7","I’m often confused about the way that I really feel about things."
+"sris12_8","integer","item","SRIS12_8","Often I find it difficult to make sense of the way I feel about things."
+"sris12_9","integer","item","SRIS12_9","Thinking about my thoughts makes me more confused."
+"sris12_10","integer","item","SRIS12_10","I frequently take time to reflect on my thoughts."
+"sris12_11","integer","item","SRIS12_11","It is important to me to evaluate the things that I do."
+"sris12_12","integer","item","SRIS12_12","I often think about the way I feel about things."
+"promptnarr_01_confirm","factor","prompt","PromptNarr_1_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptnarr_01_time_first_click","numeric","prompt","PromptNarr_1_time_First_Click","Timing - First Click"
+"promptnarr_01_time_last_click","numeric","prompt","PromptNarr_1_time_Last_Click","Timing - Last Click"
+"promptnarr_01_time_page_submit","numeric","prompt","PromptNarr_1_time_Page_Submit","Timing - Page Submit"
+"promptnarr_01_time_click_count","integer","prompt","PromptNarr_1_time_Click_Count","Timing - Click Count"
+"promptnarr_02_confirm","factor","prompt","PromptNarr_2_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptnarr_02_time_first_click","numeric","prompt","PromptNarr_2_time_First_Click","Timing - First Click"
+"promptnarr_02_time_last_click","numeric","prompt","PromptNarr_2_time_Last_Click","Timing - Last Click"
+"promptnarr_02_time_page_submit","numeric","prompt","PromptNarr_2_time_Page_Submit","Timing - Page Submit"
+"promptnarr_02_time_click_count","integer","prompt","PromptNarr_2_time_Click_Count","Timing - Click Count"
+"promptnarr_03_confirm","factor","prompt","PromptNarr_3_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptnarr_03_time_first_click","numeric","prompt","PromptNarr_3_time_First_Click","Timing - First Click"
+"promptnarr_03_time_last_click","numeric","prompt","PromptNarr_3_time_Last_Click","Timing - Last Click"
+"promptnarr_03_time_page_submit","numeric","prompt","PromptNarr_3_time_Page_Submit","Timing - Page Submit"
+"promptnarr_03_time_click_count","integer","prompt","PromptNarr_3_time_Click_Count","Timing - Click Count"
+"promptnarr_04_confirm","factor","prompt","PromptNarr_4_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptnarr_04_time_first_click","numeric","prompt","PromptNarr_4_time_First_Click","Timing - First Click"
+"promptnarr_04_time_last_click","numeric","prompt","PromptNarr_4_time_Last_Click","Timing - Last Click"
+"promptnarr_04_time_page_submit","numeric","prompt","PromptNarr_4_time_Page_Submit","Timing - Page Submit"
+"promptnarr_04_time_click_count","integer","prompt","PromptNarr_4_time_Click_Count","Timing - Click Count"
+"promptnarr_05_confirm","factor","prompt","PromptNarr_5_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptnarr_05_time_first_click","numeric","prompt","PromptNarr_5_time_First_Click","Timing - First Click"
+"promptnarr_05_time_last_click","numeric","prompt","PromptNarr_5_time_Last_Click","Timing - Last Click"
+"promptnarr_05_time_page_submit","numeric","prompt","PromptNarr_5_time_Page_Submit","Timing - Page Submit"
+"promptnarr_05_time_click_count","integer","prompt","PromptNarr_5_time_Click_Count","Timing - Click Count"
+"promptwb_01_confirm","factor","prompt","PromptWB_1_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_01_time_first_click","numeric","prompt","PromptWB_1_time_First_Click","Timing - First Click"
+"promptwb_01_time_last_click","numeric","prompt","PromptWB_1_time_Last_Click","Timing - Last Click"
+"promptwb_01_time_page_submit","numeric","prompt","PromptWB_1_time_Page_Submit","Timing - Page Submit"
+"promptwb_01_time_click_count","integer","prompt","PromptWB_1_time_Click_Count","Timing - Click Count"
+"promptwb_02_confirm","factor","prompt","PromptWB_2_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_02_time_first_click","numeric","prompt","PromptWB_2_time_First_Click","Timing - First Click"
+"promptwb_02_time_last_click","numeric","prompt","PromptWB_2_time_Last_Click","Timing - Last Click"
+"promptwb_02_time_page_submit","numeric","prompt","PromptWB_2_time_Page_Submit","Timing - Page Submit"
+"promptwb_02_time_click_count","integer","prompt","PromptWB_2_time_Click_Count","Timing - Click Count"
+"promptwb_03_confirm","factor","prompt","PromptWB_3_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_03_time_first_click","numeric","prompt","PromptWB_3_time_First_Click","Timing - First Click"
+"promptwb_03_time_last_click","numeric","prompt","PromptWB_3_time_Last_Click","Timing - Last Click"
+"promptwb_03_time_page_submit","numeric","prompt","PromptWB_3_time_Page_Submit","Timing - Page Submit"
+"promptwb_03_time_click_count","integer","prompt","PromptWB_3_time_Click_Count","Timing - Click Count"
+"promptwb_04_confirm","factor","prompt","PromptWB_4_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_04_time_first_click","numeric","prompt","PromptWB_4_time_First_Click","Timing - First Click"
+"promptwb_04_time_last_click","numeric","prompt","PromptWB_4_time_Last_Click","Timing - Last Click"
+"promptwb_04_time_page_submit","numeric","prompt","PromptWB_4_time_Page_Submit","Timing - Page Submit"
+"promptwb_04_time_click_count","integer","prompt","PromptWB_4_time_Click_Count","Timing - Click Count"
+"promptwb_05_confirm","factor","prompt","PromptWB_5_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_05_time_first_click","numeric","prompt","PromptWB_5_time_First_Click","Timing - First Click"
+"promptwb_05_time_last_click","numeric","prompt","PromptWB_5_time_Last_Click","Timing - Last Click"
+"promptwb_05_time_page_submit","numeric","prompt","PromptWB_5_time_Page_Submit","Timing - Page Submit"
+"promptwb_05_time_click_count","integer","prompt","PromptWB_5_time_Click_Count","Timing - Click Count"
+"promptwb_06_confirm","factor","prompt","PromptWB_6_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_06_time_first_click","numeric","prompt","PromptWB_6_time_First_Click","Timing - First Click"
+"promptwb_06_time_last_click","numeric","prompt","PromptWB_6_time_Last_Click","Timing - Last Click"
+"promptwb_06_time_page_submit","numeric","prompt","PromptWB_6_time_Page_Submit","Timing - Page Submit"
+"promptwb_06_time_click_count","integer","prompt","PromptWB_6_time_Click_Count","Timing - Click Count"
+"promptwb_07_confirm","factor","prompt","PromptWB_7_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_07_time_first_click","numeric","prompt","PromptWB_7_time_First_Click","Timing - First Click"
+"promptwb_07_time_last_click","numeric","prompt","PromptWB_7_time_Last_Click","Timing - Last Click"
+"promptwb_07_time_page_submit","numeric","prompt","PromptWB_7_time_Page_Submit","Timing - Page Submit"
+"promptwb_07_time_click_count","integer","prompt","PromptWB_7_time_Click_Count","Timing - Click Count"
+"promptwb_08_confirm","factor","prompt","PromptWB_8_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_08_time_first_click","numeric","prompt","PromptWB_8_time_First_Click","Timing - First Click"
+"promptwb_08_time_last_click","numeric","prompt","PromptWB_8_time_Last_Click","Timing - Last Click"
+"promptwb_08_time_page_submit","numeric","prompt","PromptWB_8_time_Page_Submit","Timing - Page Submit"
+"promptwb_08_time_click_count","integer","prompt","PromptWB_8_time_Click_Count","Timing - Click Count"
+"promptwb_09_confirm","factor","prompt","PromptWB_9_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_09_first_click","numeric","prompt","PromptWB_9_First_Click","Timing - First Click"
+"promptwb_09_last_click","numeric","prompt","PromptWB_9_Last_Click","Timing - Last Click"
+"promptwb_09_page_submit","numeric","prompt","PromptWB_9_Page_Submit","Timing - Page Submit"
+"promptwb_09_click_count","integer","prompt","PromptWB_9_Click_Count","Timing - Click Count"
+"promptwb_10_confirm","factor","prompt","PromptWB_10_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_10_time_first_click","numeric","prompt","PromptWB_10_time_First_Click","Timing - First Click"
+"promptwb_10_time_last_click","numeric","prompt","PromptWB_10_time_Last_Click","Timing - Last Click"
+"promptwb_10_time_page_submit","numeric","prompt","PromptWB_10_time_Page_Submit","Timing - Page Submit"
+"promptwb_10_time_click_count","integer","prompt","PromptWB_10_time_Click_Count","Timing - Click Count"
+"promptwb_11_confirm","factor","prompt","PromptWB_11_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_11_time_first_click","numeric","prompt","PromptWB_11_time_First_Click","Timing - First Click"
+"promptwb_11_time_last_click","numeric","prompt","PromptWB_11_time_Last_Click","Timing - Last Click"
+"promptwb_11_time_page_submit","numeric","prompt","PromptWB_11_time_Page_Submit","Timing - Page Submit"
+"promptwb_11_time_click_count","integer","prompt","PromptWB_11_time_Click_Count","Timing - Click Count"
+"promptwb_12_confirm","factor","prompt","PromptWB_12_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_12_time_first_click","numeric","prompt","PromptWB_12_time_First_Click","Timing - First Click"
+"promptwb_12_time_last_click","numeric","prompt","PromptWB_12_time_Last_Click","Timing - Last Click"
+"promptwb_12_time_page_submit","numeric","prompt","PromptWB_12_time_Page_Submit","Timing - Page Submit"
+"promptwb_12_time_click_count","integer","prompt","PromptWB_12_time_Click_Count","Timing - Click Count"
+"promptwb_13_confirm","factor","prompt","PromptWB_13_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_13_time_first_click","numeric","prompt","PromptWB_13_time_First_Click","Timing - First Click"
+"promptwb_13_time_last_click","numeric","prompt","PromptWB_13_time_Last_Click","Timing - Last Click"
+"promptwb_13_time_page_submit","numeric","prompt","PromptWB_13_time_Page_Submit","Timing - Page Submit"
+"promptwb_13_time_click_count","integer","prompt","PromptWB_13_time_Click_Count","Timing - Click Count"
+"promptwb_14_confirm","factor","prompt","PromptWB_14_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_14_time_first_click","numeric","prompt","PromptWB_14_time_First_Click","Timing - First Click"
+"promptwb_14_time_last_click","numeric","prompt","PromptWB_14_time_Last_Click","Timing - Last Click"
+"promptwb_14_time_page_submit","numeric","prompt","PromptWB_14_time_Page_Submit","Timing - Page Submit"
+"promptwb_14_time_click_count","integer","prompt","PromptWB_14_time_Click_Count","Timing - Click Count"
+"promptwb_15_confirm","factor","prompt","PromptWB_15_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptwb_15_time_first_click","numeric","prompt","PromptWB_15_time_First_Click","Timing - First Click"
+"promptwb_15_time_last_click","numeric","prompt","PromptWB_15_time_Last_Click","Timing - Last Click"
+"promptwb_15_time_page_submit","numeric","prompt","PromptWB_15_time_Page_Submit","Timing - Page Submit"
+"promptwb_15_time_click_count","integer","prompt","PromptWB_15_time_Click_Count","Timing - Click Count"
+"promptgoal_confirm","factor","content_rec","PromptGoal_confirm","Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)"
+"promptgoal_time_first_click","numeric","content_rec","PromptGoal_time_First_Click","Timing - First Click"
+"promptgoal_time_last_click","numeric","content_rec","PromptGoal_time_Last_Click","Timing - Last Click"
+"promptgoal_time_page_submit","numeric","content_rec","PromptGoal_time_Page_Submit","Timing - Page Submit"
+"promptgoal_time_click_count","integer","content_rec","PromptGoal_time_Click_Count","Timing - Click Count"
+"resourcehelp_01","factor","content_rec_raw","ResourceHelp_1",NA
+"resourcehelp_02","factor","content_rec_raw","ResourceHelp_2",NA
+"resourcehelp_03","factor","content_rec_raw","ResourceHelp_3",NA
+"resourcehelp_04","factor","content_rec_raw","ResourceHelp_4",NA
+"resourcehelp_05","factor","content_rec_raw","ResourceHelp_5",NA
+"resourcehelp_07","factor","content_rec_raw","ResourceHelp_7",NA
+"resourcehelp_08","factor","content_rec_raw","ResourceHelp_8",NA
+"resourcehelp_09","factor","content_rec_raw","ResourceHelp_9",NA
+"resourcehelp_09_text","character","content_rec","ResourceHelp_9_TEXT","What do you think would help you with meeting that goal? Support through… (select all that apply): - Something else not on this list - Text"
+"contenthelp_01","factor","content_rec_raw","ContentHelp_1",NA
+"contenthelp_02","factor","content_rec_raw","ContentHelp_2",NA
+"contenthelp_03","factor","content_rec_raw","ContentHelp_3",NA
+"contenthelp_04","factor","content_rec_raw","ContentHelp_4",NA
+"contenthelp_05","factor","content_rec_raw","ContentHelp_5",NA
+"contenthelp_06","factor","content_rec_raw","ContentHelp_6",NA
+"contenthelp_07","factor","content_rec_raw","ContentHelp_7",NA
+"contenthelp_08","factor","content_rec_raw","ContentHelp_8",NA
+"contenthelp_09","factor","content_rec_raw","ContentHelp_9",NA
+"contenthelp_10","factor","content_rec_raw","ContentHelp_10",NA
+"contenthelp_11","factor","content_rec_raw","ContentHelp_11",NA
+"contenthelp_12","factor","content_rec_raw","ContentHelp_12",NA
+"contenthelp_12_text","character","content_rec","ContentHelp_12_TEXT","Of the following topic areas, which do you feel you could use the most help with? - Something else not on this list - Text"
+"languishing_01","factor","value_prop_raw","Languishing_1",NA
+"languishing_02","factor","value_prop_raw","Languishing_2",NA
+"languishing_03","factor","value_prop_raw","Languishing_3",NA
+"languishing_04","factor","value_prop_raw","Languishing_4",NA
+"languishing_05","factor","value_prop_raw","Languishing_5",NA
+"languishing_06","factor","value_prop_raw","Languishing_6",NA
+"languishing_07","factor","value_prop_raw","Languishing_7",NA
+"languishing_08","factor","value_prop_raw","Languishing_8",NA
+"languishing_09","factor","value_prop_raw","Languishing_9",NA
+"languishing_10","factor","value_prop_raw","Languishing_10",NA
+"document_tools_01","factor","value_prop_raw","Document_Tools_1",NA
+"document_tools_02","factor","value_prop_raw","Document_Tools_2",NA
+"document_tools_03","factor","value_prop_raw","Document_Tools_3",NA
+"document_tools_04","factor","value_prop_raw","Document_Tools_4",NA
+"document_tools_05","factor","value_prop_raw","Document_Tools_5",NA
+"document_tools_06","factor","value_prop_raw","Document_Tools_6",NA
+"document_tools_07","factor","value_prop_raw","Document_Tools_7",NA
+"document_tools_06_text","character","value_prop","Document_Tools_6_TEXT","What tools do you use to journal or document your life?  Select all that apply: - Other - Text"
+"document_freq","factor","value_prop","Document_Freq",NA
+"document_benefits_01","factor","value_prop_raw","Document_Benefits_1",NA
+"document_benefits_02","factor","value_prop_raw","Document_Benefits_2",NA
+"document_benefits_03","factor","value_prop_raw","Document_Benefits_3",NA
+"document_benefits_04","factor","value_prop_raw","Document_Benefits_4",NA
+"document_benefits_05","factor","value_prop_raw","Document_Benefits_5",NA
+"document_benefits_06","factor","value_prop_raw","Document_Benefits_6",NA
+"document_benefits_07","factor","value_prop_raw","Document_Benefits_7",NA
+"document_benefits_08","factor","value_prop_raw","Document_Benefits_8",NA
+"document_benefits_09","factor","value_prop_raw","Document_Benefits_9",NA
+"document_benefits_10","factor","value_prop_raw","Document_Benefits_10",NA
+"document_benefits_11","factor","value_prop_raw","Document_Benefits_11",NA
+"document_benefits_11_text","character","value_prop","Document_Benefits_11_TEXT","Do you experience any of the following benefits when you document your life? Select all that apply: - Other - Text"
+"storyinterest","integer","value_prop","StoryInterest","Sharing your story can help you learn more about yourself. If you were going to share your story, would you be interested in a safe and secure digital place where you could self-reflect and talk openly about your life?"
+"storyinterest_desc","character","value_prop","StoryInterest_Desc","Please describe why you would be disinterested."
+"content_recruit","factor","recruit","content_recruit","Would you be interested in being contacted about a later Prolific study where you provide voice recordings for us to use in our company’s future projects? These voice recordings would be used publicly, but we would otherwise be careful about protecting your anonymity.
+
+
+
+(Note: this is for a future study, where you will first have the opportunity to learn all details of the study, and provide consent at that time. Also, a reminder that the recordings you provided today in the current study will NOT be used for anything other than our internal company research.)"
+"outro","character","feedback","Outro","You have now completed the survey questions and audio recordings. Let us know below if you have any feedback on the study. If you have any questions, please contact us through Prolific.
+
+
+
+Thank you so much for sharing your stories, especially since some may have been emotionally charged. If you or someone you care about needs immediate support, you can talk to a trained, supportive person via text, 24 hours, 7 days a week, by connecting with the Crisis Text Line. Just text HOME to 741741. If you would like to talk to someone live, you can connect with a trained, supportive person by phone. Just dial “988” or 1-800-273-TALK.
+
+
+
+Thank you again for your time. Please click the next button to be redirected to Prolific and confirm your completion of today's survey."
+"survey_name","character","metadata","survey_name",NA
+"submission_id_prolific","character","prolific_metadata","Submission.id_prolific",NA
+"status_prolific","character","prolific_metadata","Status_prolific",NA
+"started_at_prolific","character","prolific_metadata","Started.at_prolific",NA
+"completed_at_prolific","character","prolific_metadata","Completed.at_prolific",NA
+"reviewed_at_prolific","character","prolific_metadata","Reviewed.at_prolific",NA
+"archived_at_prolific","character","prolific_metadata","Archived.at_prolific",NA
+"time_taken_prolific","integer","prolific_metadata","Time.taken_prolific",NA
+"completion_code_prolific","character","prolific_metadata","Completion.code_prolific",NA
+"total_approvals_prolific","integer","prolific_metadata","Total.approvals_prolific",NA
+"fluent_languages_prolific","character","prolific_demo","Fluent.languages_prolific",NA
+"age_prolific","character","prolific_demo","Age_prolific",NA
+"sex_prolific","factor","prolific_demo","Sex_prolific",NA
+"ethnicity_simplified_prolific","factor","prolific_demo","Ethnicity.simplified_prolific",NA
+"country_of_birth_prolific","factor","prolific_demo","Country.of.birth_prolific",NA
+"country_of_residence_prolific","factor","prolific_demo","Country.of.residence_prolific",NA
+"nationality_prolific","factor","prolific_demo","Nationality_prolific",NA
+"language_prolific","factor","prolific_demo","Language_prolific",NA
+"student_status_prolific","factor","prolific_demo","Student.status_prolific",NA
+"employment_status_prolific","factor","prolific_demo","Employment.status_prolific",NA
+"flag_dupe_survey","logical","data_screen_flags","flag_dupe_survey","TRUE if this observation came from a user who recorded more than one observation; FALSE if this observation came from a unique user"
+"flag_most_complete","factor","data_screen_flags","flag_most_complete","TRUE if this observation came from a unique user, or was the most complete one among duplicated observations; SAME if the duplicated observations had same progress;
+FALSE if it did not came from a unique user and wasn't the most completed one"
+"flag_failed_recording_test","logical","data_screen_flags","flag_failed_recording_test","TRUE if participants failed teh recording test. NAs were retained"
+"flag_failed_attention","logical","data_screen_flags","flag_failed_attention","TRUE if at least 1 attention checks failed; FALSE if 1 attention check passed + 1 missing or failed both; NA if both attention checks are missing"
+"flag_failed_attention_n","integer","data_screen_flags","flag_failed_attention_n","total number of attention checks failed (NA not counted as failure)"
+"flag_no_survey","logical","data_screen_flags","flag_no_survey","TRUE if participants didn't provide any survey data; FALSE if at least 1 survey item was recorded"
+"max_identical","integer","data_screen_flags","max_identical","The number if identical survey responses in a seqeunce"
+"max_identical_perc","integer","data_screen_flags","max_identical_perc","The perceptage of identical survey responses in a seqeunce out of all survey items"
+"flag_rec_include","logical","data_screen_flags","flag_rec_include","TRUE if WB team recommend to include this observation. Criteria include:- at least some survey data
+- did not failed both attention check questions 
+- is the most completed survey if there were duplicates. "
+"resource_help","factor","content_rec_coal","resource_help",NA
+"content_help","factor","content_rec_coal","content_help",NA
+"languishing","factor","value_prop_coal","languishing",NA
+"document_tools","factor","value_prop_coal","document_tools",NA
+"document_benefits","factor","value_prop_coal","document_benefits",NA
+"demo_race","factor","demo_coal","demo_race",NA
+"swls_tot","integer","scale","SWLS_tot","total life satisfaction score"
+"swls_tot_f","factor","scale","SWLS_tot_f","life satisfaction categories"
+"perma_pos","numeric","subscale","PERMA_pos","PERMA Positive Affect"
+"perma_neg","numeric","subscale","PERMA_neg","PERMA Negative Affect"
+"pwb_04_r","integer","recoded_item","PWB_4_R","The demands of everyday life often get me down."
+"pwb_05_r","integer","recoded_item","PWB_5_R","In many ways I feel disappointed about my achievements in life."
+"pwb_06_r","integer","recoded_item","PWB_6_R","Maintaining close relationships has been difficult and frustrating for me."
+"pwb_07_r","integer","recoded_item","PWB_7_R","I live life one day at a time and don't really think about the future."
+"pwb_10_r","integer","recoded_item","PWB_10_R","I sometimes feel as if I've done all there is to do in life."
+"pwb_14_r","integer","recoded_item","PWB_14_R","I gave up trying to make big improvements or changes in my life a long time ago."
+"pwb_15_r","integer","recoded_item","PWB_15_R","I tend to be influenced by people with strong opinions."
+"pwb_16_r","integer","recoded_item","PWB_16_R","I have not experienced many warm and trusting relationships with others."
+"pwb_autonomy_tot","integer","subscale","PWB_Autonomy_tot","PWB18 Autonomy Subscale Sum Score"
+"pwb_envmas_tot","integer","subscale","PWB_EnvMas_tot","PWB18 Environmental Subscale Sum Score"
+"pwb_growth_tot","integer","subscale","PWB_Growth_tot","PWB18 Growth Subscale Sum Score"
+"pwb_posrelations_tot","integer","subscale","PWB_PosRelations_tot","PWB18 ositive Relations with Others Subscale Sum Score"
+"pwb_purpose_tot","integer","subscale","PWB_Purpose_tot","PWB18 Purpose in Life Subscale Sum Score"
+"pwb_selfaccept_tot","integer","subscale","PWB_SelfAccept_tot","PWB18 Acceptance Subscale Sum Score"
+"sris12_2_r","integer","recoded_item","SRIS12_2_R","My behavior often puzzles me."
+"sris12_3_r","integer","recoded_item","SRIS12_3_R","I’m often aware that I’m having a feeling, but I often don’t quite know what it is."
+"sris12_7_r","integer","recoded_item","SRIS12_7_R","I’m often confused about the way that I really feel about things."
+"sris12_8_r","integer","recoded_item","SRIS12_8_R","Often I find it difficult to make sense of the way I feel about things."
+"sris12_9_r","integer","recoded_item","SRIS12_9_R","Thinking about my thoughts makes me more confused."
+"sris_reflection_tot","integer","subscale","SRIS_reflection_tot","SRIS Self Reflection Scale Sum Score"
+"sris_insight_tot","integer","subscale","SRIS_insight_tot","SRIS Self Insight Scale Sum Score"
+"aniq_awareness_tot","integer","subscale","ANIQ_awareness_tot","ANIQ Awareness Subscale Sum Score"
+"aniq_temp_coherence_tot","integer","subscale","ANIQ_temp_coherence_tot","ANIQ Temporal Coherence Subscale Sum Score"
+"aniq_causal_coherence_tot","integer","subscale","ANIQ_causal_coherence_tot","ANIQ Causal Coherence Subscale Sum Score"
+"aniq_thematic_coherence_tot","integer","subscale","ANIQ_thematic_coherence_tot","ANIQ Thematic Coherence Subscale Sum Score"
+"aniq_tot","integer","scale","ANIQ_tot","ANIQ Total Score"

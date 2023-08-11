@@ -1,4 +1,11 @@
 "variable","value","label","meta"
+"Prolific_ID",NA,"What is your Prolific ID? Please note that this response should auto-fill with the correct ID","varlab"
+"ID_check",NA,"Please confirm your 24 digit Prolific ID by entering it below.","varlab"
+"Progress",NA,"Progress","varlab"
+"Duration__in_seconds_",NA,"Duration (in seconds)","varlab"
+"RecordedDate",NA,"Recorded Date","varlab"
+"ResponseId",NA,"Response ID","varlab"
+"ExternalReference",NA,"External Data Reference","varlab"
 "Consent_confirm",NA,"In this study we will ask you to record your voice while answering free-response prompts about your thoughts, feelings, activities, and memories. To confirm that you are eligible to participate, please answer the question below:
 
 
@@ -6,6 +13,7 @@
 Are you willing to let this study record your voice when responding to questions?","varlab"
 "Consent_confirm",1,"Yes",NA
 "Consent_confirm",0,"No",NA
+"Consent_no",NA,"We appreciate your willingness to participate, unfortunately one or more of your responses or your device settings indicate that you are not eligible to participate in this study. Please close this window and return this study on Prolific so that your account is not penalized by a rejection.","varlab"
 "Recording_test",NA,"Using the microphone widget below, please record the following: ""Hello, this is a test recording."" Please make sure to allow access to your device's microphone. After recording, please click on Review Recording to check that you can hear your voice playing back. If you can't hear your voice, please make sure you have allowed access to your microphone, and that your device's volume is on.
 
 
@@ -615,6 +623,16 @@ Completely agree",NA
 "WBpro_Positive Emotions",7,"Agree",NA
 "WBpro_Positive Emotions",8,"Strongly agree",NA
 "WBpro_Positive Emotions",9,"Completely agree",NA
+"Attention2",NA,"This is an attention check - please answer ""Completely agree""","varlab"
+"Attention2",1,"Completely disagree",NA
+"Attention2",2,"Strongly disagree",NA
+"Attention2",3,"Disagree",NA
+"Attention2",4,"Somewhat disagree",NA
+"Attention2",5,"Neither agree nor disagree",NA
+"Attention2",6,"Somewhat agree",NA
+"Attention2",7,"Agree",NA
+"Attention2",8,"Strongly agree",NA
+"Attention2",9,"Completely agree",NA
 "WBpro_Positive Relationships",NA,"There are people in my life who really care about me.","varlab"
 "WBpro_Positive Relationships",1,"Completely disagree",NA
 "WBpro_Positive Relationships",2,"Strongly disagree",NA
@@ -774,174 +792,161 @@ Completely agree",NA
 "PromptNarr_1_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptNarr_1_confirm",1,"Yes",NA
 "PromptNarr_1_confirm",2,"No",NA
+"PromptNarr_1_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptNarr_1_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptNarr_1_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptNarr_1_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptNarr_2_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptNarr_2_confirm",1,"Yes",NA
 "PromptNarr_2_confirm",2,"No",NA
+"PromptNarr_2_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptNarr_2_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptNarr_2_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptNarr_2_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptNarr_3_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptNarr_3_confirm",1,"Yes",NA
 "PromptNarr_3_confirm",2,"No",NA
+"PromptNarr_3_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptNarr_3_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptNarr_3_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptNarr_3_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptNarr_4_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptNarr_4_confirm",1,"Yes",NA
 "PromptNarr_4_confirm",2,"No",NA
+"PromptNarr_4_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptNarr_4_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptNarr_4_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptNarr_4_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptNarr_5_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptNarr_5_confirm",1,"Yes",NA
 "PromptNarr_5_confirm",2,"No",NA
+"PromptNarr_5_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptNarr_5_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptNarr_5_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptNarr_5_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_1_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_1_confirm",1,"Yes",NA
 "PromptWB_1_confirm",2,"No",NA
+"PromptWB_1_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_1_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_1_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_1_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_2_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_2_confirm",1,"Yes",NA
 "PromptWB_2_confirm",2,"No",NA
+"PromptWB_2_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_2_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_2_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_2_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_3_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_3_confirm",1,"Yes",NA
 "PromptWB_3_confirm",2,"No",NA
+"PromptWB_3_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_3_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_3_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_3_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_4_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_4_confirm",1,"Yes",NA
 "PromptWB_4_confirm",2,"No",NA
+"PromptWB_4_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_4_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_4_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_4_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_5_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_5_confirm",1,"Yes",NA
 "PromptWB_5_confirm",2,"No",NA
+"PromptWB_5_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_5_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_5_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_5_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_6_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_6_confirm",1,"Yes",NA
 "PromptWB_6_confirm",2,"No",NA
+"PromptWB_6_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_6_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_6_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_6_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_7_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_7_confirm",1,"Yes",NA
 "PromptWB_7_confirm",2,"No",NA
+"PromptWB_7_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_7_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_7_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_7_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_8_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_8_confirm",1,"Yes",NA
 "PromptWB_8_confirm",2,"No",NA
+"PromptWB_8_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_8_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_8_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_8_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_9_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_9_confirm",1,"Yes",NA
 "PromptWB_9_confirm",2,"No",NA
+"PromptWB_9_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_9_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_9_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_9_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_10_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_10_confirm",1,"Yes",NA
 "PromptWB_10_confirm",2,"No",NA
+"PromptWB_10_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_10_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_10_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_10_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_11_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_11_confirm",1,"Yes",NA
 "PromptWB_11_confirm",2,"No",NA
+"PromptWB_11_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_11_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_11_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_11_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_12_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_12_confirm",1,"Yes",NA
 "PromptWB_12_confirm",2,"No",NA
+"PromptWB_12_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_12_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_12_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_12_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_13_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_13_confirm",1,"Yes",NA
 "PromptWB_13_confirm",2,"No",NA
+"PromptWB_13_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_13_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_13_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_13_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_14_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_14_confirm",1,"Yes",NA
 "PromptWB_14_confirm",2,"No",NA
+"PromptWB_14_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_14_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_14_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_14_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptWB_15_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptWB_15_confirm",1,"Yes",NA
 "PromptWB_15_confirm",2,"No",NA
+"PromptWB_15_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptWB_15_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptWB_15_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptWB_15_time_Click_Count",NA,"Timing - Click Count","varlab"
 "PromptGoal_confirm",NA,"Did you click ""accept"" on your recording above and does the microphone widget confirm it was published? (You must click ""accept"" in order for the recording to successfully submit)","varlab"
 "PromptGoal_confirm",1,"Yes",NA
 "PromptGoal_confirm",2,"No",NA
-"ResourceHelp_1",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Educational or learning materials","varlab"
-"ResourceHelp_1",1,"Educational or learning materials",NA
-"ResourceHelp_2",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Financial resources","varlab"
-"ResourceHelp_2",1,"Financial resources",NA
-"ResourceHelp_3",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Friends or family","varlab"
-"ResourceHelp_3",1,"Friends or family",NA
-"ResourceHelp_4",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Mentorship or supervision","varlab"
-"ResourceHelp_4",1,"Mentorship or supervision",NA
-"ResourceHelp_5",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Mobile apps for goal/wellness tracking","varlab"
-"ResourceHelp_5",1,"Mobile apps for goal/wellness tracking",NA
-"ResourceHelp_7",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Online communities","varlab"
-"ResourceHelp_7",1,"Online communities",NA
-"ResourceHelp_8",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Religious or spiritual communities","varlab"
-"ResourceHelp_8",1,"Religious or spiritual communities",NA
-"ResourceHelp_9",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Something else not on this list","varlab"
-"ResourceHelp_9",1,"Something else not on this list",NA
-"ContentHelp_1",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Goal setting","varlab"
-"ContentHelp_1",1,"Goal setting",NA
-"ContentHelp_2",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Habit building","varlab"
-"ContentHelp_2",1,"Habit building",NA
-"ContentHelp_3",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Problem solving","varlab"
-"ContentHelp_3",1,"Problem solving",NA
-"ContentHelp_4",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Time management","varlab"
-"ContentHelp_4",1,"Time management",NA
-"ContentHelp_5",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Belonging","varlab"
-"ContentHelp_5",1,"Belonging",NA
-"ContentHelp_6",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Finding support among friends or family","varlab"
-"ContentHelp_6",1,"Finding support among friends or family",NA
-"ContentHelp_7",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Finding purpose","varlab"
-"ContentHelp_7",1,"Finding purpose",NA
-"ContentHelp_8",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Understanding who I am","varlab"
-"ContentHelp_8",1,"Understanding who I am",NA
-"ContentHelp_9",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Self-compassion","varlab"
-"ContentHelp_9",1,"Self-compassion",NA
-"ContentHelp_10",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Understanding my emotions","varlab"
-"ContentHelp_10",1,"Understanding my emotions",NA
-"ContentHelp_11",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Coping skills","varlab"
-"ContentHelp_11",1,"Coping skills",NA
-"ContentHelp_12",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Something else not on this list","varlab"
-"ContentHelp_12",1,"Something else not on this list",NA
-"Languishing_1",NA,"In the last month, have you felt like any of the following? Select all that apply: Empty","varlab"
-"Languishing_1",1,"Empty",NA
-"Languishing_2",NA,"In the last month, have you felt like any of the following? Select all that apply: Unsatisfied with life","varlab"
-"Languishing_2",1,"Unsatisfied with life",NA
-"Languishing_3",NA,"In the last month, have you felt like any of the following? Select all that apply: Disappointed in your achievements","varlab"
-"Languishing_3",1,"Disappointed in your achievements",NA
-"Languishing_4",NA,"In the last month, have you felt like any of the following? Select all that apply: Isolated from others","varlab"
-"Languishing_4",1,"Isolated from others",NA
-"Languishing_5",NA,"In the last month, have you felt like any of the following? Select all that apply: Disinterested","varlab"
-"Languishing_5",1,"Disinterested",NA
-"Languishing_6",NA,"In the last month, have you felt like any of the following? Select all that apply: Stuck","varlab"
-"Languishing_6",1,"Stuck",NA
-"Languishing_7",NA,"In the last month, have you felt like any of the following? Select all that apply: Purposeless","varlab"
-"Languishing_7",1,"Purposeless",NA
-"Languishing_8",NA,"In the last month, have you felt like any of the following? Select all that apply: Powerless","varlab"
-"Languishing_8",1,"Powerless",NA
-"Languishing_9",NA,"In the last month, have you felt like any of the following? Select all that apply: Pessimistic about the future","varlab"
-"Languishing_9",1,"Pessimistic about the future",NA
-"Languishing_10",NA,"In the last month, have you felt like any of the following? Select all that apply: Alienated from society","varlab"
-"Languishing_10",1,"Alienated from society",NA
-"Document_Tools_1",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Social media","varlab"
-"Document_Tools_1",1,"Social media",NA
-"Document_Tools_2",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Pen and paper","varlab"
-"Document_Tools_2",1,"Pen and paper",NA
-"Document_Tools_3",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Audio","varlab"
-"Document_Tools_3",1,"Audio",NA
-"Document_Tools_4",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Video","varlab"
-"Document_Tools_4",1,"Video",NA
-"Document_Tools_5",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Photography","varlab"
-"Document_Tools_5",1,"Photography",NA
-"Document_Tools_6",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Other","varlab"
-"Document_Tools_6",1,"Other",NA
-"Document_Tools_7",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice None/I don't document my life","varlab"
-"Document_Tools_7",1,"None/I don't document my life",NA
-"Document_Freq",NA,"How often do you document your life?","varlab"
-"Document_Freq",1,"Less than once a month",NA
-"Document_Freq",2,"At least monthly",NA
-"Document_Freq",3,"At least weekly",NA
-"Document_Freq",4,"At least daily",NA
-"Document_Freq",5,"Multiple times a day",NA
-"Document_Benefits_1",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Reduces stress","varlab"
-"Document_Benefits_1",1,"Reduces stress",NA
-"Document_Benefits_2",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Improves mood","varlab"
-"Document_Benefits_2",1,"Improves mood",NA
-"Document_Benefits_3",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Provides a sense of accomplishment","varlab"
-"Document_Benefits_3",1,"Provides a sense of accomplishment",NA
-"Document_Benefits_4",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Better understand myself and my experiences","varlab"
-"Document_Benefits_4",1,"Better understand myself and my experiences",NA
-"Document_Benefits_5",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Improves my memory","varlab"
-"Document_Benefits_5",1,"Improves my memory",NA
-"Document_Benefits_6",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Gain clarity about my thoughts and feelings","varlab"
-"Document_Benefits_6",1,"Gain clarity about my thoughts and feelings",NA
-"Document_Benefits_7",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Identify patterns or underlying themes in my thoughts and emotions","varlab"
-"Document_Benefits_7",1,"Identify patterns or underlying themes in my thoughts and emotions",NA
-"Document_Benefits_8",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Provides a creative outlet for self-expression","varlab"
-"Document_Benefits_8",1,"Provides a creative outlet for self-expression",NA
-"Document_Benefits_9",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Set and achieve goals","varlab"
-"Document_Benefits_9",1,"Set and achieve goals",NA
-"Document_Benefits_10",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Track personal growth and development","varlab"
-"Document_Benefits_10",1,"Track personal growth and development",NA
-"Document_Benefits_11",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Other","varlab"
-"Document_Benefits_11",1,"Other",NA
+"PromptGoal_time_First_Click",NA,"Timing - First Click","varlab"
+"PromptGoal_time_Last_Click",NA,"Timing - Last Click","varlab"
+"PromptGoal_time_Page_Submit",NA,"Timing - Page Submit","varlab"
+"PromptGoal_time_Click_Count",NA,"Timing - Click Count","varlab"
+"ResourceHelp_9_TEXT",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Something else not on this list - Text","varlab"
+"ContentHelp_12_TEXT",NA,"Of the following topic areas, which do you feel you could use the most help with? - Something else not on this list - Text","varlab"
+"Document_Tools_6_TEXT",NA,"What tools do you use to journal or document your life?  Select all that apply: - Other - Text","varlab"
+"Document_Benefits_11_TEXT",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Other - Text","varlab"
 "StoryInterest",NA,"Sharing your story can help you learn more about yourself. If you were going to share your story, would you be interested in a safe and secure digital place where you could self-reflect and talk openly about your life?","varlab"
 "StoryInterest",1,"Very disinterested",NA
 "StoryInterest",2,"Somewhat disinterested",NA
 "StoryInterest",3,"Neutral",NA
 "StoryInterest",4,"Somewhat interested",NA
 "StoryInterest",5,"Very interested",NA
+"StoryInterest_Desc",NA,"Please describe why you would be disinterested.","varlab"
 "content_recruit",NA,"Would you be interested in being contacted about a later Prolific study where you provide voice recordings for us to use in our company’s future projects? These voice recordings would be used publicly, but we would otherwise be careful about protecting your anonymity.
 
 
@@ -949,64 +954,145 @@ Completely agree",NA
 (Note: this is for a future study, where you will first have the opportunity to learn all details of the study, and provide consent at that time. Also, a reminder that the recordings you provided today in the current study will NOT be used for anything other than our internal company research.)","varlab"
 "content_recruit",1,"Yes",NA
 "content_recruit",0,"No",NA
-"SWLS_tot",NA,"Satisfaction with Life Scale Total","varlab"
-"SWLS_tot",5,"Extremely Dissatisfied1",NA
-"SWLS_tot",6,"Extremely Dissatisfied2",NA
-"SWLS_tot",7,"Extremely Dissatisfied3",NA
-"SWLS_tot",8,"Extremely Dissatisfied4",NA
-"SWLS_tot",9,"Extremely Dissatisfied5",NA
-"SWLS_tot",10,"Dissatisfied1",NA
-"SWLS_tot",11,"Dissatisfied2",NA
-"SWLS_tot",12,"Dissatisfied3",NA
-"SWLS_tot",13,"Dissatisfied4",NA
-"SWLS_tot",14,"Dissatisfied5",NA
-"SWLS_tot",15,"Slightly Dissatisfied1",NA
-"SWLS_tot",16,"Slightly Dissatisfied2",NA
-"SWLS_tot",17,"Slightly Dissatisfied3",NA
-"SWLS_tot",18,"Slightly Dissatisfied4",NA
-"SWLS_tot",19,"Slightly Dissatisfied5",NA
-"SWLS_tot",20,"Neutral",NA
-"SWLS_tot",21,"Slightly Satisfied1",NA
-"SWLS_tot",22,"Slightly Satisfied2",NA
-"SWLS_tot",23,"Slightly Satisfied3",NA
-"SWLS_tot",24,"Slightly Satisfied4",NA
-"SWLS_tot",25,"Slightly Satisfied5",NA
-"SWLS_tot",26,"Satisfied1",NA
-"SWLS_tot",27,"Satisfied2",NA
-"SWLS_tot",28,"Satisfied3",NA
-"SWLS_tot",29,"Satisfied4",NA
-"SWLS_tot",30,"Satisfied5",NA
-"SWLS_tot",31,"Extremely Satisfied1",NA
-"SWLS_tot",32,"Extremely Satisfied2",NA
-"SWLS_tot",33,"Extremely Satisfied3",NA
-"SWLS_tot",34,"Extremely Satisfied4",NA
-"SWLS_tot",35,"Extremely Satisfied5",NA
-"PERMA_pos_tot",NA,"PERMA Positive Affect","varlab"
-"PERMA_neg_tot",NA,"PERMA Negative Affect","varlab"
-"PWB_4_R",NA,"PWB_4 Reverse Scored","varlab"
-"PWB_5_R",NA,"PWB_5 Reverse Scored","varlab"
-"PWB_6_R",NA,"PWB_6 Reverse Scored","varlab"
-"PWB_7_R",NA,"PWB_7 Reverse Scored","varlab"
-"PWB_10_R",NA,"PWB_10 Reverse Scored","varlab"
-"PWB_14_R",NA,"PWB_14 Reverse Scored","varlab"
-"PWB_15_R",NA,"PWB_15 Reverse Scored","varlab"
-"PWB_16_R",NA,"PWB_16 Reverse Scored","varlab"
-"PWB_Autonomy_tot",NA,"PWB18 Autonomy Subscale","varlab"
-"PWB_EnvMas_tot",NA,"PWB18 Environmental Mastery Subscale","varlab"
-"PWB_Growth_tot",NA,"PWB18 Growth Subscale","varlab"
-"PWB_PosRelations_tot",NA,"PWB18 Positive Relations with Others Subscale","varlab"
-"PWB_Purpose_tot",NA,"PWB18 Purpose in Life Subscale","varlab"
-"PWB_PurposeFULL_tot",NA,"PWB42 Purpose in Life Subscale","varlab"
-"PWB_SelfAccept_tot",NA,"PWB18 Self Acceptance Subscale","varlab"
-"SRIS12_2_R",NA,"SRIS12_2 Reverse Scored","varlab"
-"SRIS12_3_R",NA,"SRIS12_3 Reverse Scored","varlab"
-"SRIS12_7_R",NA,"SRIS12_7 Reverse Scored","varlab"
-"SRIS12_8_R",NA,"SRIS12_8 Reverse Scored","varlab"
-"SRIS12_9_R",NA,"SRIS12_9 Reverse Scored","varlab"
-"SRIS_reflection_tot",NA,"SRIS Self Reflection Scale","varlab"
-"SRIS_insight_tot",NA,"SRIS Insight Scale","varlab"
-"ANIQ_awareness_tot",NA,"ANIQ Awareness","varlab"
-"ANIQ_temp_coherence_tot",NA,"ANIQ Temporal Coherence","varlab"
-"ANIQ_causal_coherence_tot",NA,"ANIQ Causal Coherence","varlab"
-"ANIQ_thematic_coherence_tot",NA,"ANIQ Thematic Coherence","varlab"
+"Outro",NA,"You have now completed the survey questions and audio recordings. Let us know below if you have any feedback on the study. If you have any questions, please contact us through Prolific.
+
+
+
+Thank you so much for sharing your stories, especially since some may have been emotionally charged. If you or someone you care about needs immediate support, you can talk to a trained, supportive person via text, 24 hours, 7 days a week, by connecting with the Crisis Text Line. Just text HOME to 741741. If you would like to talk to someone live, you can connect with a trained, supportive person by phone. Just dial “988” or 1-800-273-TALK.
+
+
+
+Thank you again for your time. Please click the next button to be redirected to Prolific and confirm your completion of today's survey.","varlab"
+"flag_dupe_survey",NA,"TRUE if this observation came from a user who recorded more than one observation; FALSE if this observation came from a unique user","varlab"
+"flag_most_complete",NA,"TRUE if this observation came from a unique user, or was the most complete one among duplicated observations; SAME if the duplicated observations had same progress;
+FALSE if it did not came from a unique user and wasn't the most completed one","varlab"
+"flag_failed_recording_test",NA,"TRUE if participants failed teh recording test. NAs were retained","varlab"
+"flag_failed_attention",NA,"TRUE if at least 1 attention checks failed; FALSE if 1 attention check passed + 1 missing or failed both; NA if both attention checks are missing","varlab"
+"flag_failed_attention_n",NA,"total number of attention checks failed (NA not counted as failure)","varlab"
+"flag_no_survey",NA,"TRUE if participants didn't provide any survey data; FALSE if at least 1 survey item was recorded","varlab"
+"max_identical",NA,"The number if identical survey responses in a seqeunce","varlab"
+"max_identical_perc",NA,"The perceptage of identical survey responses in a seqeunce out of all survey items","varlab"
+"flag_rec_include",NA,"TRUE if WB team recommend to include this observation. Criteria include:- at least some survey data
+- did not failed both attention check questions 
+- is the most completed survey if there were duplicates. ","varlab"
+"SWLS_tot",NA,"total life satisfaction score","varlab"
+"SWLS_tot_f",NA,"life satisfaction categories","varlab"
+"PERMA_pos",NA,"PERMA Positive Affect","varlab"
+"PERMA_neg",NA,"PERMA Negative Affect","varlab"
+"PWB_4_R",NA,"The demands of everyday life often get me down.","varlab"
+"PWB_4_R",1,"Strongly disagree",NA
+"PWB_4_R",2,"Somewhat disagree",NA
+"PWB_4_R",3,"A little disagree",NA
+"PWB_4_R",4,"Neither agree or disagree",NA
+"PWB_4_R",5,"A little agree",NA
+"PWB_4_R",6,"Somewhat agree",NA
+"PWB_4_R",7,"Strongly agree",NA
+"PWB_5_R",NA,"In many ways I feel disappointed about my achievements in life.","varlab"
+"PWB_5_R",1,"Strongly disagree",NA
+"PWB_5_R",2,"Somewhat disagree",NA
+"PWB_5_R",3,"A little disagree",NA
+"PWB_5_R",4,"Neither agree or disagree",NA
+"PWB_5_R",5,"A little agree",NA
+"PWB_5_R",6,"Somewhat agree",NA
+"PWB_5_R",7,"Strongly agree",NA
+"PWB_6_R",NA,"Maintaining close relationships has been difficult and frustrating for me.","varlab"
+"PWB_6_R",1,"Strongly disagree",NA
+"PWB_6_R",2,"Somewhat disagree",NA
+"PWB_6_R",3,"A little disagree",NA
+"PWB_6_R",4,"Neither agree or disagree",NA
+"PWB_6_R",5,"A little agree",NA
+"PWB_6_R",6,"Somewhat agree",NA
+"PWB_6_R",7,"Strongly agree",NA
+"PWB_7_R",NA,"I live life one day at a time and don't really think about the future.","varlab"
+"PWB_7_R",1,"Strongly disagree",NA
+"PWB_7_R",2,"Somewhat disagree",NA
+"PWB_7_R",3,"A little disagree",NA
+"PWB_7_R",4,"Neither agree or disagree",NA
+"PWB_7_R",5,"A little agree",NA
+"PWB_7_R",6,"Somewhat agree",NA
+"PWB_7_R",7,"Strongly agree",NA
+"PWB_10_R",NA,"I sometimes feel as if I've done all there is to do in life.","varlab"
+"PWB_10_R",1,"Strongly disagree",NA
+"PWB_10_R",2,"Somewhat disagree",NA
+"PWB_10_R",3,"A little disagree",NA
+"PWB_10_R",4,"Neither agree or disagree",NA
+"PWB_10_R",5,"A little agree",NA
+"PWB_10_R",6,"Somewhat agree",NA
+"PWB_10_R",7,"Strongly agree",NA
+"PWB_14_R",NA,"I gave up trying to make big improvements or changes in my life a long time ago.","varlab"
+"PWB_14_R",1,"Strongly disagree",NA
+"PWB_14_R",2,"Somewhat disagree",NA
+"PWB_14_R",3,"A little disagree",NA
+"PWB_14_R",4,"Neither agree or disagree",NA
+"PWB_14_R",5,"A little agree",NA
+"PWB_14_R",6,"Somewhat agree",NA
+"PWB_14_R",7,"Strongly agree",NA
+"PWB_15_R",NA,"I tend to be influenced by people with strong opinions.","varlab"
+"PWB_15_R",1,"Strongly disagree",NA
+"PWB_15_R",2,"Somewhat disagree",NA
+"PWB_15_R",3,"A little disagree",NA
+"PWB_15_R",4,"Neither agree or disagree",NA
+"PWB_15_R",5,"A little agree",NA
+"PWB_15_R",6,"Somewhat agree",NA
+"PWB_15_R",7,"Strongly agree",NA
+"PWB_16_R",NA,"I have not experienced many warm and trusting relationships with others.","varlab"
+"PWB_16_R",1,"Strongly disagree",NA
+"PWB_16_R",2,"Somewhat disagree",NA
+"PWB_16_R",3,"A little disagree",NA
+"PWB_16_R",4,"Neither agree or disagree",NA
+"PWB_16_R",5,"A little agree",NA
+"PWB_16_R",6,"Somewhat agree",NA
+"PWB_16_R",7,"Strongly agree",NA
+"PWB_Autonomy_tot",NA,"PWB18 Autonomy Subscale Sum Score","varlab"
+"PWB_EnvMas_tot",NA,"PWB18 Environmental Subscale Sum Score","varlab"
+"PWB_Growth_tot",NA,"PWB18 Growth Subscale Sum Score","varlab"
+"PWB_PosRelations_tot",NA,"PWB18 ositive Relations with Others Subscale Sum Score","varlab"
+"PWB_Purpose_tot",NA,"PWB18 Purpose in Life Subscale Sum Score","varlab"
+"PWB_SelfAccept_tot",NA,"PWB18 Acceptance Subscale Sum Score","varlab"
+"SRIS12_2_R",NA,"My behavior often puzzles me.","varlab"
+"SRIS12_2_R",1,"Strongly disagree",NA
+"SRIS12_2_R",2,"Somewhat disagree",NA
+"SRIS12_2_R",3,"A little disagree",NA
+"SRIS12_2_R",4,"Neither agree or disagree",NA
+"SRIS12_2_R",5,"A little agree",NA
+"SRIS12_2_R",6,"Somewhat agree",NA
+"SRIS12_2_R",7,"Strongly agree",NA
+"SRIS12_3_R",NA,"I’m often aware that I’m having a feeling, but I often don’t quite know what it is.","varlab"
+"SRIS12_3_R",1,"Strongly disagree",NA
+"SRIS12_3_R",2,"Somewhat disagree",NA
+"SRIS12_3_R",3,"A little disagree",NA
+"SRIS12_3_R",4,"Neither agree or disagree",NA
+"SRIS12_3_R",5,"A little agree",NA
+"SRIS12_3_R",6,"Somewhat agree",NA
+"SRIS12_3_R",7,"Strongly agree",NA
+"SRIS12_7_R",NA,"I’m often confused about the way that I really feel about things.","varlab"
+"SRIS12_7_R",1,"Strongly disagree",NA
+"SRIS12_7_R",2,"Somewhat disagree",NA
+"SRIS12_7_R",3,"A little disagree",NA
+"SRIS12_7_R",4,"Neither agree or disagree",NA
+"SRIS12_7_R",5,"A little agree",NA
+"SRIS12_7_R",6,"Somewhat agree",NA
+"SRIS12_7_R",7,"Strongly agree",NA
+"SRIS12_8_R",NA,"Often I find it difficult to make sense of the way I feel about things.","varlab"
+"SRIS12_8_R",1,"Strongly disagree",NA
+"SRIS12_8_R",2,"Somewhat disagree",NA
+"SRIS12_8_R",3,"A little disagree",NA
+"SRIS12_8_R",4,"Neither agree or disagree",NA
+"SRIS12_8_R",5,"A little agree",NA
+"SRIS12_8_R",6,"Somewhat agree",NA
+"SRIS12_8_R",7,"Strongly agree",NA
+"SRIS12_9_R",NA,"Thinking about my thoughts makes me more confused.","varlab"
+"SRIS12_9_R",1,"Strongly disagree",NA
+"SRIS12_9_R",2,"Somewhat disagree",NA
+"SRIS12_9_R",3,"A little disagree",NA
+"SRIS12_9_R",4,"Neither agree or disagree",NA
+"SRIS12_9_R",5,"A little agree",NA
+"SRIS12_9_R",6,"Somewhat agree",NA
+"SRIS12_9_R",7,"Strongly agree",NA
+"SRIS_reflection_tot",NA,"SRIS Self Reflection Scale Sum Score","varlab"
+"SRIS_insight_tot",NA,"SRIS Self Insight Scale Sum Score","varlab"
+"ANIQ_awareness_tot",NA,"ANIQ Awareness Subscale Sum Score","varlab"
+"ANIQ_temp_coherence_tot",NA,"ANIQ Temporal Coherence Subscale Sum Score","varlab"
+"ANIQ_causal_coherence_tot",NA,"ANIQ Causal Coherence Subscale Sum Score","varlab"
+"ANIQ_thematic_coherence_tot",NA,"ANIQ Thematic Coherence Subscale Sum Score","varlab"
 "ANIQ_tot",NA,"ANIQ Total Score","varlab"
