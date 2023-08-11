@@ -1,0 +1,221 @@
+---
+title: "ltab_codebook"
+author: "`r Sys.getenv('USER')`"
+date: '`r Sys.Date()`'
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    highlight: tango
+    theme: united
+    toc: yes
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+  pdf_document:
+    toc: yes
+  md_document:
+    variant: markdown_github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r libraries}
+library(tidyverse)
+library(here)
+library(psych)
+library(janitor)
+library(broom)
+library(gt)
+library(gtsummary)
+library(reactable)
+```
+
+# prepping
+```{r}
+# load survey item coding schema
+survey_item_std <- read.csv(here("inputs", "standardize_survey_items.csv"))
+
+# load survey dictionary
+survey_std <- read.csv(here("inputs", "standardize_survey.csv"))
+
+# load standardized dataset
+ltab_df_std <- read.csv(here("outputs", "ltaw_df_std_110823.csv"))
+
+# load variable naming list
+survey_varname_std <- read.csv(here("outputs", "ltaw_var_summary_110823.csv"))
+
+# load item dictionary
+ltab_data_scored_dict <- read.csv(here("outputs", "LTAW_data_scored_dict.csv"))
+```
+
+# Let's Talk About Wellbeing Overview
+
+## Study Design
+This is a cross-sectional study launched in Prolific with Qualtrics and CameraTag.  
+
+## Dataset Overview
+
+```{r}
+# identify number of observations
+obs <- ltab_df_std %>%
+  nrow()
+
+unique_obs <- ltab_df_std[unique(ltab_df_std$userid),] %>%
+  nrow()
+
+# identify study_idx
+study_idx <- unique(ltab_df_std$servey_name)
+```
+
+The index of the present dataset is `r study_idx`. This dataset includes `r obs` observations from `r unique_obs` participants.It contains Survey Items, Demographics, Moments, Open-ended questions related to content recommendation and Value prop questions. No repeated measures. 
+
+# Scale Level Overview
+
+```{r}
+
+scale_df <- survey_std %>%
+  filter(item_suffix == "") %>%
+  select(-item_suffix, -calculation)
+
+scale_df %>%
+  reactable(striped = TRUE,
+            filterable = TRUE,   resizable = TRUE)
+
+```
+
+# Subscale level overview
+
+```{r}
+subscale_name <- survey_varname_std$var_name[survey_varname_std$item_type == "subscale" | survey_varname_std$item_type == "scale"]
+
+subscale_df <- ltab_df_std %>%
+  select(all_of(subscale_name)) %>%
+  select(-swls_tot_f) %>%
+  gather(subscale, value) %>%
+  nest(-subscale) %>%
+  mutate(des = map(data, ~describe(.x$value))) %>%
+  unnest(des) %>%
+  select(-data, -vars) %>%
+  mutate(missing_perc = (obs - n)/n * 100) %>%
+  mutate_if(is.numeric,round, 3) %>%
+  select(-trimmed, -mad, -se) %>%
+  left_join(select(survey_std, var_name, function.,calculation), by = c("subscale" = "var_name")) %>%
+  relocate(function., .before = 2)
+
+subscale_df %>%
+  reactable(striped = TRUE,
+            filterable = TRUE,   resizable = TRUE)
+```
+
+# Item-level summary
+
+```{r}
+# subset with std data with item variables
+std_item_names <- survey_varname_std$var_name[survey_varname_std$item_type == "item" | survey_varname_std$item_type == "recoded_item"]
+
+item_df <- ltab_df_std %>%
+  select(all_of(std_item_names))
+
+# calculate percentage of missing 
+scaleitem_missing <- map_dbl(item_df, ~ 100*mean(is.na(.)))
+
+ltab_var_df <- data.frame(question_id = std_item_names) %>%
+  mutate(missing_perc = round(scaleitem_missing, 3), 
+         rept_measure = FALSE)
+
+# merge with standardized coding schema
+ltab_item_sum <- survey_item_std %>%
+  mutate(include = case_when(question_id %in% std_item_names ~ TRUE,
+                             TRUE ~ FALSE)) %>%
+  left_join(ltab_var_df, by = "question_id")
+
+ltab_item_sum %>%
+  reactable(striped = TRUE,
+            filterable = TRUE,   resizable = TRUE)
+```
+
+# demographic summary
+
+## Assessed by survey item
+
+The following demographic categories were assessed by the survey item
+```{r}
+survey_varname_std$var_name[survey_varname_std$item_type == "demo" | survey_varname_std$item_type == "demo_coal"]
+```
+
+Categories within each demographic variable:  
+```{r}
+ltab_demo_sum <- ltab_df_std %>%
+  select(contains("demo_")) %>%
+  pivot_longer(cols = everything(), names_to = "demo_var", values_to = "category") %>%
+  group_by(demo_var, category) %>% 
+  summarise(n = n(), .groups = "drop") %>%
+  group_by(demo_var) %>%
+  mutate(percentage = round(n / sum(n) * 100, 3)) %>%
+  filter(category !="")
+
+ltab_demo_sum %>%
+  reactable(striped = TRUE,
+            filterable = TRUE,   resizable = TRUE)
+```
+
+## Assessed by prolific
+
+```{r}
+(prolific_demo_name <- survey_varname_std$var_name[survey_varname_std$item_type == "prolific_demo"])
+```
+
+age_prolific is a numeric variable  
+
+
+Categories within each demographic variable: 
+```{r}
+ltab_demo_sum <- ltab_df_std %>%
+  select(prolific_demo_name) %>%
+  select(-age_prolific) %>%
+  pivot_longer(cols = everything(), names_to = "demo_var", values_to = "category") %>%
+  group_by(demo_var, category) %>% 
+  summarise(n = n(), .groups = "drop") %>%
+  group_by(demo_var) %>%
+  mutate(percentage = round(n / sum(n) * 100, 3)) %>%
+  filter(category !="")
+
+ltab_demo_sum %>%
+  reactable(striped = TRUE,
+            filterable = TRUE,   resizable = TRUE)
+```
+
+
+# Data Screening Flags
+```{r}
+
+item_dict <- ltab_data_scored_dict %>%
+  filter(is.na(value))
+
+
+screen_df <- survey_varname_std %>%
+  select(-scale_prefix, -item_suffix) %>%
+  left_join(select(item_dict, variable, label), by = c("ori_name" = "variable")) %>%
+  filter(item_type == "data_screen_flags")
+
+screen_df %>%
+    reactable(striped = TRUE,
+            filterable = TRUE,   resizable = TRUE)
+
+```
+
+# all data label
+
+```{r}
+all_data <- survey_varname_std %>%
+  select(-scale_prefix, -item_suffix) %>%
+  left_join(select(item_dict, variable, label), by = c("ori_name" = "variable"))
+
+all_data %>%
+    reactable(striped = TRUE,
+            filterable = TRUE,   resizable = TRUE)
+```
+
