@@ -61,7 +61,7 @@ plot_aes = theme_minimal() +
 ```{r}
 #survey <- read_sav("/Users/kristina/Downloads/Let's Talk About Well-Being_August 2, 2023_07.59.sav")
 survey <- import(here("inputs", "Let's Talk About Well-Being_August 2, 2023_07.59.sav"))
-survey$survey_name <- "survey"
+survey$survey_name <- "ltaw"
 
 #missing ID check
 count(survey$PROLIFIC_PID=="")
@@ -258,6 +258,8 @@ survey_tidy <- survey_tidy %>%
                                                 Recording_test == 1 ~ FALSE,
                                                 TRUE ~ NA))
 
+attr(survey_tidy$flag_failed_recording_test, "label") <- "TRUE if participants failed teh recording test. NAs were retained"
+
 ```
 
 
@@ -294,6 +296,10 @@ survey_tidy <- survey_tidy %>%
   as.data.frame()
 
 table(survey_tidy$flag_failed_attention_n, useNA = "ifany")
+
+# add label
+attr(survey_tidy$flag_failed_attention, "label") <- "TRUE if at least 1 attention checks failed; FALSE if 1 attention check passed + 1 missing or failed both; NA if both attention checks are missing"
+attr(survey_tidy$flag_failed_attention_n, "label") <- "total number of attention checks failed (NA not counted as failure)"
 ```
 
 
@@ -330,6 +336,7 @@ survey_tidy <- survey_tidy %>%
 
 table(survey_tidy$flag_no_survey, useNA = "ifany")
 
+attr(survey_tidy$flag_no_survey, "label") <- "TRUE if participants didn't provide any survey data; FALSE if at least 1 survey item was recorded"
 ```
 
 ### Data quality: repetitive responses in a sequence
@@ -344,6 +351,9 @@ survey_tidy <- survey_tidy %>%
          max_identical_perc = round((max_identical/item_n)*100))
 
 describe(survey_tidy$max_identical_perc)
+
+attr(survey_tidy$max_identical, "label") <- "The number if identical survey responses in a seqeunce"
+attr(survey_tidy$max_identical_perc, "label") <- "The perceptage of identical survey responses in a seqeunce out of all survey items"
 ```
 
 
@@ -363,6 +373,8 @@ describe(survey_complete$duration)
 
 # check duration distribution within 2 hours
 hist(survey_complete[survey_complete$duration < 120,]$duration)
+
+attr(survey_tidy$duration, "label") <- "The time participants spent on the survey in minutes"
 ```
 
 To further examine those responses with a completion time of less than 10 minutes, we pair these data with other data screening results. Considering all screening, the data quality here looks fine. Therefore, no flag is necessary based on survey duration. 
@@ -390,6 +402,15 @@ mutate(flag_rec_include = case_when(flag_most_complete != FALSE & flag_no_survey
                                       TRUE ~ FALSE))
 
 table(survey_tidy$flag_rec_include, useNA = "ifany")
+
+# add labels
+attr(survey_tidy$flag_dupe_survey, "label") <- "TRUE if this observation came from a user who recorded more than one observation; FALSE if this observation came from a unique user"
+attr(survey_tidy$flag_most_complete, "label") <- "TRUE if this observation came from a unique user, or was the most complete one among duplicated observations; SAME if the duplicated observations had same progress;
+FALSE if it did not came from a unique user and wasn't the most completed one"
+
+attr(survey_tidy$flag_rec_include, "label") <- "TRUE if WB team recommend to include this observation. Criteria include:- at least some survey data
+- did not failed both attention check questions 
+- is the most completed survey if there were duplicates. "
 ```
 
 # Summarize qualtrics completion info {.tabset}
@@ -608,7 +629,7 @@ surveys_scored <- cbind(surveys_scored, PWB_PosRelations_tot = rowSums(surveys_s
 #Purpose in Life Q3, Q7R, Q10R. 
 #added additional purpose subscale items from longer PWB given study design focused on PURPOSE
 surveys_scored <- cbind(surveys_scored, PWB_Purpose_tot = rowSums(surveys_scored[,  grepl("\\bPWB_3\\b|\\bPWB_7_R\\b|\\bPWB_10_R\\b", names(surveys_scored))]))
-surveys_scored <- cbind(surveys_scored, PWB_PurposeFULL_tot = rowSums(surveys_scored[,  grepl("\\bPWB_3\\b|\\bPWB_7_R\\b|\\bPWB_10_R\\b|\\bPWB_Purpose2_R\\b|\\bPWB_Purpose3_R\\b|\\bPWB_Purpose1\\b|\\bPWB_Purpose4\\b", names(surveys_scored))]))
+#surveys_scored <- cbind(surveys_scored, PWB_PurposeFULL_tot = rowSums(surveys_scored[,  grepl("\\bPWB_3\\b|\\bPWB_7_R\\b|\\bPWB_10_R\\b|\\bPWB_Purpose2_R\\b|\\bPWB_Purpose3_R\\b|\\bPWB_Purpose1\\b|\\bPWB_Purpose4\\b", names(surveys_scored))]))
 
 #Self-Acceptance Q1, Q2, Q5R
 surveys_scored <- cbind(surveys_scored, PWB_SelfAccept_tot = rowSums(surveys_scored[,  grepl("\\bPWB_1\\b|\\bPWB_2\\b|\\bPWB_5_R\\b", names(surveys_scored))]))
@@ -619,7 +640,7 @@ attr(surveys_scored$PWB_EnvMas_tot, "label") <- "PWB18 Environmental Subscale Su
 attr(surveys_scored$PWB_Growth_tot, "label") <- "PWB18 Growth Subscale Sum Score"
 attr(surveys_scored$PWB_PosRelations_tot, "label") <- "PWB18 ositive Relations with Others Subscale Sum Score"
 attr(surveys_scored$PWB_Purpose_tot, "label") <- "PWB18 Purpose in Life Subscale Sum Score"
-attr(surveys_scored$PWB_PurposeFULL_tot, "label") <- "PWB42 Purpose in Life Subscale Sum Score"
+#attr(surveys_scored$PWB_PurposeFULL_tot, "label") <- "PWB42 Purpose in Life Subscale Sum Score"
 attr(surveys_scored$PWB_SelfAccept_tot, "label") <- "PWB18 Acceptance Subscale Sum Score"
 
 
