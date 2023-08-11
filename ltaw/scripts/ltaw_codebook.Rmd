@@ -217,5 +217,7 @@ all_data <- survey_varname_std %>%
 all_data %>%
     reactable(striped = TRUE,
             filterable = TRUE,   resizable = TRUE)
+
+#write.csv(all_data, here("outputs", "ltaw_survey_data_dict.csv"), row.names = F)
 ```
 
