@@ -374,7 +374,6 @@ describe(survey_complete$duration)
 # check duration distribution within 2 hours
 hist(survey_complete[survey_complete$duration < 120,]$duration)
 
-attr(survey_tidy$duration, "label") <- "The time participants spent on the survey in minutes"
 ```
 
 To further examine those responses with a completion time of less than 10 minutes, we pair these data with other data screening results. Considering all screening, the data quality here looks fine. Therefore, no flag is necessary based on survey duration. 
@@ -734,6 +733,7 @@ attr(surveys_scored$ANIQ_tot, "label") <- "ANIQ Total Score"
 # export cleaned dataset
 ```{r b_edit}
 surveys_scored_dict <- create_dictionary(surveys_scored, remove_repeated = F, use_references = F)
+
 
 #write.csv(surveys_scored, here("outputs", "ltaw_data_scored.csv"), row.names = F)
 #write.csv(surveys_scored_dict, here("outputs", "ltaw_data_scored_dict.csv"), row.names = F)
