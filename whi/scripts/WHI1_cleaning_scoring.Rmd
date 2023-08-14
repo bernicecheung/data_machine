@@ -1,0 +1,685 @@
+---
+title: "Exploring Community Trend (WHI Pre-pilot) Study Summary 1: Cleaning & Scoring"
+author: "Kristina Dale"
+date: ""
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    highlight: tango
+    theme: united
+    toc: yes
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+  github_document:
+    toc: true
+    toc_depth: 2
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE)
+options(scipen=999)
+```
+
+# Scope
+1. Basic cleaning of survey data
+- Summary of survey completion
+- Survey data coding & scoring
+    
+2. Basic cleaning of moment data
+- Summary of moment completion
+- Moment "scoring"
+  
+Outputs include:
+
+1. cleaned survey data - csv 
+- dictionary - csv
+2. scored survey - csv
+- dictionary - csv
+3. cleaned moments - csv
+4. merged data file (survey+moments) - csv 
+
+scored survey data --> standardization + codebook
+
+cleaned moments --> master (to be processed by DS)
+
+Accompanying files:
+
+1. Study Summary 2: Summary & Descriptive Statistics 
+    - uses standardized scored survey & standardized(?) scored moments
+  
+# load packages
+```{r}
+if(!require('pacman')) {
+	install.packages('pacman')
+}
+
+pacman::p_load(tidyverse, labelled, devtools, plyr, haven, expss, DT, qwraps2, remotes, readxl, retidytext, openxlsx, reactable, reactablefmtr, ggwordcloud, topicmodels,here,psych,rio, install = TRUE)
+```
+
+# define aesthetics
+```{r}
+palette = c("#772e25", "#c44536", "#ee9b00", "#197278", "#283d3b", "#9CC5A1", "#ADA7C9", "grey50")
+palette_type = c("#c44536", "#ee9b00", "#197278")
+palette_pilot = c("#c44536", "#197278")
+palette_sentiment = c(palette[2], palette[4])
+plot_aes = theme_minimal() +
+  theme(legend.position = "top",
+        legend.text = element_text(size = 8),
+        text = element_text(size = 12, family = "Futura Medium"),
+        axis.text = element_text(color = "black"),
+        axis.ticks.y = element_blank())
+```
+
+# Basic Cleaning -- survey
+1. load & deidentify data 
+- Prolific status check -- merge & address data deletion
+2. deduplication + duplicate summary
+3. summarize consent, terms & NDA (where applicable) + additional participant "electives" (e.g., here "content_recruit")
+4. attention checks & recording test
+5. write cleaned csv + dictionary 
+ 
+# load & de-identify Qualtrics data 
+There were 2 identical surveys launched for this study, 1 open to multiple states, 1 open only to Arkansas residents only -- see the study detail page & outline for details. 
+```{r}
+######## all_states
+#all_states <- rio::import("/Users/kristina/Documents/Surveys/NEW /WHI Exploring Comm Trends/USE THIS/Raw data/Exploring Community Trends Pre-Pilot_August 10, 2023_08.35.sav")
+all_states <- import(here("inputs", "Exploring Community Trends Pre-Pilot_August 10, 2023_08.35.sav"))
+all_states$survey_name <- "all_states"
+
+#missing ID check
+I just saw count(all_states$PROLIFIC_PID=="")
+all_states$PROLIFIC_PID <- ifelse(all_states$PROLIFIC_PID == "", all_states$Prolific_ID, all_states$PROLIFIC_PID)
+count(all_states$PROLIFIC_PID=="")
+all_states$PROLIFIC_PID <- ifelse(all_states$PROLIFIC_PID == "", all_states$ID_check, all_states$PROLIFIC_PID)
+count(all_states$PROLIFIC_PID=="")
+
+subset(all_states, all_states$PROLIFIC_PID=="") #confirm any missing IDs are blank data/tests
+
+all_states_tidy = all_states %>%
+  filter(!PROLIFIC_PID == "") %>% # remove test responses
+  filter(!grepl("test", PROLIFIC_PID)) %>% # 
+  filter(nchar(PROLIFIC_PID) == 24) %>%
+  filter(!DistributionChannel == "Preview") %>% # remove incomplete responses
+  select(-c(StartDate, EndDate, Status, Finished, RecipientLastName,  IPAddress,RecipientFirstName, RecipientEmail, LocationLatitude, LocationLongitude, DistributionChannel, UserLanguage)) #remove cols #de-identify
+
+all_states_tidy <- all_states_tidy[c(238,7,8,1:6,9:237,239)] #move userID to front
+colnames(all_states_tidy)[1] <- "userid"
+
+all_states_tidy_dict <- create_dictionary(all_states_tidy, remove_repeated = F, use_references = F)
+
+######## arkansas_sub
+#arkansas_sub <- read_sav("/Users/kristina/Documents/Surveys/NEW /WHI Exploring Comm Trends/USE THIS/Raw data/Exploring Community Trends Pre-Pilot - AR_August 10, 2023_08.38.sav")
+
+arkansas_sub <- read_sav(here("inputs","Exploring Community Trends Pre-Pilot - AR_August 10, 2023_08.38.sav"))
+
+arkansas_sub$survey_name <- "arkansas_sub"
+
+#missing ID check
+count(arkansas_sub$PROLIFIC_PID=="")
+arkansas_sub$PROLIFIC_PID <- ifelse(arkansas_sub$PROLIFIC_PID == "", arkansas_sub$Prolific_ID, arkansas_sub$PROLIFIC_PID)
+count(arkansas_sub$PROLIFIC_PID=="")
+arkansas_sub$PROLIFIC_PID <- ifelse(arkansas_sub$PROLIFIC_PID == "", arkansas_sub$ID_check, arkansas_sub$PROLIFIC_PID)
+count(arkansas_sub$PROLIFIC_PID=="")
+
+subset(arkansas_sub, arkansas_sub$PROLIFIC_PID=="") #confirm any missing IDs are blank data/tests
+
+arkansas_sub_tidy = arkansas_sub %>%
+  filter(!PROLIFIC_PID == "") %>% # remove test responses
+  filter(!grepl("test", PROLIFIC_PID)) %>% # 
+  filter(nchar(PROLIFIC_PID) == 24) %>%
+  filter(!DistributionChannel == "Preview") %>% # remove incomplete responses
+  select(-c(StartDate, EndDate, Status, Finished, RecipientLastName,  IPAddress,RecipientFirstName, RecipientEmail, LocationLatitude, LocationLongitude, DistributionChannel, UserLanguage)) #remove cols #de-identify
+
+arkansas_sub_tidy <- arkansas_sub_tidy[c(230,7,8,1:6,9:229,231)] #move userID to front
+colnames(arkansas_sub_tidy)[1] <- "userid"
+
+arkansas_sub_tidy_dict <- create_dictionary(arkansas_sub_tidy, remove_repeated = F, use_references = F)
+
+```
+
+## Prolific status check {.tabset}
+7 participants returned the study (all states version) and 0 participants returned the study (arkansas only subset) in Prolific, effectively revoking consent. There are various reasons for a user to return their survey, which are detailed below where possible. Data coming from these users is removed from the dataset here. 
+
+### all states
+```{r}
+#prolific_all_states <- read.csv("/Users/kristina/Documents/Surveys/NEW /WHI Exploring Comm Trends/USE THIS/Raw data/allstates_prolific_export_6430a3fdcea4949acc8d92b1 (2).csv")
+
+prolific_all_states <- read.csv(here("inputs","allstates_prolific_export_6430a3fdcea4949acc8d92b1(2).csv"))
+
+colnames(prolific_all_states)<-paste(colnames(prolific_all_states),"prolific",sep="_")
+colnames(prolific_all_states)[2] <- "userid"
+
+#all_states_tidy <- merge(all_states_tidy, prolific_all_states, all = T)
+all_states_tidy <- all_states_tidy %>% left_join(prolific_all_states, by = "userid")
+
+all_states_tidy$Status_prolific <-all_states_tidy$Status_prolific %>% replace_na('TIMEDOUT')
+
+#summarize returned responses
+data_remove <- all_states_tidy %>%
+  select(userid, Status_prolific, Submission.id_prolific) %>%
+  unique() %>%
+  filter(Status_prolific =="RETURNED") %>%
+  group_by(userid, Status_prolific,Submission.id_prolific) %>%
+  mutate(detials = "") 
+data_remove<- data_remove[order(data_remove$userid),]
+
+n_obs <- nrow(all_states_tidy)
+
+all_states_tidy %>%
+  select(userid, Status_prolific) %>%
+  group_by(Status_prolific) %>%
+  mutate(count = length(Status_prolific)) %>%
+  dplyr::summarize(n = n()) %>%
+  spread(Status_prolific, n) %>%
+  mutate(percent_approved = round((APPROVED/ n_obs) * 100, 1)) %>%
+  mutate(percent_available = round(((APPROVED+TIMEDOUT)/ n_obs) * 100, 1))
+
+data_remove 
+
+all_states_tidy = all_states_tidy %>%
+  filter(!Status_prolific == "RETURNED") # remove returned surveys 
+```
+
+### arkansas only version
+```{r}
+#prolific_arkansas_subset <- read.csv("/Users/kristina/Documents/Surveys/NEW /WHI Exploring Comm Trends/USE THIS/Raw data/arkansas_prolific_export_6431c55de649991aa28374b3 (1).csv")
+
+prolific_arkansas_subset <- read.csv(here("inputs","arkansas_prolific_export_6431c55de649991aa28374b3 (1).csv"))
+
+colnames(prolific_arkansas_subset)<-paste(colnames(prolific_arkansas_subset),"prolific",sep="_")
+colnames(prolific_arkansas_subset)[2] <- "userid"
+
+#arkansas_sub_tidy <- merge(arkansas_sub_tidy, prolific_arkansas_subset, all = T)
+arkansas_sub_tidy <- arkansas_sub_tidy %>% left_join(prolific_arkansas_subset, by = "userid")
+
+arkansas_sub_tidy$Status_prolific <-arkansas_sub_tidy$Status_prolific %>% replace_na('TIMEDOUT')
+
+#summarize returned responses
+data_remove <- arkansas_sub_tidy %>%
+  select(userid, Status_prolific, Submission.id_prolific) %>%
+  unique() %>%
+  filter(Status_prolific =="RETURNED") %>%
+  group_by(userid, Status_prolific,Submission.id_prolific) %>%
+  mutate(detials = "") 
+data_remove<- data_remove[order(data_remove$userid),]
+
+n_obs <- nrow(arkansas_sub_tidy)
+
+arkansas_sub_tidy %>%
+  select(userid, Status_prolific) %>%
+  group_by(Status_prolific) %>%
+  mutate(count = length(Status_prolific)) %>%
+  dplyr::summarize(n = n()) %>%
+  spread(Status_prolific, n) %>%
+  mutate(percent_approved = round((APPROVED/ n_obs) * 100, 1)) %>%
+  mutate(percent_available = round(((APPROVED+TIMEDOUT)/ n_obs) * 100, 1))
+
+data_remove 
+
+arkansas_sub_tidy = arkansas_sub_tidy %>%
+  filter(!Status_prolific == "RETURNED") # remove returned surveys 
+```
+
+## deduplication & duplicates summary {.tabset}
+Duplication in survey data could have happened if the participant accessed and started the Qualtrics study multiple times. Here, we retain all duplicated data and flag each response, responses are also flagged based on completion. See below for details.
+
+### all states
+27 participant IDs were duplicated in the `all_states` dataset.
+```{r test}
+ID_counts <- data.frame(table(all_states_tidy$userid))
+survey_dupes <- ID_counts[ID_counts$Freq > 1,] 
+colnames(survey_dupes) <- c("userid", "Freq")
+dup_id <- as.vector(survey_dupes$userid)
+
+
+all_states_tidy <- all_states_tidy %>%
+  mutate(dupe_survey = case_when(userid %in% dup_id ~ TRUE,
+                                  TRUE ~ FALSE)) %>%
+  group_by(userid) %>%
+  dplyr::mutate(
+    max_progress = max(Progress),
+    distinct_progress = n_distinct(Progress),
+    total_rows = nrow(.)
+  ) %>%
+  mutate(
+    most_complete_survey = case_when(
+      # Unique userid cases
+      dupe_survey == F ~ "TRUE",
+      
+      # Duplicated userid but identical progress
+      dupe_survey == T & total_rows > 1 & distinct_progress == 1 ~ "SAME",
+      
+      # Duplicated userid with non-identical progress
+      dupe_survey == T & Progress == max_progress & distinct_progress > 1 ~ "TRUE",
+      dupe_survey == T & Progress != max_progress & distinct_progress > 1 ~ "FALSE",
+      
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  select(-max_progress, -distinct_progress, -total_rows) %>%
+  ungroup()
+```
+
+### arkansas only version
+2 participant IDs were duplicated in the `arkansas_sub` dataset.
+```{r}
+ID_counts <- data.frame(table(arkansas_sub_tidy$userid))
+survey_dupes <- ID_counts[ID_counts$Freq > 1,] 
+colnames(survey_dupes) <- c("userid", "Freq")
+dup_id <- as.vector(survey_dupes$userid)
+
+
+arkansas_sub_tidy <- arkansas_sub_tidy %>%
+  mutate(dupe_survey = case_when(userid %in% dup_id ~ TRUE,
+                                  TRUE ~ FALSE)) %>%
+  group_by(userid) %>%
+  dplyr::mutate(
+    max_progress = max(Progress),
+    distinct_progress = n_distinct(Progress),
+    total_rows = nrow(.)
+  ) %>%
+  mutate(
+    most_complete_survey = case_when(
+      # Unique userid cases
+      dupe_survey == F ~ "TRUE",
+      
+      # Duplicated userid but identical progress
+      dupe_survey == T & total_rows > 1 & distinct_progress == 1 ~ "SAME",
+      
+      # Duplicated userid with non-identical progress
+      dupe_survey == T & Progress == max_progress & distinct_progress > 1 ~ "TRUE",
+      dupe_survey == T & Progress != max_progress & distinct_progress > 1 ~ "FALSE",
+      
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  select(-max_progress, -distinct_progress, -total_rows) %>%
+  ungroup()
+
+```
+
+#merge
+```{r}
+survey_tidy <- rbind.fill(all_states_tidy, arkansas_sub_tidy)
+
+survey_tidy_dict <- create_dictionary(survey_tidy, remove_repeated = F, use_references = F)
+#write_csv(survey_tidy_dict, "/Users/kristina/Documents/Surveys/NEW /WHI Inquiry/Data/DICT_WHI_surveys_Cleaned.csv")
+#write_csv(survey_tidy, "/Users/kristina/Documents/Surveys/NEW /WHI Inquiry/Data/WHI_surveys_Cleaned.csv")
+```
+
+## Summarize qualtrics consent, terms agreement, NDA, attention checks {.tabset}
+### Consent & Terms
+3 participants (no duplicate IDs) revoked consent or did not complete consent upon entering the study. These participant IDs are removed, leaving 964 total observations. 
+```{r}
+survey_tidy %>%
+  select(userid, Consent_confirm, dupe_survey) %>%
+  filter(is.na(Consent_confirm)|Consent_confirm==0)
+
+survey_tidy <- survey_tidy %>%
+  filter(Consent_confirm == 1)
+```
+
+### Failed recording test
+No recording test was included in this study.
+
+### Failed attention 
+No attention checks were included in this study
+
+## Additional data screening {.tabset}
+
+### Missing all survey data
+
+120 observations didn't provide any survey item data
+```{r b_edit}
+survey_tidy <- survey_tidy %>% mutate_at(c(42:238), ~na_if(., ''))
+
+survey_tidy <- survey_tidy %>%
+  rowwise() %>%
+  mutate(flag_no_survey = (rowSums(is.na(dplyr::select(., QOL_1:SF36_36))) == length(dplyr::select(., QOL_1:SF36_36)))) %>%
+  ungroup()
+table(survey_tidy$flag_no_survey, useNA = "ifany")
+```
+
+### Data quality: repetitive responses in a sequence
+
+We want to flag participants who provided identical responses in a long sequence. The highest percentage of identical sequence is 35%, which is within a reasonable range
+```{r b_edit}
+# calculate the number of survey item 
+item_n <- ncol(select(survey_tidy, QOL_1:SF36_36))
+
+survey_tidy <- survey_tidy %>%
+  mutate(max_identical = apply(select(., QOL_1:SF36_36), 1, function(x) {max(rle(x)$lengths)}), 
+         max_identical_perc = round((max_identical/item_n)*100))
+
+describe(survey_tidy$max_identical_perc)
+```
+
+### Study duration
+
+check the distribution of survey duration among those who completed the survey within 2 hours. The expected completion time was 60 minutes. 
+```{r b_edit}
+# subset completed observations
+survey_complete <- survey_tidy %>%
+  filter(most_complete_survey!="FALSE") %>% #filter dupes & no survey data
+  mutate(Progress = ifelse(Progress == 100, "complete", "incomplete")) %>%
+  filter(Progress == "complete") %>%
+  mutate(duration = Duration__in_seconds_/60) # transform survey durection into minutes
+
+# check overall duration
+describe(survey_complete$duration)
+
+# check duration distribution within 2 hours
+hist(survey_complete[survey_complete$duration < 120,]$duration)
+```
+
+To further examine those responses with a completion time of less than 10 minutes, we pair these data with other data screening results. People who spent too little time on the survey didn't provide any survey data
+```{r b_edit}
+survey_complete %>%
+  filter(duration < 10) %>%
+  select(flag_no_survey, duration, max_identical_perc) #flag_failed_recording_test, flag_failed_attention_n not included here
+```
+
+## Summarize data screening results
+
+Based on all data screening efforts, 832 observations are recommended to include in the analysis. Criteria include:
+- at least some survey data
+- is the most completed survey if there were duplicates. 
+
+These column identified as "recommended for analyses" are flagged in the `flag_rec_include` column
+```{r b_edit}
+survey_tidy <- survey_tidy %>%
+  dplyr::rename(flag_dupe_survey = dupe_survey, 
+                flag_most_complete = most_complete_survey) %>% # add prefix"flag" to columns related to data_screening
+  
+# mark the observation 
+mutate(flag_rec_include = case_when(flag_most_complete != FALSE & flag_no_survey == FALSE ~ TRUE, # & flag_failed_attention_n != 2 not included here
+                                      TRUE ~ FALSE))
+
+table(survey_tidy$flag_rec_include, useNA = "ifany")
+```
+
+
+# Summarize qualtrics completion info {.tabset}
+## full data
+Overall, there are 766 cases of complete data, when accounting for duplicates, ~81% completion overall. 
+```{r}
+survey_tidy %>%
+  select(survey_name, userid, Progress) %>%
+  mutate(Progress = ifelse(Progress == 100, "complete", "incomplete")) %>%
+  group_by(Progress) %>%
+    mutate(count = length(survey_name)) %>%
+  dplyr::summarize(n = n()) %>%
+  spread(Progress, n) %>%
+  mutate(percent_complete = round((complete / (complete+incomplete)) * 100, 1))
+
+```
+## no dupes
+```{r b_edit}
+survey_tidy %>%
+  select(survey_name, userid, Progress, flag_most_complete) %>%
+  filter(flag_most_complete!="FALSE") %>% #filter dupes 
+  mutate(Progress = ifelse(Progress == 100, "complete", "incomplete")) %>%
+  group_by(Progress) %>%
+    mutate(count = length(survey_name)) %>%
+  dplyr::summarize(n = n()) %>%
+  spread(Progress, n) %>%
+  mutate(percent_complete = round((complete / (complete+incomplete)) * 100, 1))
+
+```
+
+# code & score qualtrics data {.tabset}
+1. recode demographics/qual items to character
+2. psychological surveys
+- [QOL:Quality of life - adapted](https://www.google.com/url?q=https://toolbox.naccho.org/api/ToolBlob?blobKey%3D9ad42923-f23a-4d0a-bbd2-8c30f5eadf65%26fileName%3DQuality%2520of%2520Life%2520Survey%2520Questions_2.pdf&sa=D&source=docs&ust=1683130924596966&usg=AOvVaw1Tto4bQFFAIk_kKuoz4h49)
+- [SDOH: Social determinants of health - adapted](https://innovation.cms.gov/files/worksheets/ahcm-screeningtool.pdf)
+- [AB:Access & Barries - adapted](https://nwacouncil.org/wp-content/uploads/2021/01/NWAHealthcareAssessmentOnlineVersion.pdf)
+  - NOTE: AB_AK items only included in arkansas subset version
+- [CH: Core health - adapted](https://www.cdc.gov/brfss/questionnaires/pdf-ques/2021-BRFSS-Questionnaire-1-19-2022-508.pdf)
+- [PRBQ: Risky Behaviors](https://istss.org/getattachment/Clinical-Resources/Assessing-Trauma/Posttrauma-Risky-Behaviors-Questionnaire-(PRBQ)/Posttrauma-Risky-Behaviors-Questionnaire.pdf?lang=en-US)
+- [SF-36: Subjective Meantal/Physical Health](https://www.rand.org/health-care/surveys_tools/mos/36-item-short-form/scoring.html)
+
+## recode numeric to character
+recoded from numeric to character; parse race/ethnicity variables; parse county variables; add labels 
+kristina note for bernice: you lose the column labels here for some variables
+```{r k_edit}
+# generate a dictionary
+survey_tidy_dict <- create_dictionary(survey_tidy, remove_repeated = F, use_references = F)
+
+# transform the dictionary into a list 
+dict_list <- split(survey_tidy_dict[-4], survey_tidy_dict$variable)
+
+# extract all variable numbers for the "select all that apply" questions
+varname <- names(dict_list)
+
+# all demographics & additional qualitative items from the survey
+demo_idx <- which(grepl("Demo_", varname))
+county_idx <- which(grepl("_county", varname))
+state_idx <- which(grepl("state", varname))
+AB_idx <- which(grepl("AB_", varname))
+CH_idx <- which(grepl("CH_", varname))
+SDOH_idx <- which(grepl("SDOH_", varname))
+
+multi_resposne_idx <- c(demo_idx, county_idx,state_idx,AB_idx,CH_idx,SDOH_idx)
+
+# subset these variables from the dictionary list
+recode_dict_list <- dict_list[multi_resposne_idx]
+
+# replace response with variable label 
+surveys_scored <- survey_tidy
+surveys_scored[names(recode_dict_list)] <- Map(function(x, y) { 
+    tmp <- with(y,  setNames(label, value)[as.character(x)])
+     tmp[is.na(tmp)] <- x[is.na(tmp)]
+     tmp}, survey_tidy[names(recode_dict_list)], recode_dict_list)
+```
+
+## recode county
+```{r}
+surveys_scored$county <- ifelse(!is.na(surveys_scored$AK_county), surveys_scored$AK_county,
+                      ifelse(!is.na(surveys_scored$TX_county), surveys_scored$TX_county,
+                      ifelse(!is.na(surveys_scored$ID_county), surveys_scored$ID_county,
+                      ifelse(!is.na(surveys_scored$IA_county), surveys_scored$IA_county,
+                      ifelse(!is.na(surveys_scored$NC_county), surveys_scored$NC_county,
+                      ifelse(!is.na(surveys_scored$IN_county), surveys_scored$IN_county,
+                      ifelse(!is.na(surveys_scored$KY_county), surveys_scored$KY_county,
+                      ifelse(!is.na(surveys_scored$WI_county), surveys_scored$WI_county,
+                      ifelse(!is.na(surveys_scored$WA_county), surveys_scored$WA_county, NA)))))))))
+surveys_scored <- surveys_scored[c(1:12,266,13:265)]
+surveys_scored <- surveys_scored %>% select(-contains("_county"))
+
+```
+
+## recode demographics
+recoded from numeric to character; parse race/ethnicity variables 
+```{r}
+surveys_scored <- surveys_scored %>%
+  mutate(Demo_ethnicity__99 = NA) %>% # "I prefer not to answer" into NA
+  mutate(demo_race = case_when( # coalesce race
+    rowSums(!is.na(select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))) == 0 ~ NA_character_,
+    rowSums(!is.na(select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))) == 1 ~ as.character(do.call(coalesce, select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))),
+    rowSums(!is.na(select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))) > 1 ~ "multiracial")) %>% # ethnicity is not considered for multiracial
+  dplyr::rename(demo_ethnicity = Demo_ethnicity_3) # differciate between race and ethnicity
+
+```
+
+## coalesce multiple responses (select all that apply items)
+kristina note for bernice: not sure what to do with AB_2 and AB_33 (pick 3 from list)
+```{r}
+surveys_scored <- surveys_scored %>%
+   mutate(
+          arkansas_HC_location_AB_AK = case_when(
+            rowSums(!is.na(select(., AB_AK_1:AB_AK_13))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., AB_AK_1:AB_AK_13))) == 1 ~ as.character(do.call(coalesce, select(., AB_AK_1:AB_AK_13))),
+            rowSums(!is.na(select(., AB_AK_1:AB_AK_13))) > 1 ~ "multi"), 
+          
+          healthy_needs_AB_3 = case_when(
+            rowSums(!is.na(select(., AB_3_1:AB_3_23))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., AB_3_1:AB_3_23))) == 1 ~ as.character(do.call(coalesce, select(., AB_3_1:AB_3_23))),
+            rowSums(!is.na(select(., AB_3_1:AB_3_23))) > 1 ~ "multiple"), 
+          
+          adult_HC_barriers_AB_4 = case_when(
+            rowSums(!is.na(select(., AB_4_1:AB_4_9))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., AB_4_1:AB_4_9))) == 1 ~ as.character(do.call(coalesce, select(., AB_4_1:AB_4_9))),
+            rowSums(!is.na(select(., AB_4_1:AB_4_9))) > 1 ~ "multiple"),
+          
+         adult_mentalHC_barriers_AB_5 = case_when(
+            rowSums(!is.na(select(., AB_5_1:AB_5_9))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., AB_5_1:AB_5_9))) == 1 ~ as.character(do.call(coalesce, select(., AB_5_1:AB_5_9))),
+            rowSums(!is.na(select(., AB_5_1:AB_5_9))) > 1 ~ "multiple"),
+          
+          child_mentalHC_barriers_AB_6 = case_when(
+            rowSums(!is.na(select(., AB_6_1:AB_6_10))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., AB_6_1:AB_6_10))) == 1 ~ as.character(do.call(coalesce, select(., AB_6_1:AB_6_10))),
+            rowSums(!is.na(select(., AB_6_1:AB_6_10))) > 1 ~ "multiple"),
+         
+             teleheath_barriers_AB_7 = case_when(
+            rowSums(!is.na(select(., AB_7_1:AB_7_10))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., AB_7_1:AB_7_10))) == 1 ~ as.character(do.call(coalesce, select(., AB_7_1:AB_7_10))),
+            rowSums(!is.na(select(., AB_7_1:AB_7_10))) > 1 ~ "multiple"))
+
+```
+
+##labels
+note for bernice - we lose a bunch of labels in the above chunk for the AB vars, the CH vars and the SDOH vars (noted there) not sure how you want to address it, here im just labeling the `age_house` variables . theres an outline that can probably be used to relabel manually 
+```{r}
+
+attr(surveys_scored$Demo_age_house_1, "label") <- "Number of individuals in household 0-17 years"
+attr(surveys_scored$Demo_age_house_2, "label") <- "Number of individuals in household 18-39 years"
+attr(surveys_scored$Demo_age_house_3, "label") <- "Number of individuals in household 40-59 years"
+attr(surveys_scored$Demo_age_house_4, "label") <- "Number of individuals in household 60-74 years"
+attr(surveys_scored$Demo_age_house_5, "label") <- "Number of individuals in household 75 years or older"
+
+```
+
+## QOL (quality of life)
+A total score is calculated by adding up the scores for each item. The possible range of scores is 11-55, with higher scores indicating overall better perceived quality of life. It is recommended to examine this scale on both an item level and a total score leval, as items are indicative of specific community needs.
+```{r}
+surveys_scored <- surveys_scored %>%
+  mutate(QOL_tot = rowSums(select(., contains("QOL_"))))
+
+attr(surveys_scored$QOL_tot, "label") <- "Quality of life total score"
+
+```
+
+## SDOH (social determinants of health)
+Qualitative in nature; total score is calculated as the total number of endorsements of negative social determinants of health (i.e., responded, "yes", "always","usually""sometimes" or "rarely" to any SDOH items), with higher scores indicating greater endorsement of negative social determinants of health. It is recommended to examine this scale on both an item level and a total score leval, as items are indicative of specific social determinants of health 
+```{r}
+#Bernice help i dont know how to do this 
+
+```
+
+## Assets & Barriers
+```{r}
+# i dont think theres any "scoring" to be done here 
+```
+
+## Core Health
+Qualitative in nature; total score is calculated as the total number of endorsements of negative health outcomes (i.e., responded, "yes" to any CH items), with higher scores indicating more negative health. It is recommended to examine this scale on both an item level and a total score level, as items are indicative of specific negative health outcomes.
+```{r}
+#Bernice help i dont know how to do this 
+
+```
+
+
+## PRBQ (risky behaviors)
+Total score is calculated by adding up the scores for each item (PRBQ 1-12). The possible range of scores is 0-48, with higher scores indicating more frequent engagement in risky behaviors. It is recommended to examine this scale on both an item level and a total score level, as items are indicative of engagement with specific risky behaviors.
+
+PRBQ_15 is a global item assessing the level of negative impact of engagement in risky behaviors on ones life
+```{r}
+surveys_scored <- surveys_scored %>%
+  mutate(PRBQ_tot = rowSums(select(., PRBQ_1:PRBQ_12)))
+
+attr(surveys_scored$PRBQ_tot, "label") <- "PRBQ total score"
+
+```
+
+## SF-36 (subjective health)
+The SF-36 is a measure of subjective health, and assesses eight health concepts: physical functioning, bodily pain, role limitations due to physical health problems, role limitations due to personal or emotional problems, emotional well-being, social functioning, energy/fatigue, and general health perceptions. It also includes a single item that provides an indication of perceived change in health.
+
+Scale	| Number of items |	After recoding average the following items
+Physical functioning | 10 | 3 4 5 6 7 8 9 10 11 12
+Role limitations due to physical health |	4 |	13 14 15 16
+Role limitations due to emotional problems |	3 |	17 18 19
+Energy/fatigue	| 4	| 23 27 29 31
+Emotional well-being	| 5	| 24 25 26 28 30
+Social functioning	| 2	| 20 32
+Pain	| 2	| 21 22
+General health	| 5 |	1 33 34 35 36
+```{r}
+col_repl1 <- c("SF36_1", "SF36_2","SF36_20","SF36_22","SF36_34","SF36_36")
+surveys_scored[col_repl1] <- lapply(surveys_scored[col_repl1], gsub, pattern = "\\<1\\>", replacement = 100)
+surveys_scored[col_repl1] <- lapply(surveys_scored[col_repl1], gsub, pattern = "\\<2\\>", replacement = 75)
+surveys_scored[col_repl1] <- lapply(surveys_scored[col_repl1], gsub, pattern = "\\<3\\>", replacement = 50)
+surveys_scored[col_repl1] <- lapply(surveys_scored[col_repl1], gsub, pattern = "\\<4\\>", replacement = 25)
+surveys_scored[col_repl1] <- lapply(surveys_scored[col_repl1], gsub, pattern = "\\<5\\>", replacement = 0)
+
+col_repl2 <- c("SF36_3", "SF36_4","SF36_5","SF36_6","SF36_7","SF36_8","SF36_9","SF36_10","SF36_11","SF36_12")
+surveys_scored[col_repl2] <- lapply(surveys_scored[col_repl2], gsub, pattern = "\\<1\\>", replacement = 0)
+surveys_scored[col_repl2] <- lapply(surveys_scored[col_repl2], gsub, pattern = "\\<2\\>", replacement = 50)
+surveys_scored[col_repl2] <- lapply(surveys_scored[col_repl2], gsub, pattern = "\\<3\\>", replacement = 100)
+
+col_repl3 <- c("SF36_13", "SF36_14","SF36_15","SF36_16","SF36_17","SF36_18","SF36_19")
+surveys_scored[col_repl3] <- lapply(surveys_scored[col_repl3], gsub, pattern = "\\<1\\>", replacement = 0)
+surveys_scored[col_repl3] <- lapply(surveys_scored[col_repl3], gsub, pattern = "\\<2\\>", replacement = 100)
+
+col_repl4 <- c("SF36_21", "SF36_23","SF36_26","SF36_27","SF36_30")
+surveys_scored[col_repl4] <- lapply(surveys_scored[col_repl4], gsub, pattern = "\\<1\\>", replacement = 100)
+surveys_scored[col_repl4] <- lapply(surveys_scored[col_repl4], gsub, pattern = "\\<2\\>", replacement = 80)
+surveys_scored[col_repl4] <- lapply(surveys_scored[col_repl4], gsub, pattern = "\\<3\\>", replacement = 60)
+surveys_scored[col_repl4] <- lapply(surveys_scored[col_repl4], gsub, pattern = "\\<4\\>", replacement = 40)
+surveys_scored[col_repl4] <- lapply(surveys_scored[col_repl4], gsub, pattern = "\\<5\\>", replacement = 20)
+surveys_scored[col_repl4] <- lapply(surveys_scored[col_repl4], gsub, pattern = "\\<6\\>", replacement = 0)
+
+col_repl5 <- c("SF36_24", "SF36_25","SF36_28","SF36_29","SF36_31")
+surveys_scored[col_repl5] <- lapply(surveys_scored[col_repl5], gsub, pattern = "\\<1\\>", replacement = 0)
+surveys_scored[col_repl5] <- lapply(surveys_scored[col_repl5], gsub, pattern = "\\<2\\>", replacement = 20)
+surveys_scored[col_repl5] <- lapply(surveys_scored[col_repl5], gsub, pattern = "\\<3\\>", replacement = 40)
+surveys_scored[col_repl5] <- lapply(surveys_scored[col_repl5], gsub, pattern = "\\<4\\>", replacement = 60)
+surveys_scored[col_repl5] <- lapply(surveys_scored[col_repl5], gsub, pattern = "\\<5\\>", replacement = 80)
+surveys_scored[col_repl5] <- lapply(surveys_scored[col_repl5], gsub, pattern = "\\<6\\>", replacement = 100)
+
+col_repl6 <- c("SF36_32", "SF36_33","SF36_35")
+surveys_scored[col_repl6] <- lapply(surveys_scored[col_repl6], gsub, pattern = "\\<1\\>", replacement = 0)
+surveys_scored[col_repl6] <- lapply(surveys_scored[col_repl6], gsub, pattern = "\\<2\\>", replacement = 25)
+surveys_scored[col_repl6] <- lapply(surveys_scored[col_repl6], gsub, pattern = "\\<3\\>", replacement = 50)
+surveys_scored[col_repl6] <- lapply(surveys_scored[col_repl6], gsub, pattern = "\\<4\\>", replacement = 75)
+surveys_scored[col_repl6] <- lapply(surveys_scored[col_repl6], gsub, pattern = "\\<5\\>", replacement = 100)
+
+#scoring
+cols.num <- c("SF36_1", "SF36_2","SF36_20","SF36_22","SF36_34","SF36_36","SF36_3", "SF36_4","SF36_5","SF36_6","SF36_7","SF36_8","SF36_9","SF36_10","SF36_11","SF36_12","SF36_13", "SF36_14","SF36_15","SF36_16","SF36_17","SF36_18","SF36_19",
+              "SF36_21", "SF36_23","SF36_26","SF36_27","SF36_30","SF36_24", "SF36_25","SF36_28","SF36_29","SF36_31","SF36_32", "SF36_33","SF36_35")
+surveys_scored[cols.num] <- sapply(surveys_scored[cols.num],as.numeric)
+
+surveys_scored$SF36_Physical_functioning <- rowMeans(subset(surveys_scored, select = c("SF36_3", "SF36_4","SF36_5","SF36_6","SF36_7","SF36_8","SF36_9","SF36_10","SF36_11","SF36_12")), na.rm = TRUE)
+
+surveys_scored$SF36_PH_limitations <- rowMeans(subset(surveys_scored, select = c("SF36_13", "SF36_14","SF36_15","SF36_16")), na.rm = TRUE)
+
+surveys_scored$SF36_MH_limitations <- rowMeans(subset(surveys_scored, select = c("SF36_17", "SF36_18","SF36_19")), na.rm = TRUE)
+
+surveys_scored$SF36_Energy <- rowMeans(subset(surveys_scored, select = c("SF36_23", "SF36_27","SF36_29","SF36_31")), na.rm = TRUE)
+
+surveys_scored$SF36_Emotional_WB <- rowMeans(subset(surveys_scored, select = c("SF36_24", "SF36_25","SF36_26","SF36_27","SF36_28","SF36_30")), na.rm = TRUE)
+
+surveys_scored$SF36_Social_funct <- rowMeans(subset(surveys_scored, select = c("SF36_20", "SF36_32")), na.rm = TRUE)
+
+surveys_scored$SF36_Pain <- rowMeans(subset(surveys_scored, select = c("SF36_21", "SF36_22")), na.rm = TRUE)
+
+surveys_scored$SF36_General_Health<- rowMeans(subset(surveys_scored, select = c("SF36_1", "SF36_33","SF36_34","SF36_35","SF36_36")), na.rm = TRUE)
+
+attr(surveys_scored$SF36_Physical_functioning, "label") <- "SF36 physical functioning subscale"
+attr(surveys_scored$SF36_PH_limitations, "label") <- "SF36 physical health limitations subscale"
+attr(surveys_scored$SF36_MH_limitations, "label") <- "SF36 mental health limitations subscale"
+attr(surveys_scored$SF36_Energy, "label") <- "SF36 energy subscale"
+attr(surveys_scored$SF36_Emotional_WB, "label") <- "SF36 emotional wellbeing subscale"
+attr(surveys_scored$SF36_Social_funct, "label") <- "SF36 social functioning subscale"
+attr(surveys_scored$SF36_Pain, "label") <- "SF36 pain subscale"
+attr(surveys_scored$SF36_General_Health, "label") <- "SF36 general health subscale"
+
+```
+
+
+```{r}
+write.csv(surveys_scored, "/Users/kristina/Documents/Surveys/NEW /WHI Exploring Comm Trends/USE THIS/Scored data/WHI_surveys_scored.csv")
+scored_dict <- create_dictionary(surveys_scored, remove_repeated = F, use_references = F)
+write.csv(scored_dict, "/Users/kristina/Documents/Surveys/NEW /WHI Exploring Comm Trends/USE THIS/Scored data/DICT_WHI_surveys_scored.csv")
+```
