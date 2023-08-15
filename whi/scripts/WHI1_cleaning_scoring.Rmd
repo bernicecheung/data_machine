@@ -626,20 +626,22 @@ surveys_scored <- surveys_scored %>%
                 ~ case_when(
                   . == "No" ~ FALSE,
                   . == "Yes" ~ TRUE,
-                  . == "Unsure" ~ NA_real_,
-                  . == "I prefer not to answer" ~ NA_real_
+                  . == "Unsure" ~ NA,
+                  . == "I prefer not to answer" ~ NA
                 ), 
                 .names = "{.col}_R" #add 
               )) %>%
   dplyr::mutate(across(c(SDOH_3, SDOH_7), # recode categorical variables into a Boolean
                 ~ case_when(
                   . == "Never" ~ FALSE,
-                  . == "I prefer not to answer" ~ NA_real_,
+                  . == "I prefer not to answer" ~ NA,
                   !is.na(.) ~ TRUE
                 ), 
                 .names = "{.col}_R"
               )) %>%
   mutate(SDOH_tot = rowSums(select(., SDOH_1_R:SDOH_7_R)))
+
+
 ```
 
 ## Assets & Barriers
@@ -654,12 +656,12 @@ surveys_scored <- surveys_scored %>%
   dplyr::mutate(CH_1_R = case_when(CH_1 == "Yes" ~ TRUE, 
                             CH_1 == "Told borderline high or prehypertensive or elevated blood pressure" ~ 1, 
                             CH_1 == "No" ~ FALSE, 
-                            CH_1 == "Don’t know / Not sure" ~ NA_real_)) %>%
+                            CH_1 == "Don’t know / Not sure" ~ NA)) %>%
   dplyr::mutate(across(CH_2:CH_3_15_13, 
                 ~ case_when(
                   . == "Yes" ~ TRUE,
                   . == "No" ~ FALSE, 
-                  . == "Don’t know / Not sure" ~ NA_real_
+                  . == "Don’t know / Not sure" ~ NA
                 ), 
                 .names = "{.col}_R")) %>%
   dplyr::mutate(CH_tot = rowSums(select(., CH_1_R: CH_3_15_13_R)))
