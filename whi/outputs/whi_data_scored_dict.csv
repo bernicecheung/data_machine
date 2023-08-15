@@ -1,0 +1,1673 @@
+"variable","value","label","meta"
+"Prolific_ID",NA,"What is your Prolific ID? Please note that this response should auto-fill with the correct ID","varlab"
+"ID_check",NA,"Please confirm your 24 digit Prolific ID by entering it below.","varlab"
+"Progress",NA,"Progress","varlab"
+"Duration__in_seconds_",NA,"Duration (in seconds)","varlab"
+"RecordedDate",NA,"Recorded Date","varlab"
+"ResponseId",NA,"Response ID","varlab"
+"ExternalReference",NA,"External Data Reference","varlab"
+"Consent_confirm",NA,"In this study we will ask you to record your voice while answering free-response prompts about your thoughts, feelings, activities, and memories. To confirm that you are eligible to participate, please answer the question below:
+
+
+
+Do you consent to participating in this study, and are you willing to let this study record your voice when responding to questions?","varlab"
+"Consent_confirm",1,"Yes",NA
+"Consent_confirm",0,"No",NA
+"Consent_no",NA,"We appreciate your willingness to participate, unfortunately one or more of your responses or your device settings indicate that you are not eligible to participate in this study. Please close this window and return this study on Prolific so that your account is not penalized by a rejection.","varlab"
+"Recording_test",NA,"Using the microphone widget below, please record the following: ""Hello, this is a test recording."" Please make sure to allow access to your device's microphone. After recording, please click on Review Recording to check that you can hear your voice playing back. If you can't hear your voice, please make sure you have allowed access to your microphone, and that your device's volume is on.
+
+
+
+
+
+
+
+
+You may proceed if you were able to successfully record. Were you able to hear your voice playing back on the recording?","varlab"
+"Recording_test",1,"Yes",NA
+"Recording_test",0,"No",NA
+"state",NA,"In which state do you currently live?","varlab"
+"state",1,"Arkansas",NA
+"state",2,"Texas",NA
+"state",3,"Idaho",NA
+"state",4,"Iowa",NA
+"state",5,"North Carolina",NA
+"state",6,"Indiana",NA
+"state",7,"Kentucky",NA
+"state",8,"Wisconsin",NA
+"state",9,"Washington",NA
+"AK_county",NA,"In which county do you currently live?","varlab"
+"AK_county",1,"Arkansas County, AR",NA
+"AK_county",2,"Ashley County, AR",NA
+"AK_county",3,"Baxter County, AR",NA
+"AK_county",4,"Benton County, AR",NA
+"AK_county",5,"Boone County, AR",NA
+"AK_county",6,"Bradley County, AR",NA
+"AK_county",7,"Calhoun County, AR",NA
+"AK_county",8,"Carroll County, AR",NA
+"AK_county",9,"Chicot County, AR",NA
+"AK_county",10,"Clark County, AR",NA
+"AK_county",11,"Clay County, AR",NA
+"AK_county",12,"Cleburne County, AR",NA
+"AK_county",13,"Cleveland County, AR",NA
+"AK_county",14,"Columbia County, AR",NA
+"AK_county",15,"Conway County, AR",NA
+"AK_county",16,"Craighead County, AR",NA
+"AK_county",17,"Crawford County, AR",NA
+"AK_county",18,"Crittenden County, AR",NA
+"AK_county",19,"Cross County, AR",NA
+"AK_county",20,"Dallas County, AR",NA
+"AK_county",21,"Desha County, AR",NA
+"AK_county",22,"Drew County, AR",NA
+"AK_county",23,"Faulkner County, AR",NA
+"AK_county",24,"Franklin County, AR",NA
+"AK_county",25,"Fulton County, AR",NA
+"AK_county",26,"Garland County, AR",NA
+"AK_county",27,"Grant County, AR",NA
+"AK_county",28,"Greene County, AR",NA
+"AK_county",29,"Hempstead County, AR",NA
+"AK_county",30,"Hot Spring County, AR",NA
+"AK_county",31,"Howard County, AR",NA
+"AK_county",32,"Independence County, AR",NA
+"AK_county",33,"Izard County, AR",NA
+"AK_county",34,"Jackson County, AR",NA
+"AK_county",35,"Jefferson County, AR",NA
+"AK_county",36,"Johnson County, AR",NA
+"AK_county",37,"Lafayette County, AR",NA
+"AK_county",38,"Lawrence County, AR",NA
+"AK_county",39,"Lee County, AR",NA
+"AK_county",40,"Lincoln County, AR",NA
+"AK_county",41,"Little River County, AR",NA
+"AK_county",42,"Logan County, AR",NA
+"AK_county",43,"Lonoke County, AR",NA
+"AK_county",44,"Madison County, AR",NA
+"AK_county",45,"Marion County, AR",NA
+"AK_county",46,"Miller County, AR",NA
+"AK_county",47,"Mississippi County, AR",NA
+"AK_county",48,"Monroe County, AR",NA
+"AK_county",49,"Montgomery County, AR",NA
+"AK_county",50,"Nevada County, AR",NA
+"AK_county",51,"Newton County, AR",NA
+"AK_county",52,"Ouachita County, AR",NA
+"AK_county",53,"Perry County, AR",NA
+"AK_county",54,"Phillips County, AR",NA
+"AK_county",55,"Pike County, AR",NA
+"AK_county",56,"Poinsett County, AR",NA
+"AK_county",57,"Polk County, AR",NA
+"AK_county",58,"Pope County, AR",NA
+"AK_county",59,"Prairie County, AR",NA
+"AK_county",60,"Pulaski County, AR",NA
+"AK_county",61,"Randolph County, AR",NA
+"AK_county",62,"Saint Francis County, AR",NA
+"AK_county",63,"Saline County, AR",NA
+"AK_county",64,"Scott County, AR",NA
+"AK_county",65,"Searcy County, AR",NA
+"AK_county",66,"Sebastian County, AR",NA
+"AK_county",67,"Sevier County, AR",NA
+"AK_county",68,"Sharp County, AR",NA
+"AK_county",69,"Stone County, AR",NA
+"AK_county",70,"Union County, AR",NA
+"AK_county",71,"Van Buren County, AR",NA
+"AK_county",72,"Washington County, AR",NA
+"AK_county",73,"White County, AR",NA
+"AK_county",74,"Woodruff County, AR",NA
+"AK_county",75,"Yell County, AR",NA
+"TX_county",NA,"In which county do you currently live?","varlab"
+"TX_county",1,"Anderson County, TX",NA
+"TX_county",2,"Andrews County, TX",NA
+"TX_county",3,"Angelina County, TX",NA
+"TX_county",4,"Aransas County, TX",NA
+"TX_county",5,"Archer County, TX",NA
+"TX_county",6,"Armstrong County, TX",NA
+"TX_county",7,"Atascosa County, TX",NA
+"TX_county",8,"Austin County, TX",NA
+"TX_county",9,"Bailey County, TX",NA
+"TX_county",10,"Bandera County, TX",NA
+"TX_county",11,"Bastrop County, TX",NA
+"TX_county",12,"Baylor County, TX",NA
+"TX_county",13,"Bee County, TX",NA
+"TX_county",14,"Bell County, TX",NA
+"TX_county",15,"Bexar County, TX",NA
+"TX_county",16,"Blanco County, TX",NA
+"TX_county",17,"Borden County, TX",NA
+"TX_county",18,"Bosque County, TX",NA
+"TX_county",19,"Bowie County, TX",NA
+"TX_county",20,"Brazoria County, TX",NA
+"TX_county",21,"Brazos County, TX",NA
+"TX_county",22,"Brewster County, TX",NA
+"TX_county",23,"Briscoe County, TX",NA
+"TX_county",24,"Brooks County, TX",NA
+"TX_county",25,"Brown County, TX",NA
+"TX_county",26,"Burleson County, TX",NA
+"TX_county",27,"Burnet County, TX",NA
+"TX_county",28,"Caldwell County, TX",NA
+"TX_county",29,"Calhoun County, TX",NA
+"TX_county",30,"Callahan County, TX",NA
+"TX_county",31,"Cameron County, TX",NA
+"TX_county",32,"Camp County, TX",NA
+"TX_county",33,"Carson County, TX",NA
+"TX_county",34,"Cass County, TX",NA
+"TX_county",35,"Castro County, TX",NA
+"TX_county",36,"Chambers County, TX",NA
+"TX_county",37,"Cherokee County, TX",NA
+"TX_county",38,"Childress County, TX",NA
+"TX_county",39,"Clay County, TX",NA
+"TX_county",40,"Cochran County, TX",NA
+"TX_county",41,"Coke County, TX",NA
+"TX_county",42,"Coleman County, TX",NA
+"TX_county",43,"Collin County, TX",NA
+"TX_county",44,"Collingsworth County, TX",NA
+"TX_county",45,"Colorado County, TX",NA
+"TX_county",46,"Comal County, TX",NA
+"TX_county",47,"Comanche County, TX",NA
+"TX_county",48,"Concho County, TX",NA
+"TX_county",49,"Cooke County, TX",NA
+"TX_county",50,"Coryell County, TX",NA
+"TX_county",51,"Cottle County, TX",NA
+"TX_county",52,"Crane County, TX",NA
+"TX_county",53,"Crockett County, TX",NA
+"TX_county",54,"Crosby County, TX",NA
+"TX_county",55,"Culberson County, TX",NA
+"TX_county",56,"Dallam County, TX",NA
+"TX_county",57,"Dallas County, TX",NA
+"TX_county",58,"Dawson County, TX",NA
+"TX_county",59,"Deaf Smith County, TX",NA
+"TX_county",60,"Delta County, TX",NA
+"TX_county",61,"Denton County, TX",NA
+"TX_county",62,"DeWitt County, TX",NA
+"TX_county",63,"Dickens County, TX",NA
+"TX_county",64,"Dimmit County, TX",NA
+"TX_county",65,"Donley County, TX",NA
+"TX_county",66,"Duval County, TX",NA
+"TX_county",67,"Eastland County, TX",NA
+"TX_county",68,"Ector County, TX",NA
+"TX_county",69,"Edwards County, TX",NA
+"TX_county",70,"El Paso County, TX",NA
+"TX_county",71,"Ellis County, TX",NA
+"TX_county",72,"Erath County, TX",NA
+"TX_county",73,"Falls County, TX",NA
+"TX_county",74,"Fannin County, TX",NA
+"TX_county",75,"Fayette County, TX",NA
+"TX_county",76,"Fisher County, TX",NA
+"TX_county",77,"Floyd County, TX",NA
+"TX_county",78,"Foard County, TX",NA
+"TX_county",79,"Fort Bend County, TX",NA
+"TX_county",80,"Franklin County, TX",NA
+"TX_county",81,"Freestone County, TX",NA
+"TX_county",82,"Frio County, TX",NA
+"TX_county",83,"Gaines County, TX",NA
+"TX_county",84,"Galveston County, TX",NA
+"TX_county",85,"Garza County, TX",NA
+"TX_county",86,"Gillespie County, TX",NA
+"TX_county",87,"Glasscock County, TX",NA
+"TX_county",88,"Goliad County, TX",NA
+"TX_county",89,"Gonzales County, TX",NA
+"TX_county",90,"Gray County, TX",NA
+"TX_county",91,"Grayson County, TX",NA
+"TX_county",92,"Gregg County, TX",NA
+"TX_county",93,"Grimes County, TX",NA
+"TX_county",94,"Guadalupe County, TX",NA
+"TX_county",95,"Hale County, TX",NA
+"TX_county",96,"Hall County, TX",NA
+"TX_county",97,"Hamilton County, TX",NA
+"TX_county",98,"Hansford County, TX",NA
+"TX_county",99,"Hardeman County, TX",NA
+"TX_county",100,"Hardin County, TX",NA
+"TX_county",101,"Harris County, TX",NA
+"TX_county",102,"Harrison County, TX",NA
+"TX_county",103,"Hartley County, TX",NA
+"TX_county",104,"Haskell County, TX",NA
+"TX_county",105,"Hays County, TX",NA
+"TX_county",106,"Hemphill County, TX",NA
+"TX_county",107,"Henderson County, TX",NA
+"TX_county",108,"Hidalgo County, TX",NA
+"TX_county",109,"Hill County, TX",NA
+"TX_county",110,"Hockley County, TX",NA
+"TX_county",111,"Hood County, TX",NA
+"TX_county",112,"Hopkins County, TX",NA
+"TX_county",113,"Houston County, TX",NA
+"TX_county",114,"Howard County, TX",NA
+"TX_county",115,"Hudspeth County, TX",NA
+"TX_county",116,"Hunt County, TX",NA
+"TX_county",117,"Hutchinson County, TX",NA
+"TX_county",118,"Irion County, TX",NA
+"TX_county",119,"Jack County, TX",NA
+"TX_county",120,"Jackson County, TX",NA
+"TX_county",121,"Jasper County, TX",NA
+"TX_county",122,"Jeff Davis County, TX",NA
+"TX_county",123,"Jefferson County, TX",NA
+"TX_county",124,"Jim Hogg County, TX",NA
+"TX_county",125,"Jim Wells County, TX",NA
+"TX_county",126,"Johnson County, TX",NA
+"TX_county",127,"Jones County, TX",NA
+"TX_county",128,"Karnes County, TX",NA
+"TX_county",129,"Kaufman County, TX",NA
+"TX_county",130,"Kendall County, TX",NA
+"TX_county",131,"Kenedy County, TX",NA
+"TX_county",132,"Kent County, TX",NA
+"TX_county",133,"Kerr County, TX",NA
+"TX_county",134,"Kimble County, TX",NA
+"TX_county",135,"King County, TX",NA
+"TX_county",136,"Kinney County, TX",NA
+"TX_county",137,"Kleberg County, TX",NA
+"TX_county",138,"Knox County, TX",NA
+"TX_county",139,"Lamar County, TX",NA
+"TX_county",140,"Lamb County, TX",NA
+"TX_county",141,"Lampasas County, TX",NA
+"TX_county",142,"LaSalle County, TX",NA
+"TX_county",143,"Lavaca County, TX",NA
+"TX_county",144,"Lee County, TX",NA
+"TX_county",145,"Leon County, TX",NA
+"TX_county",146,"Liberty County, TX",NA
+"TX_county",147,"Limestone County, TX",NA
+"TX_county",148,"Lipscomb County, TX",NA
+"TX_county",149,"Live Oak County, TX",NA
+"TX_county",150,"Llano County, TX",NA
+"TX_county",151,"Loving County, TX",NA
+"TX_county",152,"Lubbock County, TX",NA
+"TX_county",153,"Lynn County, TX",NA
+"TX_county",154,"Madison County, TX",NA
+"TX_county",155,"Marion County, TX",NA
+"TX_county",156,"Martin County, TX",NA
+"TX_county",157,"Mason County, TX",NA
+"TX_county",158,"Matagorda County, TX",NA
+"TX_county",159,"Maverick County, TX",NA
+"TX_county",160,"McCulloch County, TX",NA
+"TX_county",161,"McLennan County, TX",NA
+"TX_county",162,"McMullen County, TX",NA
+"TX_county",163,"Medina County, TX",NA
+"TX_county",164,"Menard County, TX",NA
+"TX_county",165,"Midland County, TX",NA
+"TX_county",166,"Milam County, TX",NA
+"TX_county",167,"Mills County, TX",NA
+"TX_county",168,"Mitchell County, TX",NA
+"TX_county",169,"Montague County, TX",NA
+"TX_county",170,"Montgomery County, TX",NA
+"TX_county",171,"Moore County, TX",NA
+"TX_county",172,"Morris County, TX",NA
+"TX_county",173,"Motley County, TX",NA
+"TX_county",174,"Nacogdoches County, TX",NA
+"TX_county",175,"Navarro County, TX",NA
+"TX_county",176,"Newton County, TX",NA
+"TX_county",177,"Nolan County, TX",NA
+"TX_county",178,"Nueces County, TX",NA
+"TX_county",179,"Ochiltree County, TX",NA
+"TX_county",180,"Oldham County, TX",NA
+"TX_county",181,"Orange County, TX",NA
+"TX_county",182,"Palo Pinto County, TX",NA
+"TX_county",183,"Panola County, TX",NA
+"TX_county",184,"Parker County, TX",NA
+"TX_county",185,"Parmer County, TX",NA
+"TX_county",186,"Pecos County, TX",NA
+"TX_county",187,"Polk County, TX",NA
+"TX_county",188,"Potter County, TX",NA
+"TX_county",189,"Presidio County, TX",NA
+"TX_county",190,"Rains County, TX",NA
+"TX_county",191,"Randall County, TX",NA
+"TX_county",192,"Reagan County, TX",NA
+"TX_county",193,"Real County, TX",NA
+"TX_county",194,"Red River County, TX",NA
+"TX_county",195,"Reeves County, TX",NA
+"TX_county",196,"Refugio County, TX",NA
+"TX_county",197,"Roberts County, TX",NA
+"TX_county",198,"Robertson County, TX",NA
+"TX_county",199,"Rockwall County, TX",NA
+"TX_county",200,"Runnels County, TX",NA
+"TX_county",201,"Rusk County, TX",NA
+"TX_county",202,"Sabine County, TX",NA
+"TX_county",203,"San Augustine County, TX",NA
+"TX_county",204,"San Jacinto County, TX",NA
+"TX_county",205,"San Patricio County, TX",NA
+"TX_county",206,"San Saba County, TX",NA
+"TX_county",207,"Schleicher County, TX",NA
+"TX_county",208,"Scurry County, TX",NA
+"TX_county",209,"Shackelford County, TX",NA
+"TX_county",210,"Shelby County, TX",NA
+"TX_county",211,"Sherman County, TX",NA
+"TX_county",212,"Smith County, TX",NA
+"TX_county",213,"Somervell County, TX",NA
+"TX_county",214,"Starr County, TX",NA
+"TX_county",215,"Stephens County, TX",NA
+"TX_county",216,"Sterling County, TX",NA
+"TX_county",217,"Stonewall County, TX",NA
+"TX_county",218,"Sutton County, TX",NA
+"TX_county",219,"Swisher County, TX",NA
+"TX_county",220,"Tarrant County, TX",NA
+"TX_county",221,"Taylor County, TX",NA
+"TX_county",222,"Terrell County, TX",NA
+"TX_county",223,"Terry County, TX",NA
+"TX_county",224,"Throckmorton County, TX",NA
+"TX_county",225,"Titus County, TX",NA
+"TX_county",226,"Tom Green County, TX",NA
+"TX_county",227,"Travis County, TX",NA
+"TX_county",228,"Trinity County, TX",NA
+"TX_county",229,"Tyler County, TX",NA
+"TX_county",230,"Upshur County, TX",NA
+"TX_county",231,"Upton County, TX",NA
+"TX_county",232,"Uvalde County, TX",NA
+"TX_county",233,"Val Verde County, TX",NA
+"TX_county",234,"Van Zandt County, TX",NA
+"TX_county",235,"Victoria County, TX",NA
+"TX_county",236,"Walker County, TX",NA
+"TX_county",237,"Waller County, TX",NA
+"TX_county",238,"Ward County, TX",NA
+"TX_county",239,"Washington County, TX",NA
+"TX_county",240,"Webb County, TX",NA
+"TX_county",241,"Wharton County, TX",NA
+"TX_county",242,"Wheeler County, TX",NA
+"TX_county",243,"Wichita County, TX",NA
+"TX_county",244,"Wilbarger County, TX",NA
+"TX_county",245,"Willacy County, TX",NA
+"TX_county",246,"Williamson County, TX",NA
+"TX_county",247,"Wilson County, TX",NA
+"TX_county",248,"Winkler County, TX",NA
+"TX_county",249,"Wise County, TX",NA
+"TX_county",250,"Wood County, TX",NA
+"TX_county",251,"Yoakum County, TX",NA
+"TX_county",252,"Young County, TX",NA
+"TX_county",253,"Zapata County, TX",NA
+"TX_county",254,"Zavala County, TX",NA
+"ID_county",NA,"In which county do you currently live?","varlab"
+"ID_county",1,"Ada County, ID",NA
+"ID_county",2,"Adams County, ID",NA
+"ID_county",3,"Bannock County, ID",NA
+"ID_county",4,"Bear Lake County, ID",NA
+"ID_county",5,"Benewah County, ID",NA
+"ID_county",6,"Bingham County, ID",NA
+"ID_county",7,"Blaine County, ID",NA
+"ID_county",8,"Boise County, ID",NA
+"ID_county",9,"Bonner County, ID",NA
+"ID_county",10,"Bonneville County, ID",NA
+"ID_county",11,"Boundary County, ID",NA
+"ID_county",12,"Butte County, ID",NA
+"ID_county",13,"Camas County, ID",NA
+"ID_county",14,"Canyon County, ID",NA
+"ID_county",15,"Caribou County, ID",NA
+"ID_county",16,"Cassia County, ID",NA
+"ID_county",17,"Clark County, ID",NA
+"ID_county",18,"Clearwater County, ID",NA
+"ID_county",19,"Custer County, ID",NA
+"ID_county",20,"Elmore County, ID",NA
+"ID_county",21,"Franklin County, ID",NA
+"ID_county",22,"Fremont County, ID",NA
+"ID_county",23,"Gem County, ID",NA
+"ID_county",24,"Gooding County, ID",NA
+"ID_county",25,"Idaho County, ID",NA
+"ID_county",26,"Jefferson County, ID",NA
+"ID_county",27,"Jerome County, ID",NA
+"ID_county",28,"Kootenai County, ID",NA
+"ID_county",29,"Latah County, ID",NA
+"ID_county",30,"Lemhi County, ID",NA
+"ID_county",31,"Lewis County, ID",NA
+"ID_county",32,"Lincoln County, ID",NA
+"ID_county",33,"Madison County, ID",NA
+"ID_county",34,"Minidoka County, ID",NA
+"ID_county",35,"Nez Perce County, ID",NA
+"ID_county",36,"Oneida County, ID",NA
+"ID_county",37,"Owyhee County, ID",NA
+"ID_county",38,"Payette County, ID",NA
+"ID_county",39,"Power County, ID",NA
+"ID_county",40,"Shoshone County, ID",NA
+"ID_county",41,"Teton County, ID",NA
+"ID_county",42,"Twin Falls County, ID",NA
+"ID_county",43,"Valley County, ID",NA
+"ID_county",44,"Washington County, ID",NA
+"IA_county",NA,"In which county do you currently live?","varlab"
+"IA_county",1,"Adair County, IA",NA
+"IA_county",2,"Adams County, IA",NA
+"IA_county",3,"Allamakee County, IA",NA
+"IA_county",4,"Appanoose County, IA",NA
+"IA_county",5,"Audubon County, IA",NA
+"IA_county",6,"Benton County, IA",NA
+"IA_county",7,"Black Hawk County, IA",NA
+"IA_county",8,"Boone County, IA",NA
+"IA_county",9,"Bremer County, IA",NA
+"IA_county",10,"Buchanan County, IA",NA
+"IA_county",11,"Buena Vista County, IA",NA
+"IA_county",12,"Butler County, IA",NA
+"IA_county",13,"Calhoun County, IA",NA
+"IA_county",14,"Carroll County, IA",NA
+"IA_county",15,"Cass County, IA",NA
+"IA_county",16,"Cedar County, IA",NA
+"IA_county",17,"Cerro Gordo County, IA",NA
+"IA_county",18,"Cherokee County, IA",NA
+"IA_county",19,"Chickasaw County, IA",NA
+"IA_county",20,"Clarke County, IA",NA
+"IA_county",21,"Clay County, IA",NA
+"IA_county",22,"Clayton County, IA",NA
+"IA_county",23,"Clinton County, IA",NA
+"IA_county",24,"Crawford County, IA",NA
+"IA_county",25,"Dallas County, IA",NA
+"IA_county",26,"Davis County, IA",NA
+"IA_county",27,"Decatur County, IA",NA
+"IA_county",28,"Delaware County, IA",NA
+"IA_county",29,"Des Moines County, IA",NA
+"IA_county",30,"Dickinson County, IA",NA
+"IA_county",31,"Dubuque County, IA",NA
+"IA_county",32,"Emmet County, IA",NA
+"IA_county",33,"Fayette County, IA",NA
+"IA_county",34,"Floyd County, IA",NA
+"IA_county",35,"Franklin County, IA",NA
+"IA_county",36,"Fremont County, IA",NA
+"IA_county",37,"Greene County, IA",NA
+"IA_county",38,"Grundy County, IA",NA
+"IA_county",39,"Guthrie County, IA",NA
+"IA_county",40,"Hamilton County, IA",NA
+"IA_county",41,"Hancock County, IA",NA
+"IA_county",42,"Hardin County, IA",NA
+"IA_county",43,"Harrison County, IA",NA
+"IA_county",44,"Henry County, IA",NA
+"IA_county",45,"Howard County, IA",NA
+"IA_county",46,"Humboldt County, IA",NA
+"IA_county",47,"Ida County, IA",NA
+"IA_county",48,"Iowa County, IA",NA
+"IA_county",49,"Jackson County, IA",NA
+"IA_county",50,"Jasper County, IA",NA
+"IA_county",51,"Jefferson County, IA",NA
+"IA_county",52,"Johnson County, IA",NA
+"IA_county",53,"Jones County, IA",NA
+"IA_county",54,"Keokuk County, IA",NA
+"IA_county",55,"Kossuth County, IA",NA
+"IA_county",56,"Lee County, IA",NA
+"IA_county",57,"Linn County, IA",NA
+"IA_county",58,"Louisa County, IA",NA
+"IA_county",59,"Lucas County, IA",NA
+"IA_county",60,"Lyon County, IA",NA
+"IA_county",61,"Madison County, IA",NA
+"IA_county",62,"Mahaska County, IA",NA
+"IA_county",63,"Marion County, IA",NA
+"IA_county",64,"Marshall County, IA",NA
+"IA_county",65,"Mills County, IA",NA
+"IA_county",66,"Mitchell County, IA",NA
+"IA_county",67,"Monona County, IA",NA
+"IA_county",68,"Monroe County, IA",NA
+"IA_county",69,"Montgomery County, IA",NA
+"IA_county",70,"Muscatine County, IA",NA
+"IA_county",71,"O’Brien County, IA",NA
+"IA_county",72,"Osceola County, IA",NA
+"IA_county",73,"Page County, IA",NA
+"IA_county",74,"Palo Alto County, IA",NA
+"IA_county",75,"Plymouth County, IA",NA
+"IA_county",76,"Pocahontas County, IA",NA
+"IA_county",77,"Polk County, IA",NA
+"IA_county",78,"Pottawattamie County, IA",NA
+"IA_county",79,"Poweshiek County, IA",NA
+"IA_county",80,"Ringgold County, IA",NA
+"IA_county",81,"Sac County, IA",NA
+"IA_county",82,"Scott County, IA",NA
+"IA_county",83,"Shelby County, IA",NA
+"IA_county",84,"Sioux County, IA",NA
+"IA_county",85,"Story County, IA",NA
+"IA_county",86,"Tama County, IA",NA
+"IA_county",87,"Taylor County, IA",NA
+"IA_county",88,"Union County, IA",NA
+"IA_county",89,"Van Buren County, IA",NA
+"IA_county",90,"Wapello County, IA",NA
+"IA_county",91,"Warren County, IA",NA
+"IA_county",92,"Washington County, IA",NA
+"IA_county",93,"Wayne County, IA",NA
+"IA_county",94,"Webster County, IA",NA
+"IA_county",95,"Winnebago County, IA",NA
+"IA_county",96,"Winneshiek County, IA",NA
+"IA_county",97,"Woodbury County, IA",NA
+"IA_county",98,"Worth County, IA",NA
+"IA_county",99,"Wright County, IA",NA
+"NC_county",NA,"In which county do you currently live?","varlab"
+"NC_county",1,"Alamance County, NC",NA
+"NC_county",2,"Alexander County, NC",NA
+"NC_county",3,"Alleghany County, NC",NA
+"NC_county",4,"Anson County, NC",NA
+"NC_county",5,"Ashe County, NC",NA
+"NC_county",6,"Avery County, NC",NA
+"NC_county",7,"Beaufort County, NC",NA
+"NC_county",8,"Bertie County, NC",NA
+"NC_county",9,"Bladen County, NC",NA
+"NC_county",10,"Brunswick County, NC",NA
+"NC_county",11,"Buncombe County, NC",NA
+"NC_county",12,"Burke County, NC",NA
+"NC_county",13,"Cabarrus County, NC",NA
+"NC_county",14,"Caldwell County, NC",NA
+"NC_county",15,"Camden County, NC",NA
+"NC_county",16,"Carteret County, NC",NA
+"NC_county",17,"Caswell County, NC",NA
+"NC_county",18,"Catawba County, NC",NA
+"NC_county",19,"Chatham County, NC",NA
+"NC_county",20,"Cherokee County, NC",NA
+"NC_county",21,"Chowan County, NC",NA
+"NC_county",22,"Clay County, NC",NA
+"NC_county",23,"Cleveland County, NC",NA
+"NC_county",24,"Columbus County, NC",NA
+"NC_county",25,"Craven County, NC",NA
+"NC_county",26,"Cumberland County, NC",NA
+"NC_county",27,"Currituck County, NC",NA
+"NC_county",28,"Dare County, NC",NA
+"NC_county",29,"Davidson County, NC",NA
+"NC_county",30,"Davie County, NC",NA
+"NC_county",31,"Duplin County, NC",NA
+"NC_county",32,"Durham County, NC",NA
+"NC_county",33,"Edgecombe County, NC",NA
+"NC_county",34,"Forsyth County, NC",NA
+"NC_county",35,"Franklin County, NC",NA
+"NC_county",36,"Gaston County, NC",NA
+"NC_county",37,"Gates County, NC",NA
+"NC_county",38,"Graham County, NC",NA
+"NC_county",39,"Granville County, NC",NA
+"NC_county",40,"Greene County, NC",NA
+"NC_county",41,"Guilford County, NC",NA
+"NC_county",42,"Halifax County, NC",NA
+"NC_county",43,"Harnett County, NC",NA
+"NC_county",44,"Haywood County, NC",NA
+"NC_county",45,"Henderson County, NC",NA
+"NC_county",46,"Hertford County, NC",NA
+"NC_county",47,"Hoke County, NC",NA
+"NC_county",48,"Hyde County, NC",NA
+"NC_county",49,"Iredell County, NC",NA
+"NC_county",50,"Jackson County, NC",NA
+"NC_county",51,"Johnston County, NC",NA
+"NC_county",52,"Jones County, NC",NA
+"NC_county",53,"Lee County, NC",NA
+"NC_county",54,"Lenoir County, NC",NA
+"NC_county",55,"Lincoln County, NC",NA
+"NC_county",56,"Macon County, NC",NA
+"NC_county",57,"Madison County, NC",NA
+"NC_county",58,"Martin County, NC",NA
+"NC_county",59,"McDowell County, NC",NA
+"NC_county",60,"Mecklenburg County, NC",NA
+"NC_county",61,"Mitchell County, NC",NA
+"NC_county",62,"Montgomery County, NC",NA
+"NC_county",63,"Moore County, NC",NA
+"NC_county",64,"Nash County, NC",NA
+"NC_county",65,"New Hanover County, NC",NA
+"NC_county",66,"Northampton County, NC",NA
+"NC_county",67,"Onslow County, NC",NA
+"NC_county",68,"Orange County, NC",NA
+"NC_county",69,"Pamlico County, NC",NA
+"NC_county",70,"Pasquotank County, NC",NA
+"NC_county",71,"Pender County, NC",NA
+"NC_county",72,"Perquimans County, NC",NA
+"NC_county",73,"Person County, NC",NA
+"NC_county",74,"Pitt County, NC",NA
+"NC_county",75,"Polk County, NC",NA
+"NC_county",76,"Randolph County, NC",NA
+"NC_county",77,"Richmond County, NC",NA
+"NC_county",78,"Robeson County, NC",NA
+"NC_county",79,"Rockingham County, NC",NA
+"NC_county",80,"Rowan County, NC",NA
+"NC_county",81,"Rutherford County, NC",NA
+"NC_county",82,"Sampson County, NC",NA
+"NC_county",83,"Scotland County, NC",NA
+"NC_county",84,"Stanly County, NC",NA
+"NC_county",85,"Stokes County, NC",NA
+"NC_county",86,"Surry County, NC",NA
+"NC_county",87,"Swain County, NC",NA
+"NC_county",88,"Transylvania County, NC",NA
+"NC_county",89,"Tyrrell County, NC",NA
+"NC_county",90,"Union County, NC",NA
+"NC_county",91,"Vance County, NC",NA
+"NC_county",92,"Wake County, NC",NA
+"NC_county",93,"Warren County, NC",NA
+"NC_county",94,"Washington County, NC",NA
+"NC_county",95,"Watauga County, NC",NA
+"NC_county",96,"Wayne County, NC",NA
+"NC_county",97,"Wilkes County, NC",NA
+"NC_county",98,"Wilson County, NC",NA
+"NC_county",99,"Yadkin County, NC",NA
+"NC_county",100,"Yancey County, NC",NA
+"IN_county",NA,"In which county do you currently live?","varlab"
+"IN_county",1,"Adams County, IN",NA
+"IN_county",2,"Allen County, IN",NA
+"IN_county",3,"Bartholomew County, IN",NA
+"IN_county",4,"Benton County, IN",NA
+"IN_county",5,"Blackford County, IN",NA
+"IN_county",6,"Boone County, IN",NA
+"IN_county",7,"Brown County, IN",NA
+"IN_county",8,"Carroll County, IN",NA
+"IN_county",9,"Cass County, IN",NA
+"IN_county",10,"Clark County, IN",NA
+"IN_county",11,"Clay County, IN",NA
+"IN_county",12,"Clinton County, IN",NA
+"IN_county",13,"Crawford County, IN",NA
+"IN_county",14,"Daviess County, IN",NA
+"IN_county",15,"Dearborn County, IN",NA
+"IN_county",16,"Decatur County, IN",NA
+"IN_county",17,"DeKalb County, IN",NA
+"IN_county",18,"Delaware County, IN",NA
+"IN_county",19,"Dubois County, IN",NA
+"IN_county",20,"Elkhart County, IN",NA
+"IN_county",21,"Fayette County, IN",NA
+"IN_county",22,"Floyd County, IN",NA
+"IN_county",23,"Fountain County, IN",NA
+"IN_county",24,"Franklin County, IN",NA
+"IN_county",25,"Fulton County, IN",NA
+"IN_county",26,"Gibson County, IN",NA
+"IN_county",27,"Grant County, IN",NA
+"IN_county",28,"Greene County, IN",NA
+"IN_county",29,"Hamilton County, IN",NA
+"IN_county",30,"Hancock County, IN",NA
+"IN_county",31,"Harrison County, IN",NA
+"IN_county",32,"Hendricks County, IN",NA
+"IN_county",33,"Henry County, IN",NA
+"IN_county",34,"Howard County, IN",NA
+"IN_county",35,"Huntington County, IN",NA
+"IN_county",36,"Jackson County, IN",NA
+"IN_county",37,"Jasper County, IN",NA
+"IN_county",38,"Jay County, IN",NA
+"IN_county",39,"Jefferson County, IN",NA
+"IN_county",40,"Jennings County, IN",NA
+"IN_county",41,"Johnson County, IN",NA
+"IN_county",42,"Knox County, IN",NA
+"IN_county",43,"Kosciusko County, IN",NA
+"IN_county",44,"LaGrange County, IN",NA
+"IN_county",45,"Lake County, IN",NA
+"IN_county",46,"LaPorte County, IN",NA
+"IN_county",47,"Lawrence County, IN",NA
+"IN_county",48,"Madison County, IN",NA
+"IN_county",49,"Marion County, IN",NA
+"IN_county",50,"Marshall County, IN",NA
+"IN_county",51,"Martin County, IN",NA
+"IN_county",52,"Miami County, IN",NA
+"IN_county",53,"Monroe County, IN",NA
+"IN_county",54,"Montgomery County, IN",NA
+"IN_county",55,"Morgan County, IN",NA
+"IN_county",56,"Newton County, IN",NA
+"IN_county",57,"Noble County, IN",NA
+"IN_county",58,"Ohio County, IN",NA
+"IN_county",59,"Orange County, IN",NA
+"IN_county",60,"Owen County, IN",NA
+"IN_county",61,"Parke County, IN",NA
+"IN_county",62,"Perry County, IN",NA
+"IN_county",63,"Pike County, IN",NA
+"IN_county",64,"Porter County, IN",NA
+"IN_county",65,"Posey County, IN",NA
+"IN_county",66,"Pulaski County, IN",NA
+"IN_county",67,"Putnam County, IN",NA
+"IN_county",68,"Randolph County, IN",NA
+"IN_county",69,"Ripley County, IN",NA
+"IN_county",70,"Rush County, IN",NA
+"IN_county",71,"Saint Joseph County, IN",NA
+"IN_county",72,"Scott County, IN",NA
+"IN_county",73,"Shelby County, IN",NA
+"IN_county",74,"Spencer County, IN",NA
+"IN_county",75,"Starke County, IN",NA
+"IN_county",76,"Steuben County, IN",NA
+"IN_county",77,"Sullivan County, IN",NA
+"IN_county",78,"Switzerland County, IN",NA
+"IN_county",79,"Tippecanoe County, IN",NA
+"IN_county",80,"Tipton County, IN",NA
+"IN_county",81,"Union County, IN",NA
+"IN_county",82,"Vanderburgh County, IN",NA
+"IN_county",83,"Vermillion County, IN",NA
+"IN_county",84,"Vigo County, IN",NA
+"IN_county",85,"Wabash County, IN",NA
+"IN_county",86,"Warren County, IN",NA
+"IN_county",87,"Warrick County, IN",NA
+"IN_county",88,"Washington County, IN",NA
+"IN_county",89,"Wayne County, IN",NA
+"IN_county",90,"Wells County, IN",NA
+"IN_county",91,"White County, IN",NA
+"IN_county",92,"Whitley County, IN",NA
+"KY_county",NA,"In which county do you currently live?","varlab"
+"KY_county",1,"Adair County, KY",NA
+"KY_county",2,"Allen County, KY",NA
+"KY_county",3,"Anderson County, KY",NA
+"KY_county",4,"Ballard County, KY",NA
+"KY_county",5,"Barren County, KY",NA
+"KY_county",6,"Bath County, KY",NA
+"KY_county",7,"Bell County, KY",NA
+"KY_county",8,"Boone County, KY",NA
+"KY_county",9,"Bourbon County, KY",NA
+"KY_county",10,"Boyd County, KY",NA
+"KY_county",11,"Boyle County, KY",NA
+"KY_county",12,"Bracken County, KY",NA
+"KY_county",13,"Breathitt County, KY",NA
+"KY_county",14,"Breckinridge County, KY",NA
+"KY_county",15,"Bullitt County, KY",NA
+"KY_county",16,"Butler County, KY",NA
+"KY_county",17,"Caldwell County, KY",NA
+"KY_county",18,"Calloway County, KY",NA
+"KY_county",19,"Campbell County, KY",NA
+"KY_county",20,"Carlisle County, KY",NA
+"KY_county",21,"Carroll County, KY",NA
+"KY_county",22,"Carter County, KY",NA
+"KY_county",23,"Casey County, KY",NA
+"KY_county",24,"Christian County, KY",NA
+"KY_county",25,"Clark County, KY",NA
+"KY_county",26,"Clay County, KY",NA
+"KY_county",27,"Clinton County, KY",NA
+"KY_county",28,"Crittenden County, KY",NA
+"KY_county",29,"Cumberland County, KY",NA
+"KY_county",30,"Daviess County, KY",NA
+"KY_county",31,"Edmonson County, KY",NA
+"KY_county",32,"Elliott County, KY",NA
+"KY_county",33,"Estill County, KY",NA
+"KY_county",34,"Fayette County, KY",NA
+"KY_county",35,"Fleming County, KY",NA
+"KY_county",36,"Floyd County, KY",NA
+"KY_county",37,"Franklin County, KY",NA
+"KY_county",38,"Fulton County, KY",NA
+"KY_county",39,"Gallatin County, KY",NA
+"KY_county",40,"Garrard County, KY",NA
+"KY_county",41,"Grant County, KY",NA
+"KY_county",42,"Graves County, KY",NA
+"KY_county",43,"Grayson County, KY",NA
+"KY_county",44,"Green County, KY",NA
+"KY_county",45,"Greenup County, KY",NA
+"KY_county",46,"Hancock County, KY",NA
+"KY_county",47,"Hardin County, KY",NA
+"KY_county",48,"Harlan County, KY",NA
+"KY_county",49,"Harrison County, KY",NA
+"KY_county",50,"Hart County, KY",NA
+"KY_county",51,"Henderson County, KY",NA
+"KY_county",52,"Henry County, KY",NA
+"KY_county",53,"Hickman County, KY",NA
+"KY_county",54,"Hopkins County, KY",NA
+"KY_county",55,"Jackson County, KY",NA
+"KY_county",56,"Jefferson County, KY",NA
+"KY_county",57,"Jessamine County, KY",NA
+"KY_county",58,"Johnson County, KY",NA
+"KY_county",59,"Kenton County, KY",NA
+"KY_county",60,"Knott County, KY",NA
+"KY_county",61,"Knox County, KY",NA
+"KY_county",62,"LaRue County, KY",NA
+"KY_county",63,"Laurel County, KY",NA
+"KY_county",64,"Lawrence County, KY",NA
+"KY_county",65,"Lee County, KY",NA
+"KY_county",66,"Leslie County, KY",NA
+"KY_county",67,"Letcher County, KY",NA
+"KY_county",68,"Lewis County, KY",NA
+"KY_county",69,"Lincoln County, KY",NA
+"KY_county",70,"Livingston County, KY",NA
+"KY_county",71,"Logan County, KY",NA
+"KY_county",72,"Lyon County, KY",NA
+"KY_county",73,"Madison County, KY",NA
+"KY_county",74,"Magoffin County, KY",NA
+"KY_county",75,"Marion County, KY",NA
+"KY_county",76,"Marshall County, KY",NA
+"KY_county",77,"Martin County, KY",NA
+"KY_county",78,"Mason County, KY",NA
+"KY_county",79,"McCracken County, KY",NA
+"KY_county",80,"McCreary County, KY",NA
+"KY_county",81,"McLean County, KY",NA
+"KY_county",82,"Meade County, KY",NA
+"KY_county",83,"Menifee County, KY",NA
+"KY_county",84,"Mercer County, KY",NA
+"KY_county",85,"Metcalfe County, KY",NA
+"KY_county",86,"Monroe County, KY",NA
+"KY_county",87,"Montgomery County, KY",NA
+"KY_county",88,"Morgan County, KY",NA
+"KY_county",89,"Muhlenberg County, KY",NA
+"KY_county",90,"Nelson County, KY",NA
+"KY_county",91,"Nicholas County, KY",NA
+"KY_county",92,"Ohio County, KY",NA
+"KY_county",93,"Oldham County, KY",NA
+"KY_county",94,"Owen County, KY",NA
+"KY_county",95,"Owsley County, KY",NA
+"KY_county",96,"Pendleton County, KY",NA
+"KY_county",97,"Perry County, KY",NA
+"KY_county",98,"Pike County, KY",NA
+"KY_county",99,"Powell County, KY",NA
+"KY_county",100,"Pulaski County, KY",NA
+"KY_county",101,"Robertson County, KY",NA
+"KY_county",102,"Rockcastle County, KY",NA
+"KY_county",103,"Rowan County, KY",NA
+"KY_county",104,"Russell County, KY",NA
+"KY_county",105,"Scott County, KY",NA
+"KY_county",106,"Shelby County, KY",NA
+"KY_county",107,"Simpson County, KY",NA
+"KY_county",108,"Spencer County, KY",NA
+"KY_county",109,"Taylor County, KY",NA
+"KY_county",110,"Todd County, KY",NA
+"KY_county",111,"Trigg County, KY",NA
+"KY_county",112,"Trimble County, KY",NA
+"KY_county",113,"Union County, KY",NA
+"KY_county",114,"Warren County, KY",NA
+"KY_county",115,"Washington County, KY",NA
+"KY_county",116,"Wayne County, KY",NA
+"KY_county",117,"Webster County, KY",NA
+"KY_county",118,"Whitley County, KY",NA
+"KY_county",119,"Wolfe County, KY",NA
+"KY_county",120,"Woodford County, KY",NA
+"WI_county",NA,"In which county do you currently live?","varlab"
+"WI_county",1,"Adams County, WI",NA
+"WI_county",2,"Ashland County, WI",NA
+"WI_county",3,"Barron County, WI",NA
+"WI_county",4,"Bayfield County, WI",NA
+"WI_county",5,"Brown County, WI",NA
+"WI_county",6,"Buffalo County, WI",NA
+"WI_county",7,"Burnett County, WI",NA
+"WI_county",8,"Calumet County, WI",NA
+"WI_county",9,"Chippewa County, WI",NA
+"WI_county",10,"Clark County, WI",NA
+"WI_county",11,"Columbia County, WI",NA
+"WI_county",12,"Crawford County, WI",NA
+"WI_county",13,"Dane County, WI",NA
+"WI_county",14,"Dodge County, WI",NA
+"WI_county",15,"Door County, WI",NA
+"WI_county",16,"Douglas County, WI",NA
+"WI_county",17,"Dunn County, WI",NA
+"WI_county",18,"Eau Claire County, WI",NA
+"WI_county",19,"Florence County, WI",NA
+"WI_county",20,"Fond du Lac County, WI",NA
+"WI_county",21,"Forest County, WI",NA
+"WI_county",22,"Grant County, WI",NA
+"WI_county",23,"Green County, WI",NA
+"WI_county",24,"Green Lake County, WI",NA
+"WI_county",25,"Iowa County, WI",NA
+"WI_county",26,"Iron County, WI",NA
+"WI_county",27,"Jackson County, WI",NA
+"WI_county",28,"Jefferson County, WI",NA
+"WI_county",29,"Juneau County, WI",NA
+"WI_county",30,"Kenosha County, WI",NA
+"WI_county",31,"Kewaunee County, WI",NA
+"WI_county",32,"La Crosse County, WI",NA
+"WI_county",33,"Lafayette County, WI",NA
+"WI_county",34,"Langlade County, WI",NA
+"WI_county",35,"Lincoln County, WI",NA
+"WI_county",36,"Manitowoc County, WI",NA
+"WI_county",37,"Marathon County, WI",NA
+"WI_county",38,"Marinette County, WI",NA
+"WI_county",39,"Marquette County, WI",NA
+"WI_county",40,"Menominee County, WI",NA
+"WI_county",41,"Milwaukee County, WI",NA
+"WI_county",42,"Monroe County, WI",NA
+"WI_county",43,"Oconto County, WI",NA
+"WI_county",44,"Oneida County, WI",NA
+"WI_county",45,"Outagamie County, WI",NA
+"WI_county",46,"Ozaukee County, WI",NA
+"WI_county",47,"Pepin County, WI",NA
+"WI_county",48,"Pierce County, WI",NA
+"WI_county",49,"Polk County, WI",NA
+"WI_county",50,"Portage County, WI",NA
+"WI_county",51,"Price County, WI",NA
+"WI_county",52,"Racine County, WI",NA
+"WI_county",53,"Richland County, WI",NA
+"WI_county",54,"Rock County, WI",NA
+"WI_county",55,"Rusk County, WI",NA
+"WI_county",56,"Saint Croix County, WI",NA
+"WI_county",57,"Sauk County, WI",NA
+"WI_county",58,"Sawyer County, WI",NA
+"WI_county",59,"Shawano County, WI",NA
+"WI_county",60,"Sheboygan County, WI",NA
+"WI_county",61,"Taylor County, WI",NA
+"WI_county",62,"Trempealeau County, WI",NA
+"WI_county",63,"Vernon County, WI",NA
+"WI_county",64,"Vilas County, WI",NA
+"WI_county",65,"Walworth County, WI",NA
+"WI_county",66,"Washburn County, WI",NA
+"WI_county",67,"Washington County, WI",NA
+"WI_county",68,"Waukesha County, WI",NA
+"WI_county",69,"Waupaca County, WI",NA
+"WI_county",70,"Waushara County, WI",NA
+"WI_county",71,"Winnebago County, WI",NA
+"WI_county",72,"Wood County, WI",NA
+"WA_county",NA,"In which county do you currently live?","varlab"
+"WA_county",1,"Adams County, WA",NA
+"WA_county",2,"Asotin County, WA",NA
+"WA_county",3,"Benton County, WA",NA
+"WA_county",4,"Chelan County, WA",NA
+"WA_county",5,"Clallam County, WA",NA
+"WA_county",6,"Clark County, WA",NA
+"WA_county",7,"Columbia County, WA",NA
+"WA_county",8,"Cowlitz County, WA",NA
+"WA_county",9,"Douglas County, WA",NA
+"WA_county",10,"Ferry County, WA",NA
+"WA_county",11,"Franklin County, WA",NA
+"WA_county",12,"Garfield County, WA",NA
+"WA_county",13,"Grant County, WA",NA
+"WA_county",14,"Grays Harbor County, WA",NA
+"WA_county",15,"Island County, WA",NA
+"WA_county",16,"Jefferson County, WA",NA
+"WA_county",17,"King County, WA",NA
+"WA_county",18,"Kitsap County, WA",NA
+"WA_county",19,"Kittitas County, WA",NA
+"WA_county",20,"Klickitat County, WA",NA
+"WA_county",21,"Lewis County, WA",NA
+"WA_county",22,"Lincoln County, WA",NA
+"WA_county",23,"Mason County, WA",NA
+"WA_county",24,"Okanogan County, WA",NA
+"WA_county",25,"Pacific County, WA",NA
+"WA_county",26,"Pend Oreille County, WA",NA
+"WA_county",27,"Pierce County, WA",NA
+"WA_county",28,"San Juan County, WA",NA
+"WA_county",29,"Skagit County, WA",NA
+"WA_county",30,"Skamania County, WA",NA
+"WA_county",31,"Snohomish County, WA",NA
+"WA_county",32,"Spokane County, WA",NA
+"WA_county",33,"Stevens County, WA",NA
+"WA_county",34,"Thurston County, WA",NA
+"WA_county",35,"Wahkiakum County, WA",NA
+"WA_county",36,"Walla Walla County, WA",NA
+"WA_county",37,"Whatcom County, WA",NA
+"WA_county",38,"Whitman County, WA",NA
+"WA_county",39,"Yakima County, WA",NA
+"Demo_gender",NA,"What gender do you identify as?","varlab"
+"Demo_gender",1,"Male",NA
+"Demo_gender",2,"Female",NA
+"Demo_gender",3,"Non-binary / Genderqueer / Genderfluid",NA
+"Demo_gender",4,"I identify with a gender not listed here",NA
+"Demo_gender",-99,"I prefer not to answer",NA
+"Demo_age_int",NA,"What is your age?","varlab"
+"Demo_age_house_1",NA,"How many people in each of the age groups below (including
+yourself) live in your household? - 0-17 years","varlab"
+"Demo_age_house_1",1,"0 people",NA
+"Demo_age_house_1",2,"1 person",NA
+"Demo_age_house_1",3,"2 people",NA
+"Demo_age_house_1",4,"3 people",NA
+"Demo_age_house_1",5,"4 people",NA
+"Demo_age_house_1",6,"5 or more people",NA
+"Demo_age_house_2",NA,"How many people in each of the age groups below (including
+yourself) live in your household? - 18-39 years","varlab"
+"Demo_age_house_2",1,"0 people",NA
+"Demo_age_house_2",2,"1 person",NA
+"Demo_age_house_2",3,"2 people",NA
+"Demo_age_house_2",4,"3 people",NA
+"Demo_age_house_2",5,"4 people",NA
+"Demo_age_house_2",6,"5 or more people",NA
+"Demo_age_house_3",NA,"How many people in each of the age groups below (including
+yourself) live in your household? - 40-59 years","varlab"
+"Demo_age_house_3",1,"0 people",NA
+"Demo_age_house_3",2,"1 person",NA
+"Demo_age_house_3",3,"2 people",NA
+"Demo_age_house_3",4,"3 people",NA
+"Demo_age_house_3",5,"4 people",NA
+"Demo_age_house_3",6,"5 or more people",NA
+"Demo_age_house_4",NA,"How many people in each of the age groups below (including
+yourself) live in your household? - 60-74 years","varlab"
+"Demo_age_house_4",1,"0 people",NA
+"Demo_age_house_4",2,"1 person",NA
+"Demo_age_house_4",3,"2 people",NA
+"Demo_age_house_4",4,"3 people",NA
+"Demo_age_house_4",5,"4 people",NA
+"Demo_age_house_4",6,"5 or more people",NA
+"Demo_age_house_5",NA,"How many people in each of the age groups below (including
+yourself) live in your household? - 75 years or older","varlab"
+"Demo_age_house_5",1,"0 people",NA
+"Demo_age_house_5",2,"1 person",NA
+"Demo_age_house_5",3,"2 people",NA
+"Demo_age_house_5",4,"3 people",NA
+"Demo_age_house_5",5,"4 people",NA
+"Demo_age_house_5",6,"5 or more people",NA
+"Demo_ethnicity_1",NA,"Please specify your race and/or ethnicity. Select all that apply. White/Caucasian","varlab"
+"Demo_ethnicity_1",1,"White/Caucasian",NA
+"Demo_ethnicity_2",NA,"Please specify your race and/or ethnicity. Select all that apply. Black/African-American","varlab"
+"Demo_ethnicity_2",1,"Black/African-American",NA
+"Demo_ethnicity_3",NA,"Please specify your race and/or ethnicity. Select all that apply. Latinx/Hispanic","varlab"
+"Demo_ethnicity_3",1,"Latinx/Hispanic",NA
+"Demo_ethnicity_4",NA,"Please specify your race and/or ethnicity. Select all that apply. Asian","varlab"
+"Demo_ethnicity_4",1,"Asian",NA
+"Demo_ethnicity_5",NA,"Please specify your race and/or ethnicity. Select all that apply. Native American","varlab"
+"Demo_ethnicity_5",1,"Native American",NA
+"Demo_ethnicity_6",NA,"Please specify your race and/or ethnicity. Select all that apply. Native Hawaiian/Pacific Islander","varlab"
+"Demo_ethnicity_6",1,"Native Hawaiian/Pacific Islander",NA
+"Demo_ethnicity_7",NA,"Please specify your race and/or ethnicity. Select all that apply. Other/Unknown","varlab"
+"Demo_ethnicity_7",1,"Other/Unknown",NA
+"Demo_ethnicity__99",NA,"Please specify your race and/or ethnicity. Select all that apply. I prefer not to answer","varlab"
+"Demo_ethnicity__99",1,"I prefer not to answer",NA
+"Demo_education",NA,"What is the highest level of education you or someone in your household have completed?","varlab"
+"Demo_education",1,"Some high school",NA
+"Demo_education",2,"High school diploma or equivalent (GED)",NA
+"Demo_education",3,"Associate's degree",NA
+"Demo_education",4,"Bachelor's degree",NA
+"Demo_education",5,"Master's degree",NA
+"Demo_education",6,"Ph.D or higher",NA
+"Demo_education",7,"Trade School",NA
+"Demo_education",-99,"I prefer not to answer",NA
+"Demo_marital",NA,"Are you married or living with someone as if you were married?","varlab"
+"Demo_marital",1,"Yes",NA
+"Demo_marital",2,"No",NA
+"Demo_marital",-99,"I prefer not to answer",NA
+"Demo_income",NA,"What is your annual household income?","varlab"
+"Demo_income",1,"Less than $25,000",NA
+"Demo_income",2,"$25,000 - $50,000",NA
+"Demo_income",3,"$51,000 - $100,000",NA
+"Demo_income",4,"$101,000 - $200,000",NA
+"Demo_income",5,"More than $200,000",NA
+"Demo_income",-99,"I prefer not to answer",NA
+"Demo_employment",NA,"What is your current employment status?","varlab"
+"Demo_employment",1,"Employed",NA
+"Demo_employment",5,"Not employed",NA
+"Demo_employment",6,"Retired",NA
+"Demo_employment",-99,"I prefer not to answer",NA
+"Demo_healthcare",NA,"What type of Healthcare coverage do you have?","varlab"
+"Demo_healthcare",1,"No insurance",NA
+"Demo_healthcare",2,"Health insurance (e.g., private insurance, Blue Cross, HMO)",NA
+"Demo_healthcare",3,"Medicaid",NA
+"Demo_healthcare",4,"Medicare",NA
+"Demo_healthcare",5,"Veterans Administration",NA
+"Demo_healthcare",6,"Indian Health Services",NA
+"Demo_healthcare",7,"Other",NA
+"Demo_healthcare",-99,"I prefer not to answer",NA
+"QOL_1",NA,"I am satisfied with the quality of life in my community.
+(Consider your sense of safety, well being, participation in community life and associations, etc.)","varlab"
+"QOL_1",1,"Strongly disagree",NA
+"QOL_1",2,"Somewhat disagree",NA
+"QOL_1",3,"Neither agree nor disagree",NA
+"QOL_1",4,"Somewhat agree",NA
+"QOL_1",5,"Strongly agree",NA
+"QOL_1_prompt",NA,"Please let us know how you chose to respond in your audio clip","varlab"
+"QOL_1_prompt",1,"I responded to prompt option 1",NA
+"QOL_1_prompt",2,"I responded with general detail",NA
+"QOL_2",NA,"I am satisfied with the health care system in my community.  (Consider access, cost, availability, quality, and options in health care)","varlab"
+"QOL_2",1,"Strongly disagree",NA
+"QOL_2",2,"Somewhat disagree",NA
+"QOL_2",3,"Neither agree nor disagree",NA
+"QOL_2",4,"Somewhat agree",NA
+"QOL_2",5,"Strongly agree",NA
+"QOL_3",NA,"This community is a good place to raise children.
+(Consider school quality, day care, after school programs, recreation, etc.)","varlab"
+"QOL_3",1,"Strongly disagree",NA
+"QOL_3",2,"Somewhat disagree",NA
+"QOL_3",3,"Neither agree nor disagree",NA
+"QOL_3",4,"Somewhat agree",NA
+"QOL_3",5,"Strongly agree",NA
+"QOL_4",NA,"This community is a good place to grow old.  
+(Consider elder-friendly housing, transportation to medical services, churches, shopping; elder day care, social support for the elderly living alone, meals on wheels, etc.)","varlab"
+"QOL_4",1,"Strongly disagree",NA
+"QOL_4",2,"Somewhat disagree",NA
+"QOL_4",3,"Neither agree nor disagree",NA
+"QOL_4",4,"Somewhat agree",NA
+"QOL_4",5,"Strongly agree",NA
+"QOL_5",NA,"There is economic opportunity in the community.  
+(Consider locally owned and operated businesses, jobs with career growth, job training/higher education opportunities, affordable housing, reasonable commute, etc.)","varlab"
+"QOL_5",1,"Strongly disagree",NA
+"QOL_5",2,"Somewhat disagree",NA
+"QOL_5",3,"Neither agree nor disagree",NA
+"QOL_5",4,"Somewhat agree",NA
+"QOL_5",5,"Strongly agree",NA
+"QOL_6",NA,"This community is a safe place to live.  
+(Consider residents’ perceptions of safety in the home, the workplace, schools, playgrounds, parks, and the mall.  Do neighbors know and trust one another?  Do they look out for one another?)","varlab"
+"QOL_6",1,"Strongly disagree",NA
+"QOL_6",2,"Somewhat disagree",NA
+"QOL_6",3,"Neither agree nor disagree",NA
+"QOL_6",4,"Somewhat agree",NA
+"QOL_6",5,"Strongly agree",NA
+"QOL_6_prompt",NA,"Please let us know how you chose to respond in your audio clip","varlab"
+"QOL_6_prompt",1,"I responded to prompt option 1",NA
+"QOL_6_prompt",2,"I responded with general detail",NA
+"QOL_7",NA,"There are networks of support for individuals and families during times of stress and need. 
+(e.g., neighbors, support groups, faith community outreach, agencies, organizations)","varlab"
+"QOL_7",1,"Strongly disagree",NA
+"QOL_7",2,"Somewhat disagree",NA
+"QOL_7",3,"Neither agree nor disagree",NA
+"QOL_7",4,"Somewhat agree",NA
+"QOL_7",5,"Strongly agree",NA
+"QOL_7_prompt",NA,"Please let us know how you chose to respond in your audio clip","varlab"
+"QOL_7_prompt",1,"I responded to prompt option 1",NA
+"QOL_7_prompt",2,"I responded to prompt option 2",NA
+"QOL_7_prompt",3,"I responded to prompt option 3",NA
+"QOL_7_prompt",4,"I responded with general detail",NA
+"QOL_8",NA,"All individuals and groups have the opportunity to contribute to and participate in the community’s quality of life.","varlab"
+"QOL_8",1,"Strongly disagree",NA
+"QOL_8",2,"Somewhat disagree",NA
+"QOL_8",3,"Neither agree nor disagree",NA
+"QOL_8",4,"Somewhat agree",NA
+"QOL_8",5,"Strongly agree",NA
+"QOL_8_prompt",NA,"Please let us know how you chose to respond in your audio clip","varlab"
+"QOL_8_prompt",1,"I responded to prompt option 1",NA
+"QOL_8_prompt",2,"I responded with general detial",NA
+"QOL_9",NA,"There are a broad variety of health services in the community.","varlab"
+"QOL_9",1,"Strongly disagree",NA
+"QOL_9",2,"Somewhat disagree",NA
+"QOL_9",3,"Neither agree nor disagree",NA
+"QOL_9",4,"Somewhat agree",NA
+"QOL_9",5,"Strongly agree",NA
+"QOL_10",NA,"There are a sufficient number of health and social services in the community.","varlab"
+"QOL_10",1,"Strongly disagree",NA
+"QOL_10",2,"Somewhat disagree",NA
+"QOL_10",3,"Neither agree nor disagree",NA
+"QOL_10",4,"Somewhat agree",NA
+"QOL_10",5,"Strongly agree",NA
+"SDOH_1",NA,"In the past 12 months have you lost employment or had hours reduced?","varlab"
+"SDOH_1",1,"Yes",NA
+"SDOH_1",2,"No",NA
+"SDOH_1",3,"Unsure",NA
+"SDOH_1",-99,"I prefer not to answer",NA
+"SDOH_2",NA,"During the past 12 months, have you received food stamps, also called SNAP, the Supplemental Nutrition Assistance Program on an EBT card?","varlab"
+"SDOH_2",1,"Yes",NA
+"SDOH_2",2,"No",NA
+"SDOH_2",3,"Unsure",NA
+"SDOH_2",-99,"I prefer not to answer",NA
+"SDOH_3",NA,"During the past 12 months how often did the food that you bought not last, and you didn’t have money to get more?","varlab"
+"SDOH_3",3,"Always",NA
+"SDOH_3",4,"Usually",NA
+"SDOH_3",5,"Sometimes",NA
+"SDOH_3",6,"Rarely",NA
+"SDOH_3",7,"Never",NA
+"SDOH_3",-99,"I prefer not to answer",NA
+"SDOH_4",NA,"During the last 12 months, was there a time when you were not able to pay your mortgage, rent or utility bills?","varlab"
+"SDOH_4",1,"Yes",NA
+"SDOH_4",2,"No",NA
+"SDOH_4",3,"Unsure",NA
+"SDOH_4",-99,"I prefer not to answer",NA
+"SDOH_5",NA,"During the last 12 months was there a time when an electric, gas, oil, or water company threatened to shut off services?","varlab"
+"SDOH_5",1,"Yes",NA
+"SDOH_5",2,"No",NA
+"SDOH_5",3,"Unsure",NA
+"SDOH_5",-99,"I prefer not to answer",NA
+"SDOH_6",NA,"During the past 12 months has a lack of reliable transportation kept you from medical appointments, meetings, work, or from getting things needed for daily living?","varlab"
+"SDOH_6",1,"Yes",NA
+"SDOH_6",2,"No",NA
+"SDOH_6",3,"Unsure",NA
+"SDOH_6",-99,"I prefer not to answer",NA
+"SDOH_7",NA,"Stress means a situation in which a person feels tense, restless, nervous or anxious or is unable to sleep at night because their mind is troubled all the time. Within the last 30 days, how often have you felt this kind of stress?","varlab"
+"SDOH_7",1,"Always",NA
+"SDOH_7",2,"Usually",NA
+"SDOH_7",3,"Sometimes",NA
+"SDOH_7",4,"Rarely",NA
+"SDOH_7",5,"Never",NA
+"SDOH_7",-99,"I prefer not to answer",NA
+"AB_AK_1",NA,"In the last 12 months, have you or people in your household gotten health services
+at any of the places below? Choose all that apply Arkansas Children’s Northwest","varlab"
+"AB_AK_1",1,"Arkansas Children’s Northwest",NA
+"AB_AK_2",NA,"In the last 12 months, have you or people in your household gotten health services
+at any of the places below? Choose all that apply Boston Mountain Rural Health Center","varlab"
+"AB_AK_2",1,"Boston Mountain Rural Health Center",NA
+"AB_AK_3",NA,"In the last 12 months, have you or people in your household gotten health services
+at any of the places below? Choose all that apply Community Clinic Northwest Arkansas","varlab"
+"AB_AK_3",1,"Community Clinic Northwest Arkansas",NA
+"AB_AK_4",NA,"In the last 12 months, have you or people in your household gotten health services
+at any of the places below? Choose all that apply Health Department","varlab"
+"AB_AK_4",1,"Health Department",NA
+"AB_AK_5",NA,"In the last 12 months, have you or people in your household gotten health services
+at any of the places below? Choose all that apply Indian Health Services","varlab"
+"AB_AK_5",1,"Indian Health Services",NA
+"AB_AK_6",NA,"In the last 12 months, have you or people in your household gotten health services
+at any of the places below? Choose all that apply Mercy Hospital or Clinic","varlab"
+"AB_AK_6",1,"Mercy Hospital or Clinic",NA
+"AB_AK_7",NA,"In the last 12 months, have you or people in your household gotten health services
+at any of the places below? Choose all that apply Northwest Medical Center Hospital or Clinic","varlab"
+"AB_AK_7",1,"Northwest Medical Center Hospital or Clinic",NA
+"AB_AK_8",NA,"In the last 12 months, have you or people in your household gotten health services
+at any of the places below? Choose all that apply Ozark Guidance Center/ Arisa Health","varlab"
+"AB_AK_8",1,"Ozark Guidance Center/ Arisa Health",NA
+"AB_AK_9",NA,"In the last 12 months, have you or people in your household gotten health services
+at any of the places below? Choose all that apply UAMS Northwest","varlab"
+"AB_AK_9",1,"UAMS Northwest",NA
+"AB_AK_10",NA,"In the last 12 months, have you or people in your household gotten health services
+at any of the places below? Choose all that apply University of Arkansas Pat Walker Health Center","varlab"
+"AB_AK_10",1,"University of Arkansas Pat Walker Health Center",NA
+"AB_AK_11",NA,"In the last 12 months, have you or people in your household gotten health services
+at any of the places below? Choose all that apply VA Medical Center or Clinic","varlab"
+"AB_AK_11",1,"VA Medical Center or Clinic",NA
+"AB_AK_12",NA,"In the last 12 months, have you or people in your household gotten health services
+at any of the places below? Choose all that apply Washington Regional Medical Center or Clinic","varlab"
+"AB_AK_12",1,"Washington Regional Medical Center or Clinic",NA
+"AB_AK_13",NA,"In the last 12 months, have you or people in your household gotten health services
+at any of the places below? Choose all that apply A doctor’s office or clinic not listed above","varlab"
+"AB_AK_13",1,"A doctor’s office or clinic not listed above",NA
+"AB_1_1",NA,"What are three health issues or problems that are most important to you and the
+people in your household? - 1","varlab"
+"AB_1_2",NA,"What are three health issues or problems that are most important to you and the
+people in your household? - 2","varlab"
+"AB_1_3",NA,"What are three health issues or problems that are most important to you and the
+people in your household? - 3","varlab"
+"AB_2_1",NA,"Here is a list of things health care organizations are working on. Please pick three things from this list you think are the most important. Diabetes","varlab"
+"AB_2_1",1,"Diabetes",NA
+"AB_2_2",NA,"Here is a list of things health care organizations are working on. Please pick three things from this list you think are the most important. Obesity","varlab"
+"AB_2_2",1,"Obesity",NA
+"AB_2_3",NA,"Here is a list of things health care organizations are working on. Please pick three things from this list you think are the most important. Housing we can afford","varlab"
+"AB_2_3",1,"Housing we can afford",NA
+"AB_2_4",NA,"Here is a list of things health care organizations are working on. Please pick three things from this list you think are the most important. Mental or behavioral health","varlab"
+"AB_2_4",1,"Mental or behavioral health",NA
+"AB_2_5",NA,"Here is a list of things health care organizations are working on. Please pick three things from this list you think are the most important. Immunizations (shots), not including COVID-19 Vaccine","varlab"
+"AB_2_5",1,"Immunizations (shots), not including COVID-19 Vaccine",NA
+"AB_2_6",NA,"Here is a list of things health care organizations are working on. Please pick three things from this list you think are the most important. Access to health care we can afford","varlab"
+"AB_2_6",1,"Access to health care we can afford",NA
+"AB_2_7",NA,"Here is a list of things health care organizations are working on. Please pick three things from this list you think are the most important. Wellness and health education","varlab"
+"AB_2_7",1,"Wellness and health education",NA
+"AB_2_8",NA,"Here is a list of things health care organizations are working on. Please pick three things from this list you think are the most important. Cancer","varlab"
+"AB_2_8",1,"Cancer",NA
+"AB_2_9",NA,"Here is a list of things health care organizations are working on. Please pick three things from this list you think are the most important. Not having enough food or being worried food might run out","varlab"
+"AB_2_9",1,"Not having enough food or being worried food might run out",NA
+"AB_3_1",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Information on healthy habits","varlab"
+"AB_3_1",1,"Information on healthy habits",NA
+"AB_3_2",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Information on meal planning and nutrition or cooking classes","varlab"
+"AB_3_2",1,"Information on meal planning and nutrition or cooking classes",NA
+"AB_3_3",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Access to healthy food","varlab"
+"AB_3_3",1,"Access to healthy food",NA
+"AB_3_4",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Learning and using new ways to reduce stress","varlab"
+"AB_3_4",1,"Learning and using new ways to reduce stress",NA
+"AB_3_5",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice A safe neighborhood","varlab"
+"AB_3_5",1,"A safe neighborhood",NA
+"AB_3_6",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice A safe home","varlab"
+"AB_3_6",1,"A safe home",NA
+"AB_3_7",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Knowing where I will live or stay for the long-term","varlab"
+"AB_3_7",1,"Knowing where I will live or stay for the long-term",NA
+"AB_3_8",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Transportation","varlab"
+"AB_3_8",1,"Transportation",NA
+"AB_3_9",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Access to exercise groups","varlab"
+"AB_3_9",1,"Access to exercise groups",NA
+"AB_3_10",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Healthier relationships","varlab"
+"AB_3_10",1,"Healthier relationships",NA
+"AB_3_11",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Better sleep","varlab"
+"AB_3_11",1,"Better sleep",NA
+"AB_3_12",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Access to a health coach who can help me set and reach personal health goals","varlab"
+"AB_3_12",1,"Access to a health coach who can help me set and reach personal health goals",NA
+"AB_3_13",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Someone to keep me on track with health habits","varlab"
+"AB_3_13",1,"Someone to keep me on track with health habits",NA
+"AB_3_14",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Learning and using special skills (like yoga, tai chi, mindfulness, or others)","varlab"
+"AB_3_14",1,"Learning and using special skills (like yoga, tai chi, mindfulness, or others)",NA
+"AB_3_15",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Learning and using tips to manage money better","varlab"
+"AB_3_15",1,"Learning and using tips to manage money better",NA
+"AB_3_16",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice A deeper faith experience","varlab"
+"AB_3_16",1,"A deeper faith experience",NA
+"AB_3_17",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Finding meaning and purpose in my life","varlab"
+"AB_3_17",1,"Finding meaning and purpose in my life",NA
+"AB_3_18",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Having enough money to pay for everything we need","varlab"
+"AB_3_18",1,"Having enough money to pay for everything we need",NA
+"AB_3_19",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Affordable health insurance","varlab"
+"AB_3_19",1,"Affordable health insurance",NA
+"AB_3_20",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Steady work or job","varlab"
+"AB_3_20",1,"Steady work or job",NA
+"AB_3_21",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Higher level education","varlab"
+"AB_3_21",1,"Higher level education",NA
+"AB_3_22",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Information or resources about how to be a better parent","varlab"
+"AB_3_22",1,"Information or resources about how to be a better parent",NA
+"AB_3_23",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Selected Choice Other (please specify):","varlab"
+"AB_3_23",1,"Other (please specify):",NA
+"AB_3_23_TEXT",NA,"Which of the things below would help you or others in your household to get healthy or
+stay healthy? Please select all that apply - Other (please specify): - Text","varlab"
+"AB33_1",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Information on healthy habits","varlab"
+"AB33_1",1,"Information on healthy habits",NA
+"AB33_2",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Information on meal planning and nutrition or cooking classes","varlab"
+"AB33_2",1,"Information on meal planning and nutrition or cooking classes",NA
+"AB33_3",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Access to healthy food","varlab"
+"AB33_3",1,"Access to healthy food",NA
+"AB33_4",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Learning and using new ways to reduce stress","varlab"
+"AB33_4",1,"Learning and using new ways to reduce stress",NA
+"AB33_5",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? A safe neighborhood","varlab"
+"AB33_5",1,"A safe neighborhood",NA
+"AB33_6",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? A safe home","varlab"
+"AB33_6",1,"A safe home",NA
+"AB33_7",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Knowing where I will live or stay for the long-term","varlab"
+"AB33_7",1,"Knowing where I will live or stay for the long-term",NA
+"AB33_8",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Transportation","varlab"
+"AB33_8",1,"Transportation",NA
+"AB33_9",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Access to exercise groups","varlab"
+"AB33_9",1,"Access to exercise groups",NA
+"AB33_10",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Healthier relationships","varlab"
+"AB33_10",1,"Healthier relationships",NA
+"AB33_11",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Better sleep","varlab"
+"AB33_11",1,"Better sleep",NA
+"AB33_12",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Access to a health coach who can help me set and reach personal health goals","varlab"
+"AB33_12",1,"Access to a health coach who can help me set and reach personal health goals",NA
+"AB33_13",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Someone to keep me on track with health habits","varlab"
+"AB33_13",1,"Someone to keep me on track with health habits",NA
+"AB33_14",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Learning and using special skills (like yoga, tai chi, mindfulness, or others)","varlab"
+"AB33_14",1,"Learning and using special skills (like yoga, tai chi, mindfulness, or others)",NA
+"AB33_15",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Learning and using tips to manage money better","varlab"
+"AB33_15",1,"Learning and using tips to manage money better",NA
+"AB33_16",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? A deeper faith experience","varlab"
+"AB33_16",1,"A deeper faith experience",NA
+"AB33_17",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Finding meaning and purpose in my life","varlab"
+"AB33_17",1,"Finding meaning and purpose in my life",NA
+"AB33_18",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Having enough money to pay for everything we need","varlab"
+"AB33_18",1,"Having enough money to pay for everything we need",NA
+"AB33_19",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Affordable health insurance","varlab"
+"AB33_19",1,"Affordable health insurance",NA
+"AB33_20",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Steady work or job","varlab"
+"AB33_20",1,"Steady work or job",NA
+"AB33_21",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Higher level education","varlab"
+"AB33_21",1,"Higher level education",NA
+"AB33_22",NA,"Of the below, what are the TOP 3 things that would help you or others in your household to get healthy or stay healthy? Information or resources about how to be a better parent","varlab"
+"AB33_22",1,"Information or resources about how to be a better parent",NA
+"AB_4_1",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the health care or medicine you needed? (Choose all that
+apply) - Selected Choice Adults did not need health care or medicine","varlab"
+"AB_4_1",1,"Adults did not need health care or medicine",NA
+"AB_4_2",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the health care or medicine you needed? (Choose all that
+apply) - Selected Choice Adults did not have problems getting health care or medicine we needed","varlab"
+"AB_4_2",1,"Adults did not have problems getting health care or medicine we needed",NA
+"AB_4_3",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the health care or medicine you needed? (Choose all that
+apply) - Selected Choice Did not have health insurance or our insurance did not cover what we needed","varlab"
+"AB_4_3",1,"Did not have health insurance or our insurance did not cover what we needed",NA
+"AB_4_4",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the health care or medicine you needed? (Choose all that
+apply) - Selected Choice Needed to work instead","varlab"
+"AB_4_4",1,"Needed to work instead",NA
+"AB_4_5",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the health care or medicine you needed? (Choose all that
+apply) - Selected Choice Did not have a way to get there","varlab"
+"AB_4_5",1,"Did not have a way to get there",NA
+"AB_4_6",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the health care or medicine you needed? (Choose all that
+apply) - Selected Choice Could not find a place to go or could not get an appointment","varlab"
+"AB_4_6",1,"Could not find a place to go or could not get an appointment",NA
+"AB_4_7",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the health care or medicine you needed? (Choose all that
+apply) - Selected Choice Could not find a place to get care in my preferred language","varlab"
+"AB_4_7",1,"Could not find a place to get care in my preferred language",NA
+"AB_4_8",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the health care or medicine you needed? (Choose all that
+apply) - Selected Choice Cultural or religious reasons","varlab"
+"AB_4_8",1,"Cultural or religious reasons",NA
+"AB_4_9",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the health care or medicine you needed? (Choose all that
+apply) - Selected Choice Other (please specify):","varlab"
+"AB_4_9",1,"Other (please specify):",NA
+"AB_4_9_TEXT",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the health care or medicine you needed? (Choose all that
+apply) - Other (please specify): - Text","varlab"
+"AB_5_1",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the mental health care you needed? (Choose all that
+apply) - Selected Choice Adults did not need mental health care","varlab"
+"AB_5_1",1,"Adults did not need mental health care",NA
+"AB_5_2",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the mental health care you needed? (Choose all that
+apply) - Selected Choice Adults did not have problems getting mental health care we needed","varlab"
+"AB_5_2",1,"Adults did not have problems getting mental health care we needed",NA
+"AB_5_3",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the mental health care you needed? (Choose all that
+apply) - Selected Choice Did not have health insurance or our insurance did not cover what we needed","varlab"
+"AB_5_3",1,"Did not have health insurance or our insurance did not cover what we needed",NA
+"AB_5_4",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the mental health care you needed? (Choose all that
+apply) - Selected Choice Needed to work instead","varlab"
+"AB_5_4",1,"Needed to work instead",NA
+"AB_5_5",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the mental health care you needed? (Choose all that
+apply) - Selected Choice Did not have a way to get there","varlab"
+"AB_5_5",1,"Did not have a way to get there",NA
+"AB_5_6",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the mental health care you needed? (Choose all that
+apply) - Selected Choice Could not find a place to go or could not get an appointment","varlab"
+"AB_5_6",1,"Could not find a place to go or could not get an appointment",NA
+"AB_5_7",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the mental health care you needed? (Choose all that
+apply) - Selected Choice Could not find a place to get care in my preferred language","varlab"
+"AB_5_7",1,"Could not find a place to get care in my preferred language",NA
+"AB_5_8",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the mental health care you needed? (Choose all that
+apply) - Selected Choice Cultural or religious reasons","varlab"
+"AB_5_8",1,"Cultural or religious reasons",NA
+"AB_5_9",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the mental health care you needed? (Choose all that
+apply) - Selected Choice Other (please specify):","varlab"
+"AB_5_9",1,"Other (please specify):",NA
+"AB_5_9_TEXT",NA,"In the last 12 months, which of these problems kept you or other adults in your
+household from getting the mental health care you needed? (Choose all that
+apply) - Other (please specify): - Text","varlab"
+"AB_6_1",NA,"In the last 12 months, which of these problems kept children in your household from getting the mental health care they needed? (Choose all that
+apply) Children did not need mental health care","varlab"
+"AB_6_1",1,"Children did not need mental health care",NA
+"AB_6_2",NA,"In the last 12 months, which of these problems kept children in your household from getting the mental health care they needed? (Choose all that
+apply) Children did not have problems getting mental health care they needed","varlab"
+"AB_6_2",1,"Children did not have problems getting mental health care they needed",NA
+"AB_6_3",NA,"In the last 12 months, which of these problems kept children in your household from getting the mental health care they needed? (Choose all that
+apply) Did not have health insurance or our insurance did not cover what we needed","varlab"
+"AB_6_3",1,"Did not have health insurance or our insurance did not cover what we needed",NA
+"AB_6_4",NA,"In the last 12 months, which of these problems kept children in your household from getting the mental health care they needed? (Choose all that
+apply) Needed to work instead","varlab"
+"AB_6_4",1,"Needed to work instead",NA
+"AB_6_5",NA,"In the last 12 months, which of these problems kept children in your household from getting the mental health care they needed? (Choose all that
+apply) Did not have a way to get there","varlab"
+"AB_6_5",1,"Did not have a way to get there",NA
+"AB_6_6",NA,"In the last 12 months, which of these problems kept children in your household from getting the mental health care they needed? (Choose all that
+apply) Could not find a place to go or could not get an appointment","varlab"
+"AB_6_6",1,"Could not find a place to go or could not get an appointment",NA
+"AB_6_7",NA,"In the last 12 months, which of these problems kept children in your household from getting the mental health care they needed? (Choose all that
+apply) Could not find a place to get care in my preferred language","varlab"
+"AB_6_7",1,"Could not find a place to get care in my preferred language",NA
+"AB_6_8",NA,"In the last 12 months, which of these problems kept children in your household from getting the mental health care they needed? (Choose all that
+apply) Cultural or religious reasons","varlab"
+"AB_6_8",1,"Cultural or religious reasons",NA
+"AB_6_9",NA,"In the last 12 months, which of these problems kept children in your household from getting the mental health care they needed? (Choose all that
+apply) There are no children in my household","varlab"
+"AB_6_9",1,"There are no children in my household",NA
+"AB_6_10",NA,"In the last 12 months, which of these problems kept children in your household from getting the mental health care they needed? (Choose all that
+apply) Other (please specify):","varlab"
+"AB_6_10",1,"Other (please specify):",NA
+"AB_7_1",NA,"In the last 12 months, which of these problems kept you or anyone in your
+household from getting a telehealth or video visit with a health care worker? Choose
+all that apply - Selected Choice No one in my household needed a telehealth or video visit","varlab"
+"AB_7_1",1,"No one in my household needed a telehealth or video visit",NA
+"AB_7_2",NA,"In the last 12 months, which of these problems kept you or anyone in your
+household from getting a telehealth or video visit with a health care worker? Choose
+all that apply - Selected Choice No one in my household had problems getting telehealth or video visits","varlab"
+"AB_7_2",1,"No one in my household had problems getting telehealth or video visits",NA
+"AB_7_3",NA,"In the last 12 months, which of these problems kept you or anyone in your
+household from getting a telehealth or video visit with a health care worker? Choose
+all that apply - Selected Choice Did not have health insurance or our health insurance did not cover what we needed","varlab"
+"AB_7_3",1,"Did not have health insurance or our health insurance did not cover what we needed",NA
+"AB_7_4",NA,"In the last 12 months, which of these problems kept you or anyone in your
+household from getting a telehealth or video visit with a health care worker? Choose
+all that apply - Selected Choice Needed to work instead","varlab"
+"AB_7_4",1,"Needed to work instead",NA
+"AB_7_5",NA,"In the last 12 months, which of these problems kept you or anyone in your
+household from getting a telehealth or video visit with a health care worker? Choose
+all that apply - Selected Choice Could not find a place that offered telehealth or video visits, could not get an appointment","varlab"
+"AB_7_5",1,"Could not find a place that offered telehealth or video visits, could not get an appointment",NA
+"AB_7_6",NA,"In the last 12 months, which of these problems kept you or anyone in your
+household from getting a telehealth or video visit with a health care worker? Choose
+all that apply - Selected Choice Could not find a place to get care in our preferred language","varlab"
+"AB_7_6",1,"Could not find a place to get care in our preferred language",NA
+"AB_7_7",NA,"In the last 12 months, which of these problems kept you or anyone in your
+household from getting a telehealth or video visit with a health care worker? Choose
+all that apply - Selected Choice Cultural or religious reasons","varlab"
+"AB_7_7",1,"Cultural or religious reasons",NA
+"AB_7_8",NA,"In the last 12 months, which of these problems kept you or anyone in your
+household from getting a telehealth or video visit with a health care worker? Choose
+all that apply - Selected Choice Did not have a computer or smartphone","varlab"
+"AB_7_8",1,"Did not have a computer or smartphone",NA
+"AB_7_9",NA,"In the last 12 months, which of these problems kept you or anyone in your
+household from getting a telehealth or video visit with a health care worker? Choose
+all that apply - Selected Choice Did not have internet access","varlab"
+"AB_7_9",1,"Did not have internet access",NA
+"AB_7_10",NA,"In the last 12 months, which of these problems kept you or anyone in your
+household from getting a telehealth or video visit with a health care worker? Choose
+all that apply - Selected Choice Other (please specify):","varlab"
+"AB_7_10",1,"Other (please specify):",NA
+"AB_7_10_TEXT",NA,"In the last 12 months, which of these problems kept you or anyone in your
+household from getting a telehealth or video visit with a health care worker? Choose
+all that apply - Other (please specify): - Text","varlab"
+"CH_1",NA,"Have you ever been told by a doctor, nurse, or other health professional that you have high blood pressure?","varlab"
+"CH_1",1,"Yes",NA
+"CH_1",2,"No",NA
+"CH_1",3,"Told borderline high or prehypertensive or elevated blood pressure",NA
+"CH_1",4,"Don’t know / Not sure",NA
+"CH_2",NA,"Have you ever been told by a doctor, nurse or other health professional that your cholesterol is high?","varlab"
+"CH_2",1,"Yes",NA
+"CH_2",2,"No",NA
+"CH_2",3,"Don’t know / Not sure",NA
+"CH_3_15_1",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - a heart attack also called a myocardial infarction?","varlab"
+"CH_3_15_1",1,"Yes",NA
+"CH_3_15_1",2,"No",NA
+"CH_3_15_1",3,"Dont know / Not sure",NA
+"CH_3_15_2",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - angina or coronary heart disease?","varlab"
+"CH_3_15_2",1,"Yes",NA
+"CH_3_15_2",2,"No",NA
+"CH_3_15_2",3,"Dont know / Not sure",NA
+"CH_3_15_3",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - A stroke?","varlab"
+"CH_3_15_3",1,"Yes",NA
+"CH_3_15_3",2,"No",NA
+"CH_3_15_3",3,"Dont know / Not sure",NA
+"CH_3_15_4",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - Asthma?","varlab"
+"CH_3_15_4",1,"Yes",NA
+"CH_3_15_4",2,"No",NA
+"CH_3_15_4",3,"Dont know / Not sure",NA
+"CH_3_15_5",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - Any type of cancer?","varlab"
+"CH_3_15_5",1,"Yes",NA
+"CH_3_15_5",2,"No",NA
+"CH_3_15_5",3,"Dont know / Not sure",NA
+"CH_3_15_6",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - C.O.P.D. (chronic obstructive pulmonary disease), emphysema or chronic bronchitis?","varlab"
+"CH_3_15_6",1,"Yes",NA
+"CH_3_15_6",2,"No",NA
+"CH_3_15_6",3,"Dont know / Not sure",NA
+"CH_3_15_7",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - kidney disease?","varlab"
+"CH_3_15_7",1,"Yes",NA
+"CH_3_15_7",2,"No",NA
+"CH_3_15_7",3,"Dont know / Not sure",NA
+"CH_3_15_8",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - some form of arthritis, rheumatoid arthritis, gout, lupus, or fibromyalgia?","varlab"
+"CH_3_15_8",1,"Yes",NA
+"CH_3_15_8",2,"No",NA
+"CH_3_15_8",3,"Dont know / Not sure",NA
+"CH_3_15_9",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - Diabetes?","varlab"
+"CH_3_15_9",1,"Yes",NA
+"CH_3_15_9",2,"No",NA
+"CH_3_15_9",3,"Dont know / Not sure",NA
+"CH_3_15_10",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - a depressive disorder (including depression, major depression, dysthymia, or minor depression)?","varlab"
+"CH_3_15_10",1,"Yes",NA
+"CH_3_15_10",2,"No",NA
+"CH_3_15_10",3,"Dont know / Not sure",NA
+"CH_3_15_11",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - An anxiety disorder?","varlab"
+"CH_3_15_11",1,"Yes",NA
+"CH_3_15_11",2,"No",NA
+"CH_3_15_11",3,"Dont know / Not sure",NA
+"CH_3_15_12",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - Another serious mental illness, such as bipolar, schizophrenia, or psychosis?","varlab"
+"CH_3_15_12",1,"Yes",NA
+"CH_3_15_12",2,"No",NA
+"CH_3_15_12",3,"Dont know / Not sure",NA
+"CH_3_15_13",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - Substance abuse disorder?","varlab"
+"CH_3_15_13",1,"Yes",NA
+"CH_3_15_13",2,"No",NA
+"CH_3_15_13",3,"Dont know / Not sure",NA
+"PRBQ_1",NA,"Problematic alcohol use (e.g., binge drank, which is having 4 or
+more drinks a day for women or 5 or more drinks a day for men;
+used alcohol in dangerous situations, such as driving)","varlab"
+"PRBQ_1",0,"Never",NA
+"PRBQ_1",1,"Rarely (once or twice a month)",NA
+"PRBQ_1",2,"Occasionally (once or twice a week)",NA
+"PRBQ_1",3,"Frequently (several times a week)",NA
+"PRBQ_1",4,"Very Frequently (daily or almost daily)",NA
+"PRBQ_2",NA,"Problematic drug use (e.g., used drugs such as marijuana, heroin, or
+cocaine; taken prescription drugs such as opioids or stimulants
+other than prescribed; used drugs in dangerous situations, such as
+driving)","varlab"
+"PRBQ_2",0,"Never",NA
+"PRBQ_2",1,"Rarely (once or twice a month)",NA
+"PRBQ_2",2,"Occasionally (once or twice a week)",NA
+"PRBQ_2",3,"Frequently (several times a week)",NA
+"PRBQ_2",4,"Very Frequently (daily or almost daily)",NA
+"PRBQ_3",NA,"Problematic gambling (e.g., difficulty limiting money or time spent
+on gambling, such as playing cards or dice or betting on sports;
+inability to stop gambling despite significant financial losses)","varlab"
+"PRBQ_3",0,"Never",NA
+"PRBQ_3",1,"Rarely (once or twice a month)",NA
+"PRBQ_3",2,"Occasionally (once or twice a week)",NA
+"PRBQ_3",3,"Frequently (several times a week)",NA
+"PRBQ_3",4,"Very Frequently (daily or almost daily)",NA
+"PRBQ_4",NA,"Problematic technology use (e.g., texting while driving; inability to
+reduce time on cellphones/internet/etc. despite significant problems
+in school, work, home, or with family/friends)","varlab"
+"PRBQ_4",0,"Never",NA
+"PRBQ_4",1,"Rarely (once or twice a month)",NA
+"PRBQ_4",2,"Occasionally (once or twice a week)",NA
+"PRBQ_4",3,"Frequently (several times a week)",NA
+"PRBQ_4",4,"Very Frequently (daily or almost daily)",NA
+"PRBQ_5",NA,"Impulsive or risky sexual behaviors (e.g., unprotected sex with an
+unfamiliar partner such as a one-night stand, or with a risky partner
+such as someone who uses intravenous drugs, is HIV-positive, or
+has multiple partners)","varlab"
+"PRBQ_5",0,"Never",NA
+"PRBQ_5",1,"Rarely (once or twice a month)",NA
+"PRBQ_5",2,"Occasionally (once or twice a week)",NA
+"PRBQ_5",3,"Frequently (several times a week)",NA
+"PRBQ_5",4,"Very Frequently (daily or almost daily)",NA
+"PRBQ_6",NA,"Problematic eating behavior(s) (e.g., eating so much that your
+stomach hurts; vomiting, fasting, exercising far too much, or using
+laxatives/diuretics to prevent weight gain; restricting your diet to
+the point of starvation)","varlab"
+"PRBQ_6",0,"Never",NA
+"PRBQ_6",1,"Rarely (once or twice a month)",NA
+"PRBQ_6",2,"Occasionally (once or twice a week)",NA
+"PRBQ_6",3,"Frequently (several times a week)",NA
+"PRBQ_6",4,"Very Frequently (daily or almost daily)",NA
+"PRBQ_7",NA,"Illegal behaviors (e.g., shoplifting, vandalism, forgery, weapons
+offense, burglary, robbery, arson, illegal prostitution)","varlab"
+"PRBQ_7",0,"Never",NA
+"PRBQ_7",1,"Rarely (once or twice a month)",NA
+"PRBQ_7",2,"Occasionally (once or twice a week)",NA
+"PRBQ_7",3,"Frequently (several times a week)",NA
+"PRBQ_7",4,"Very Frequently (daily or almost daily)",NA
+"PRBQ_8",NA,"Reckless spending (e.g., spending sprees where you spent a lot of
+money on things you didn’t need and couldn’t afford)","varlab"
+"PRBQ_8",0,"Never",NA
+"PRBQ_8",1,"Rarely (once or twice a month)",NA
+"PRBQ_8",2,"Occasionally (once or twice a week)",NA
+"PRBQ_8",3,"Frequently (several times a week)",NA
+"PRBQ_8",4,"Very Frequently (daily or almost daily)",NA
+"PRBQ_9",NA,"Physically aggressive behavior(s) (e.g., pushing, punching, kicking,
+or using a weapon on another person)","varlab"
+"PRBQ_9",0,"Never",NA
+"PRBQ_9",1,"Rarely (once or twice a month)",NA
+"PRBQ_9",2,"Occasionally (once or twice a week)",NA
+"PRBQ_9",3,"Frequently (several times a week)",NA
+"PRBQ_9",4,"Very Frequently (daily or almost daily)",NA
+"PRBQ_10",NA,"Verbally aggressive behavior(s) (e.g., yelling, screaming, or
+swearing at another person; threatening to physically harm
+someone)","varlab"
+"PRBQ_10",0,"Never",NA
+"PRBQ_10",1,"Rarely (once or twice a month)",NA
+"PRBQ_10",2,"Occasionally (once or twice a week)",NA
+"PRBQ_10",3,"Frequently (several times a week)",NA
+"PRBQ_10",4,"Very Frequently (daily or almost daily)",NA
+"PRBQ_11",NA,"Property destruction (e.g., deliberately smashing dishes, breaking
+furniture, or wrecking someone’s cellphone, car, home, or other
+personal belongings)","varlab"
+"PRBQ_11",0,"Never",NA
+"PRBQ_11",1,"Rarely (once or twice a month)",NA
+"PRBQ_11",2,"Occasionally (once or twice a week)",NA
+"PRBQ_11",3,"Frequently (several times a week)",NA
+"PRBQ_11",4,"Very Frequently (daily or almost daily)",NA
+"PRBQ_12",NA,"Reckless driving (e.g., road rage; intentionally cutting off or
+chasing another driver; excessive speeding)","varlab"
+"PRBQ_12",0,"Never",NA
+"PRBQ_12",1,"Rarely (once or twice a month)",NA
+"PRBQ_12",2,"Occasionally (once or twice a week)",NA
+"PRBQ_12",3,"Frequently (several times a week)",NA
+"PRBQ_12",4,"Very Frequently (daily or almost daily)",NA
+"PRBQ_15",NA,"In general, if you have used any of these behaviors, how difficult have these behaviors made it for you to do your work, take care of things at home, or
+get along with other people?","varlab"
+"PRBQ_15",0,"Not at all",NA
+"PRBQ_15",1,"Somewhat difficult",NA
+"PRBQ_15",2,"Very difficult",NA
+"PRBQ_15",3,"Extremely difficult",NA
+"demo_race",NA,"cleaned racial category. 'multiracial' if multiple categories were selected. (Latinx/Hispanic was not included)","varlab"
+"demo_ethnicity",NA,"whether particpants self-identify as Latinx/Hispanic, Is not coalesed with racial categories","varlab"
+"arkansas_HC_location_AB_AK",NA,"In the last 12 months, have you or people in your household gotten health services at any of the places below? Choose all that apply","varlab"
+"healthy_needs_AB_3",NA,"Which of the things below would help you or others in your household to get healthy or stay healthy? Please select all that apply","varlab"
+"adult_HC_barriers_AB_4",NA,"In the last 12 months, which of these problems kept you or other adults in your household from getting the health care or medicine you needed? (Choose all that apply)","varlab"
+"adult_mentalHC_barriers_AB_5",NA,"In the last 12 months, which of these problems kept you or other adults in your household from getting the mental health care you needed? (Choose all that apply)","varlab"
+"child_mentalHC_barriers_AB_6",NA,"In the last 12 months, which of these problems kept children in your household from getting the mental health care they needed? (Choose all that apply)","varlab"
+"teleheath_barriers_AB_7",NA,"In the last 12 months, which of these problems kept you or anyone in your household from getting a telehealth or video visit with a health care worker? Choose all that apply","varlab"
+"AB_2_important_1",NA,"The most important things the health care organizations are working on","varlab"
+"AB_2_important_2",NA,"The second important things the health care organizations are working on","varlab"
+"AB_2_important_3",NA,"The third important things the health care organizations are working on","varlab"
+"AB_33_rank_1",NA,"The top thing that would help you or others in your household to get healthy or stay healthy","varlab"
+"AB_33_rank_2",NA,"The second thing that would help you or others in your household to get healthy or stay healthy","varlab"
+"AB_33_rank_3",NA,"The third thing that would help you or others in your household to get healthy or stay healthy","varlab"
+"QOL_tot",NA,"Quality of life total score","varlab"
+"PRBQ_tot",NA,"PRBQ total score","varlab"
+"SF36_Physical_functioning",NA,"SF36 physical functioning subscale","varlab"
+"SF36_PH_limitations",NA,"SF36 physical health limitations subscale","varlab"
+"SF36_MH_limitations",NA,"SF36 mental health limitations subscale","varlab"
+"SF36_Energy",NA,"SF36 energy subscale","varlab"
+"SF36_Emotional_WB",NA,"SF36 emotional wellbeing subscale","varlab"
+"SF36_Social_funct",NA,"SF36 social functioning subscale","varlab"
+"SF36_Pain",NA,"SF36 pain subscale","varlab"
+"SF36_General_Health",NA,"SF36 general health subscale","varlab"

@@ -88,7 +88,7 @@ all_states <- import(here("inputs", "Exploring Community Trends Pre-Pilot_August
 all_states$survey_name <- "all_states"
 
 #missing ID check
-I just saw count(all_states$PROLIFIC_PID=="")
+count(all_states$PROLIFIC_PID=="")
 all_states$PROLIFIC_PID <- ifelse(all_states$PROLIFIC_PID == "", all_states$Prolific_ID, all_states$PROLIFIC_PID)
 count(all_states$PROLIFIC_PID=="")
 all_states$PROLIFIC_PID <- ifelse(all_states$PROLIFIC_PID == "", all_states$ID_check, all_states$PROLIFIC_PID)
@@ -373,7 +373,7 @@ describe(survey_complete$duration)
 hist(survey_complete[survey_complete$duration < 120,]$duration)
 ```
 
-To further examine those responses with a completion time of less than 10 minutes, we pair these data with other data screening results. People who spent too little time on the survey didn't provide any survey data
+To further examine those responses with a completion time of less than 10 minutes, we pair these data with other data screening results. People who spent too little time on the survey didn't provide any survey data 
 ```{r b_edit}
 survey_complete %>%
   filter(duration < 10) %>%
@@ -456,7 +456,7 @@ varname <- names(dict_list)
 demo_idx <- which(grepl("Demo_", varname))
 county_idx <- which(grepl("_county", varname))
 state_idx <- which(grepl("state", varname))
-AB_idx <- which(grepl("AB_", varname))
+AB_idx <- which(grepl("AB", varname))
 CH_idx <- which(grepl("CH_", varname))
 SDOH_idx <- which(grepl("SDOH_", varname))
 
@@ -471,6 +471,7 @@ surveys_scored[names(recode_dict_list)] <- Map(function(x, y) {
     tmp <- with(y,  setNames(label, value)[as.character(x)])
      tmp[is.na(tmp)] <- x[is.na(tmp)]
      tmp}, survey_tidy[names(recode_dict_list)], recode_dict_list)
+
 ```
 
 ## recode county
@@ -485,7 +486,7 @@ surveys_scored$county <- ifelse(!is.na(surveys_scored$AK_county), surveys_scored
                       ifelse(!is.na(surveys_scored$WI_county), surveys_scored$WI_county,
                       ifelse(!is.na(surveys_scored$WA_county), surveys_scored$WA_county, NA)))))))))
 surveys_scored <- surveys_scored[c(1:12,266,13:265)]
-surveys_scored <- surveys_scored %>% select(-contains("_county"))
+# surveys_scored <- surveys_scored %>% select(-contains("_county")) # similarly, we keep all the raw data from the dataset
 
 ```
 
@@ -493,13 +494,16 @@ surveys_scored <- surveys_scored %>% select(-contains("_county"))
 recoded from numeric to character; parse race/ethnicity variables 
 ```{r}
 surveys_scored <- surveys_scored %>%
-  mutate(Demo_ethnicity__99 = NA) %>% # "I prefer not to answer" into NA
+  dplyr::mutate(across(starts_with("Demo_") , ~ case_match(., "I prefer not to answer" ~ NA_character_,
+                                                           .default = .))) %>% # convert all "I prefer not to answer" to NAs
   mutate(demo_race = case_when( # coalesce race
     rowSums(!is.na(select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))) == 0 ~ NA_character_,
     rowSums(!is.na(select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))) == 1 ~ as.character(do.call(coalesce, select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))),
     rowSums(!is.na(select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))) > 1 ~ "multiracial")) %>% # ethnicity is not considered for multiracial
-  dplyr::rename(demo_ethnicity = Demo_ethnicity_3) # differciate between race and ethnicity
+  dplyr::mutate(demo_ethnicity = Demo_ethnicity_3) #can't use rename because the attribution assignment will run into problems if all original
 
+attr(surveys_scored$demo_race, "label") <- "cleaned racial category. 'multiracial' if multiple categories were selected. (Latinx/Hispanic was not included)"
+attr(surveys_scored$demo_ethnicity, "label") <- "whether particpants self-identify as Latinx/Hispanic, Is not coalesed with racial categories"
 ```
 
 ## coalesce multiple responses (select all that apply items)
@@ -537,17 +541,69 @@ surveys_scored <- surveys_scored %>%
             rowSums(!is.na(select(., AB_7_1:AB_7_10))) == 1 ~ as.character(do.call(coalesce, select(., AB_7_1:AB_7_10))),
             rowSums(!is.na(select(., AB_7_1:AB_7_10))) > 1 ~ "multiple"))
 
+# add labels to new data
+attr(surveys_scored$arkansas_HC_location_AB_AK, "label") <- "In the last 12 months, have you or people in your household gotten health services at any of the places below? Choose all that apply"
+attr(surveys_scored$healthy_needs_AB_3, "label") <- "Which of the things below would help you or others in your household to get healthy or stay healthy? Please select all that apply"
+attr(surveys_scored$adult_HC_barriers_AB_4, "label") <- "In the last 12 months, which of these problems kept you or other adults in your household from getting the health care or medicine you needed? (Choose all that apply)"
+attr(surveys_scored$adult_mentalHC_barriers_AB_5, "label") <- "In the last 12 months, which of these problems kept you or other adults in your household from getting the mental health care you needed? (Choose all that apply)"
+attr(surveys_scored$child_mentalHC_barriers_AB_6, "label") <- "In the last 12 months, which of these problems kept children in your household from getting the mental health care they needed? (Choose all that apply)"
+attr(surveys_scored$teleheath_barriers_AB_7, "label") <- "In the last 12 months, which of these problems kept you or anyone in your household from getting a telehealth or video visit with a health care worker? Choose all that apply"
 ```
+
+## coalesce multiple responses (pick 3 most important/top 3)
+
+We asked the participants to select 3 important things for AB_2 and select top 3 for AB_33, but the questions on qualtric did not force the number of checked options. All raw data are kept in the dataset, therefore, we only keep the first 3 checked options as the processed data. 
+```{r}
+# organize AB_2 question
+
+AB_2_response <- surveys_scored %>%
+  select(contains("AB_2"), userid) %>% # extract relevant data
+  gather(-userid, key = "option", value = "select") %>% # transform to long-format
+  filter(!is.na(select)) %>%  # only keep the selected onces
+  group_by(userid) %>%
+  dplyr::mutate(col_name = paste0("AB_2_important_", dplyr::row_number())) %>% # labeled the selected ones as option_1, option_2 & option_3
+  dplyr::ungroup() %>%
+  select(-option) %>%
+  spread(col_name, select) %>% # transform the long-format back to a wide-format
+  select(userid:AB_2_important_3) # because the survey asked to select 3 important options so all other transformed rankings were removed from the dataset
+
+# organize AB_33
+AB_33 <- surveys_scored %>%
+  select(starts_with("AB33_"), userid) %>% # extract relevant data
+  gather(-userid, key = "option", value = "select") %>% # transform to long-format
+  filter(!is.na(select)) %>%  # only keep the selected onces
+  group_by(userid) %>%
+  dplyr::mutate(col_name = paste0("AB_33_rank_", dplyr::row_number())) %>% # labeled the selected ones as option_1, option_2 & option_3
+  dplyr::ungroup() %>%
+  select(-option) %>%
+  spread(col_name, select) %>% # transform the long-format back to a wide-format
+  select(userid:AB_33_rank_3) # because the survey asked to select the top 3 so all other transformed rankings were removed from the dataset
+
+# merged the organized resonses back to the dataset
+surveys_scored <- surveys_scored %>%
+  left_join(AB_2_response, by = "userid") %>%
+  left_join(AB_33, by = "userid")
+
+# add labels
+attr(surveys_scored$AB_2_important_1, "label") <- "The most important things the health care organizations are working on"
+attr(surveys_scored$AB_2_important_2, "label") <- "The second important things the health care organizations are working on"
+attr(surveys_scored$AB_2_important_3, "label") <- "The third important things the health care organizations are working on"
+
+attr(surveys_scored$AB_33_rank_1, "label") <- "The top thing that would help you or others in your household to get healthy or stay healthy"
+attr(surveys_scored$AB_33_rank_2, "label") <- "The second thing that would help you or others in your household to get healthy or stay healthy"
+attr(surveys_scored$AB_33_rank_3, "label") <- "The third thing that would help you or others in your household to get healthy or stay healthy"
+```
+
 
 ##labels
 note for bernice - we lose a bunch of labels in the above chunk for the AB vars, the CH vars and the SDOH vars (noted there) not sure how you want to address it, here im just labeling the `age_house` variables . theres an outline that can probably be used to relabel manually 
-```{r}
 
-attr(surveys_scored$Demo_age_house_1, "label") <- "Number of individuals in household 0-17 years"
-attr(surveys_scored$Demo_age_house_2, "label") <- "Number of individuals in household 18-39 years"
-attr(surveys_scored$Demo_age_house_3, "label") <- "Number of individuals in household 40-59 years"
-attr(surveys_scored$Demo_age_house_4, "label") <- "Number of individuals in household 60-74 years"
-attr(surveys_scored$Demo_age_house_5, "label") <- "Number of individuals in household 75 years or older"
+```{r}
+# attr(surveys_scored$Demo_age_house_1, "label") <- "Number of individuals in household 0-17 years"
+# attr(surveys_scored$Demo_age_house_2, "label") <- "Number of individuals in household 18-39 years"
+# attr(surveys_scored$Demo_age_house_3, "label") <- "Number of individuals in household 40-59 years"
+# attr(surveys_scored$Demo_age_house_4, "label") <- "Number of individuals in household 60-74 years"
+# attr(surveys_scored$Demo_age_house_5, "label") <- "Number of individuals in household 75 years or older"
 
 ```
 
@@ -563,9 +619,27 @@ attr(surveys_scored$QOL_tot, "label") <- "Quality of life total score"
 
 ## SDOH (social determinants of health)
 Qualitative in nature; total score is calculated as the total number of endorsements of negative social determinants of health (i.e., responded, "yes", "always","usually""sometimes" or "rarely" to any SDOH items), with higher scores indicating greater endorsement of negative social determinants of health. It is recommended to examine this scale on both an item level and a total score leval, as items are indicative of specific social determinants of health 
-```{r}
-#Bernice help i dont know how to do this 
 
+```{r}
+surveys_scored <- surveys_scored %>%
+    dplyr::mutate(across(c(SDOH_1, SDOH_2, SDOH_4:SDOH_6), # recode binary variables into a Boolean
+                ~ case_when(
+                  . == "No" ~ FALSE,
+                  . == "Yes" ~ TRUE,
+                  . == "Unsure" ~ NA_real_,
+                  . == "I prefer not to answer" ~ NA_real_
+                ), 
+                .names = "{.col}_R" #add 
+              )) %>%
+  dplyr::mutate(across(c(SDOH_3, SDOH_7), # recode categorical variables into a Boolean
+                ~ case_when(
+                  . == "Never" ~ FALSE,
+                  . == "I prefer not to answer" ~ NA_real_,
+                  !is.na(.) ~ TRUE
+                ), 
+                .names = "{.col}_R"
+              )) %>%
+  mutate(SDOH_tot = rowSums(select(., SDOH_1_R:SDOH_7_R)))
 ```
 
 ## Assets & Barriers
@@ -576,8 +650,19 @@ Qualitative in nature; total score is calculated as the total number of endorsem
 ## Core Health
 Qualitative in nature; total score is calculated as the total number of endorsements of negative health outcomes (i.e., responded, "yes" to any CH items), with higher scores indicating more negative health. It is recommended to examine this scale on both an item level and a total score level, as items are indicative of specific negative health outcomes.
 ```{r}
-#Bernice help i dont know how to do this 
-
+surveys_scored <- surveys_scored %>%
+  dplyr::mutate(CH_1_R = case_when(CH_1 == "Yes" ~ TRUE, 
+                            CH_1 == "Told borderline high or prehypertensive or elevated blood pressure" ~ 1, 
+                            CH_1 == "No" ~ FALSE, 
+                            CH_1 == "Don’t know / Not sure" ~ NA_real_)) %>%
+  dplyr::mutate(across(CH_2:CH_3_15_13, 
+                ~ case_when(
+                  . == "Yes" ~ TRUE,
+                  . == "No" ~ FALSE, 
+                  . == "Don’t know / Not sure" ~ NA_real_
+                ), 
+                .names = "{.col}_R")) %>%
+  dplyr::mutate(CH_tot = rowSums(select(., CH_1_R: CH_3_15_13_R)))
 ```
 
 
@@ -677,9 +762,26 @@ attr(surveys_scored$SF36_General_Health, "label") <- "SF36 general health subsca
 
 ```
 
+# label
 
 ```{r}
-write.csv(surveys_scored, "/Users/kristina/Documents/Surveys/NEW /WHI Exploring Comm Trends/USE THIS/Scored data/WHI_surveys_scored.csv")
+# reassign attributions for variables included in the 
+for (col_name in varname[multi_resposne_idx]) {
+  attributes(surveys_scored[[col_name]]) <- attributes(survey_tidy[[col_name]])
+}
+
+# assign the same label to recording variables
+for (col_name in c(paste0("SDOH_", 1:7), paste0("CH_3_15_", 1:13), "CH_1", "CH_2")){
+  attr(surveys_scored[[paste0(col_name, "_R")]], "label") <- attr(surveys_scored[[col_name]], "label")
+}
+```
+
+
+```{r}
+#write.csv(surveys_scored, "/Users/kristina/Documents/Surveys/NEW /WHI Exploring Comm Trends/USE THIS/Scored data/WHI_surveys_scored.csv")
 scored_dict <- create_dictionary(surveys_scored, remove_repeated = F, use_references = F)
-write.csv(scored_dict, "/Users/kristina/Documents/Surveys/NEW /WHI Exploring Comm Trends/USE THIS/Scored data/DICT_WHI_surveys_scored.csv")
+#write.csv(scored_dict, "/Users/kristina/Documents/Surveys/NEW /WHI Exploring Comm Trends/USE THIS/Scored data/DICT_WHI_surveys_scored.csv")
+
+#write.csv(surveys_scored, here("outputs", "whi_data_scored.csv"), row.names = F)
+#write.csv(scored_dict, here("outputs", "whi_data_scored_dict.csv"), row.names = F)
 ```
