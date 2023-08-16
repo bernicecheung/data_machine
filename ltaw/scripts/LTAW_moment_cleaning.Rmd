@@ -81,20 +81,34 @@ moments_tidy <- moments_tidy[c(2,11,12,3:10,1)]
 ```
 
 ## Prolific status check
-In total, 82 responses were removed. 
-```{r}
-#already read in above qualtrics section
 
+2539 out of 2573 participants on prolific were included in this merge
+```{r}
 #prolific <- read.csv("/Users/kristina/Downloads/prolific_export_639e73b38884ae6555e593ca.csv")
 prolific <- read.csv(here("inputs", "prolific_export_639e73b38884ae6555e593ca.csv")) 
 colnames(prolific)<-paste(colnames(prolific),"prolific",sep="_")
 colnames(prolific)[2] <- "userid"
 
-moments_tidy <- merge(moments_tidy, prolific, all = T)
-moments_tidy$Status_prolific <-moments_tidy$Status_prolific %>% replace_na('TIMEDOUT')
+
+# merge prolific data
+moments_merge <- moments_tidy %>% 
+  left_join(prolific, by = "userid")
+  
+length(unique(moments$userid))
+```
+
+
+In total, 23 responses were removed. 
+```{r}
+#already read in above qualtrics section
+
+
+
+#moments_tidy <- merge(moments_tidy, prolific, all = T)
+moments_merge$Status_prolific <-moments_merge$Status_prolific %>% replace_na('TIMEDOUT')
 
 #summarize returned responses
-data_remove_moments <- moments_tidy %>%
+data_remove_moments <- moments_merge %>%
   select(userid, itemid, transcript, duration, number_of_words, mp3_url, recorded_from, app_uuid, uuid, Status_prolific, Submission.id_prolific) %>%
   unique() %>%
   filter(Status_prolific =="RETURNED") %>%
@@ -105,41 +119,8 @@ data_remove_moments<- data_remove_moments[order(data_remove_moments$userid),]
 
 data_remove_moments 
 
-moments_tidy = moments_tidy %>%
+moments_tidy = moments_merge %>%
   filter(!Status_prolific == "RETURNED") # remove returned moments 
-```
-
-## deduplication & duplicates summary
-Duplication in moment data could have happened if the participant accessed and started the Qualtrics study multiple times, thus accessing the prompts multiple times. 
-*In this particular study, participants were randomly presented with a subset (1/5 Narrative, 5/15 Well-being) of a larger pool of possible prompt options + 1 Goal prompt*, so it is possible that even though they accessed the study at multiple points, they did not complete the same prompt(s) twice due to randomization. Because of this, we flag only duplicated itemid's as dupes within a given participant. We retain all duplicated data and flag each response. 
-
-```{r}
-ID_counts_moments <- data.frame(table(moments_tidy$name)) 
-ID_counts_moments<- ID_counts_moments[order(ID_counts_moments$Var1),]
-
-moments_dupes <- ID_counts_moments[ID_counts_moments$Freq > 1,] 
-colnames(moments_dupes) <- c("name", "Freq")
-
-#get & flag duplicate data 
-dupes_moments <- c(moments_dupes$name)
-dupes_moments <- moments_tidy[moments_tidy$name %in% dupes_moments,] 
-dupes_moments$dupe_moment <- "TRUE"
-
-#merge flagged dupes back into tidy df & flag non-dupes in tidy df 
-moments_tidy <- moments_tidy[!moments_tidy$name %in% dupes_moments$name,] 
-moments_tidy$dupe_moment <- "FALSE"
-moments_tidy <- merge(moments_tidy, dupes_moments, all = T)
-moments_tidy <- moments_tidy[order(moments_tidy$userid),]
-
-#summarize duplicate responses
-moments_tidy %>%
-  select(userid, itemid, transcript, dupe_moment) %>%
-  unique() %>%
-  filter(dupe_moment =="TRUE") %>%
-  group_by(userid) %>%
-  group_by(userid) %>%
-  add_count(userid, itemid)
-
 ```
 
 # Summarize moments data: total attempted, total valid {.tabset}
@@ -154,7 +135,7 @@ valid_moment = TRUE --> duration != none & itemid != PromptTest
 #adding totals for moments attempted/completed (valid)
 moments_totals <- dcast(unique(moments_tidy), formula = userid ~ itemid, fun.aggregate = length) %>%
   select(-c(PromptTest)) #exclude prompt_test
-moments_totals <- cbind(moments_totals, total_attempted = rowSums(moments_totals[ , 3:23])) 
+moments_totals <- cbind(moments_totals, total_attempted = rowSums(moments_totals[ , 2:22])) 
 moments_totals <- select(moments_totals, userid, total_attempted)
 moments_tidy <- merge(moments_tidy,moments_totals)
 
@@ -181,9 +162,50 @@ moments_tidy %>%
   dplyr::summarize(n = n()) %>%
   spread(valid_moment, n) %>%
   mutate(percent_valid = round((valid / (invalid+valid)) * 100, 1))
-
-
 ```
+
+
+## deduplication & duplicates summary
+Duplication in moment data could have happened if the participant accessed and started the Qualtrics study multiple times, thus accessing the prompts multiple times. 
+*In this particular study, participants were randomly presented with a subset (1/5 Narrative, 5/15 Well-being) of a larger pool of possible prompt options + 1 Goal prompt*, so it is possible that even though they accessed the study at multiple points, they did not complete the same prompt(s) twice due to randomization. Because of this, we flag only duplicated itemid's as dupes within a given participant. We retain all duplicated data and flag each response. If the moment it's 
+
+```{r}
+
+ID_counts_moments <- data.frame(table(moments_tidy$name)) 
+ID_counts_moments<- ID_counts_moments[order(ID_counts_moments$Var1),]
+
+moments_dupes <- ID_counts_moments[ID_counts_moments$Freq > 1,] 
+colnames(moments_dupes) <- c("name", "Freq")
+dup_id <- as.vector(moments_dupes$name)
+
+#get & flag duplicate data 
+moments_tidy <- moments_tidy %>%
+  mutate(dupe_survey = case_when(userid %in% dup_id & valid_moment == TRUE ~ TRUE,
+                                 userid %in% dup_id & valid_moment == FALSE ~ NA,
+                                  TRUE ~ FALSE)) %>%
+  select(userid, valid_moment, dupe_survey)
+
+
+# dupes_moments <- c(moments_dupes$name)
+# dupes_moments <- moments_tidy[moments_tidy$name %in% dupes_moments,] 
+# dupes_moments$dupe_moment <- "TRUE"
+# 
+# #merge flagged dupes back into tidy df & flag non-dupes in tidy df 
+# moments_tidy <- moments_tidy[!moments_tidy$name %in% dupes_moments$name,] 
+# moments_tidy$dupe_moment <- "FALSE"
+# moments_tidy <- merge(moments_tidy, dupes_moments, all = T)
+# moments_tidy <- moments_tidy[order(moments_tidy$userid),]
+
+#summarize duplicate responses
+moments_tidy %>%
+  select(userid, itemid, transcript, dupe_moment) %>%
+  unique() %>%
+  filter(dupe_moment =="TRUE") %>%
+  group_by(userid) %>%
+  group_by(userid) %>%
+  add_count(userid, itemid)
+```
+
 ## by prompt 
 ```{r}
 moments_tidy %>%
@@ -279,10 +301,27 @@ moments_tidy <- moments_tidy %>%
     ))
 
 #organize
-moments_cleaned <- moments_tidy[c(1,3,39,4:12,32,36:38,13:31,33:35)]
+#moments_cleaned <- moments_tidy[c(1,3,39,4:12,32,36:38,13:31,33:35)]
+moments_cleaned <- moments_tidy
 moments_cleaned$source <- "Lets talk about wellbeing"
 ```
 
+# generate a prompt dictionary
 ```{r}
-write.csv(moments_cleaned, "/Users/kristina/Documents/Surveys/NEW /Lets Talk About Wellbeing/LTAW_moments_cleaned.csv")
+prompt_dict <- moments_tidy %>%
+  select(itemid, prompt_category,itemtext) %>%
+  unique() %>%
+  filter(!prompt_category == "Test") %>%
+  arrange(prompt_category) %>%
+  mutate(prompt_id = sprintf("prompt_%02d", row_number())) %>%
+  mutate(ltaw = TRUE)
+```
+
+
+
+```{r}
+#write.csv(moments_cleaned, "/Users/kristina/Documents/Surveys/NEW /Lets Talk About Wellbeing/LTAW_moments_cleaned.csv")
+
+#write.csv(moments_cleaned, here("outputs", "ltaw_moments_cleaned.csv"), row.names = F)
+#write.csv(prompt_dict, here("outputs", "prompt_dict.csv"), row.names = F)
 ```

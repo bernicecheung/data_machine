@@ -1,0 +1,22 @@
+"itemid","prompt_category","itemtext","prompt_id","ltaw"
+"PromptGoal","Goals","If your goal was a more satisfying life, what would be your first step towards that goal?","prompt_01",TRUE
+"PromptNarr_4","Narrative","Talk about a time you failed and at least one way this failure changed you for the better.","prompt_02",TRUE
+"PromptNarr_1","Narrative","Talk about a time in your past when you successfully coped with a challenge.","prompt_03",TRUE
+"PromptNarr_3","Narrative","Talk about a negative experience in your past when you were disappointed in yourself, in conflict with someone else, or for some other reason have regrets.","prompt_04",TRUE
+"PromptNarr_5","Narrative","Talk about a time you succeeded and describe the steps you took to make this success a reality.","prompt_05",TRUE
+"PromptNarr_2","Narrative","Talk about an event or experience in your past that was meaningful and helped shape how you became the person that you are.","prompt_06",TRUE
+"PromptWB_1","Well-being","What is keeping you from pursuing the things you want to pursue in life?","prompt_07",TRUE
+"PromptWB_13","Well-being","How do you treat yourself when you make mistakes?","prompt_08",TRUE
+"PromptWB_6","Well-being","Describe a recent activity or hobby that you enjoyed.","prompt_09",TRUE
+"PromptWB_7","Well-being","To what extent do you feel like your life is moving in the right direction?","prompt_10",TRUE
+"PromptWB_8","Well-being","Do you feel optimistic about the future? Talk about it.","prompt_11",TRUE
+"PromptWB_3","Well-being","Talk about whether you feel able to manage difficulties in your life.","prompt_12",TRUE
+"PromptWB_9","Well-being","Talk about something that usually makes you happy.","prompt_13",TRUE
+"PromptWB_10","Well-being","Is there a community, online or in person, that you feel you have become a part of?","prompt_14",TRUE
+"PromptWB_12","Well-being","Describe a time you had a significant life difficulty, and how you reacted to it.","prompt_15",TRUE
+"PromptWB_2","Well-being","Describe a time when you were very focused on a task.","prompt_16",TRUE
+"PromptWB_5","Well-being","Describe a time when you talked with another person about their problems.","prompt_17",TRUE
+"PromptWB_14","Well-being","How would you describe yourself as a person?","prompt_18",TRUE
+"PromptWB_11","Well-being","Talk about a time when you sacrificed for someone else.","prompt_19",TRUE
+"PromptWB_15","Well-being","Talk about a time when you felt truly happy and alive.","prompt_20",TRUE
+"PromptWB_4","Well-being","Describe an event that recently made you upset. What did that feel like for you?","prompt_21",TRUE
