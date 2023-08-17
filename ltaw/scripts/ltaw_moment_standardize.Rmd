@@ -1,0 +1,114 @@
+---
+title: "Untitled"
+author: "Bernice Cheung"
+date: "2023-08-17"
+output: html_document
+---
+
+# Prepping {.tabset}
+
+## load libraries
+```{r libraries}
+library(tidyverse)
+library(here)
+library(psych)
+library(janitor)
+library(broom)
+library(gt)
+library(gtsummary)
+library(dplyr)
+```
+
+## load data
+```{r}
+# load cleaned datasets
+ltaw_df <- read.csv(here("outputs", "ltaw_moments_cleaned.csv"))
+
+# load prompt dictionary
+prompt_dic <- read.csv(here("outputs", "prompt_dict.csv"))
+```
+
+## org_varname function
+A function to organize variable names
+```{r}
+org_varname <- function(dataframe){
+  scale_df <- data.frame("var_name" = colnames(dataframe), 
+                            "var_class" = sapply(dataframe, class)) %>%
+  separate(var_name, into = c("scale_prefix", "item_suffix"), sep = "_", remove = FALSE, extra = "merge") %>%
+  mutate(num_item = grepl("\\d", item_suffix))
+  
+  scale_df <- scale_df %>%
+  mutate(item_type = case_when(
+    str_detect(scale_prefix, "(?i)Consent") ~ "metadata",
+    str_detect(scale_prefix, "(?i)recording") ~ "metadata",
+    str_detect(scale_prefix, "(?i)demo") ~ "demo",
+    str_detect(scale_prefix, "(?i)flag") ~ "data_screen_flags",
+    str_detect(scale_prefix, "(?i)max") ~ "data_screen_flags",
+    str_detect(scale_prefix, "(?i)Attention") ~ "attention_check",
+    str_detect(scale_prefix, "(?i)Prompt") ~ "prompt",
+    str_detect(item_suffix, "(?i)_tot") ~ "subscale",
+    str_detect(item_suffix, "(?i)_R") ~ "recoded_item",
+    str_detect(item_suffix, "(?i)prolific") ~ "prolific_metadata", 
+    str_detect(scale_prefix, "(?i)flag") ~ "data_screen_flags",
+    num_item ~ "item",
+    !is.na(item_suffix) & !num_item & var_class != "character" ~ "subscale",
+    scale_prefix == "outro" ~ "feedback", 
+    TRUE ~ "metadata"
+  ))
+  
+  return(select(scale_df, -num_item))
+}
+```
+
+## rename_match function
+
+A function to rename variable names based on the naming convention
+
+```{r}
+rename_var_std <- function(df) {
+  df %>%
+    #clean_names() %>% # use janitor::clean_names for a more thorough cleanup
+    rename_with(~ tolower(gsub(".", "_", .x, fixed = TRUE))) %>% # replace "." by "_" and change everything into lower case
+    rename_with(~ str_replace(., "(\\d+)", function(x) sprintf("%02d", as.numeric(x))), .cols = everything()) #add padding 0 to all numeric index
+}
+```
+
+
+# standardization
+
+## standardize variable names
+```{r}
+# rename variable according to the naming convention
+ltaw_df_rn <- rename_var_std(ltaw_df)
+```
+
+## transform variable class
+
+```{r}
+# transform duration into numeric 
+ltaw_df_rc <- ltaw_df_rn %>%
+  mutate(duration = ifelse(duration == "none", NA, duration), 
+         duration = as.numeric(duration), 
+         words_per_minute = ifelse(words_per_minute == "none", NA, words_per_minute), 
+         words_per_minute = as.numeric(words_per_minute))
+```
+
+## add prompt_id 
+```{r}
+# transform duration into numeric 
+ltaw_df_merge <- ltaw_df_rc %>%
+  left_join(select(prompt_dic, itemid, prompt_id), by = "itemid")
+```
+
+## get rid off prolific data
+```{r}
+ltaw_df_std <- ltaw_df_merge %>%
+  select(-matches("_prolific$"))
+```
+
+```{r}
+current_date <- format(Sys.Date(), "%d%m%y")
+
+write.csv(ltaw_df_std, here("outputs", paste("ltaw_moments_std_", current_date, ".csv", sep = "")), row.names = F)
+```
+
