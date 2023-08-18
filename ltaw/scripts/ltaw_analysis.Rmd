@@ -1,0 +1,175 @@
+---
+title: "LTAW_analysis"
+author: "Bernice Cheung"
+date: "4/6/2021"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, echo=FALSE,warning=FALSE,message=FALSE}
+library(tidyverse)
+library(psych)
+library(ggplot2)
+library(stringr)
+library(knitr)
+library(lme4)
+library(nFactors)
+library(corrplot)
+library(janitor)
+library(kableExtra)
+library(GPArotation)
+library(here)
+```
+
+# prep{.tab}
+
+## load dataset{.tabset}
+```{r}
+survey_df <- read.csv(here("outputs", "ltaw_df_std_110823.csv"))
+```
+
+## functions
+
+```{r}
+value_between <- function(vec, start, end){
+  
+  result <- vec[(which(vec == start)):(which(vec == end))]
+  
+  return(result)
+}
+```
+
+## pre-sets
+```{r}
+var_names <- colnames(survey_df)
+# well-being
+
+wellbeing_items <- c(value_between(var_names, "swls_01", "pwb_00"), value_between(var_names, "wbpro_autonomy", "wbpro_vitality"))
+
+wellbeing_subscale <- c(value_between(var_names, "pwb_autonomy_tot", "pwb_selfaccept_tot"), "swls_tot", "perma_pos", "perma_neg", value_between(var_names, "wbpro_autonomy", "wbpro_positive_emotions"), value_between(var_names, "wbpro_positive_relationships", "wbpro_vitality"))
+
+wellbeing_single <- "pwb_00"
+
+main_dv <- c("swls_tot", "sris_reflection_tot", "sris_insight_tot", value_between(var_names, "aniq_awareness_tot", "aniq_tot"))
+
+
+# total observation
+obs_n <- nrow(survey_df)
+```
+
+
+# Well-being Assessment
+
+## Correlations between single item measures and well-being subscale/overall scores
+
+```{r}
+single_item_cdf <- survey_df %>% select(all_of(wellbeing_subscale), wellbeing_single)
+cor(single_item_cdf, use = "pairwise", method = "spearman") %>%
+  as.data.frame() %>%
+  mutate(subscale = rownames(.)) %>%
+  filter(subscale != "pwb_00") %>%
+  ggplot(aes(x=subscale, y=pwb_00)) + 
+  geom_col() +
+  geom_hline(yintercept=0, linetype="dashed") +
+  labs(title="Correlation between X and other variables", y="Correlation coefficient") +
+  coord_flip()  
+```
+
+## factor analysis
+
+```{r}
+# generate a correlational matrix
+wellbeing_subscale_df <- survey_df %>%
+  select(all_of(wellbeing_subscale))
+
+wellbeing_subscale_m <- cor(wellbeing_subscale_df, use = "pairwise")
+
+# use Very Simple Structure criterion
+res_vss <- psych :: nfactors(wellbeing_subscale_m, n = 10, rotate = "promax", diagonal = FALSE, fm = "minres", 
+n.obs=obs_n,title="Very Simple Structure",use="pairwise",cor="cor")
+
+# select useful parameters and organize them into a table
+cbind(1:10, res_vss$map) %>%
+  as_tibble() %>%
+  rename(., factor = V1, map = V2) %>%
+  cbind(., res_vss$vss.stats) %>%
+  select(factor, map, fit, complex, eChisq, SRMR, eCRMS, eBIC, eRMS) %>%
+  kable(format = "html", escape = F, caption = "VSS output -mTurk") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,position = "center",fixed_thead = T)
+
+# Use the Scree plot to identify the number of factors have Eigenvalues >1 and the output from the Parallel analysis
+
+ev <- eigen(wellbeing_subscale_m)
+ap <- parallel(subject=nrow(wellbeing_subscale_df),var=ncol(wellbeing_subscale_df),
+  rep=100,cent=.05)
+nS <- nScree(x=ev$values, aparallel=ap$eigen$qevpea)
+plotnScree(nS)
+```
+
+### Extract 4 factors
+
+```{r}
+# extract 4 factors
+fa_new_4 <-fa(r=wellbeing_subscale_m, nfactors=4,n.obs = obs_n, rotate="promax", SMC=FALSE, fm="minres")
+```
+
+```{r}
+## Factor loadings
+fa.diagram(fa_new_4)
+```
+
+The factors remain the same but some variables have shifted, such as intrinsic motivation
+```{r}
+# visualization
+loadings <- fa.sort(fa_new_4)$loadings
+loadings <- as.data.frame(unclass(loadings))
+colnames(loadings) <- c("F1","F2", "F3", "F4")
+loadings$Items <- rownames(loadings)
+loadings.m <- loadings %>% gather(-Items, key = "Factor", value = "Loading")
+colOrder <- c("F1","F2", "F3", "F4")
+rowOrder <- rev(rownames(loadings))
+loadings.m<- arrange(mutate(loadings.m,Items=factor(Items,leve=rowOrder)),Items)
+loadings.m<- arrange(mutate(loadings.m,Factor=factor(Factor,leve=colOrder)),Factor)
+
+ggplot(loadings.m, aes(Items, abs(Loading), fill=Loading)) + 
+  facet_wrap(~ Factor, nrow=1) + #place the factors in separate facets
+  geom_bar(stat="identity") + #make the bars
+  coord_flip() + #flip the axes so the test names can be horizontal  
+  #define the fill color gradient: blue=positive, red=negative
+  scale_fill_gradient2(name = "Loading", 
+                       high = "orange", mid = "white", low = "midnightblue", 
+                       midpoint=0, guide="colourbar") +
+  ylab("Loading Strength") + #improve y-axis label + 
+  ggtitle("The Four Factor Solution from Study 5 Baseline") +
+  geom_hline(yintercept = 0.3, color = "red", linetype="dotted") +
+  theme_bw(base_size=10)
+```
+
+# Associations between self-awareness, narrative identity & wellbeing
+
+```{r}
+dv_cdf <- survey_df %>% select(all_of(main_dv))
+cor(dv_cdf, use = "pairwise", method = "spearman") %>%
+  as.data.frame() %>%
+  mutate(subscale = rownames(.)) %>%
+  filter(subscale != "swls_tot") %>%
+  ggplot(aes(x=subscale, y=swls_tot)) + 
+  geom_col() +
+  geom_hline(yintercept=0, linetype="dashed") +
+  labs(title="Correlation between X and other variables", y="Correlation coefficient") +
+  coord_flip()  
+```
+
+```{r}
+m1 <- lm(swls_tot ~ sris_reflection_tot + sris_insight_tot + aniq_tot, data = survey_df)
+summary(m1)
+```
+
