@@ -1,0 +1,246 @@
+---
+title: "ltaw_moment_receptiviti"
+author: "Bernice Cheung"
+date: "2023-08-21"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, echo=FALSE,warning=FALSE,message=FALSE}
+library(tidyverse)
+library(psych)
+library(ggplot2)
+library(stringr)
+library(knitr)
+library(lme4)
+library(lmerTest)
+library(nFactors)
+library(corrplot)
+library(janitor)
+library(kableExtra)
+library(GPArotation)
+library(here)
+library(RColorBrewer)
+library(broom)
+library(sjPlot)
+```
+
+# prep{.tab}
+
+## load dataset{.tabset}
+```{r}
+survey_df <- read.csv(here("outputs", "ltaw_df_std_110823.csv")) %>%
+  filter(flag_rec_include == T)
+moment_df <- read.csv(here("outputs", "ltaw_moments_std_170823.csv")) %>%
+  filter(flag_invalid_moment == FALSE) %>%
+  filter(flag_dup_moment == FALSE)
+py_sentiment_df <-read.csv("/Users/BerniceCheung/Downloads/sentiment_results.csv") %>%
+  rename("transcript_py" = "transcript",
+          "sentiment_py" = "sentiment", 
+         "sentiment_class_py" = "sentiment_class")
+receptiviti_df <- read.csv("/Users/BerniceCheung/Downloads/master_mom-liwc.csv") %>%
+  filter(source == "Wellbeing Dimensions")
+
+moment_df_full <- read.csv(here("outputs", "ltaw_moments_std_170823.csv"))
+
+moment_pysenet_df <- cbind(moment_df_full, py_sentiment_df) %>%
+  filter(flag_invalid_moment == FALSE) %>%
+  filter(flag_dup_moment == FALSE)
+
+student_sentiment_df <- read.csv("/Users/BerniceCheung/Downloads/moment_student_wellness_sentiment.csv")
+
+liwc_wb_df <- read.csv(here("outputs", "LIWC-22 Results - ltaw_moments_std_170823 - LIWC Analysis.csv"))
+
+liwc_df <- read.csv(here("outputs", "LIWC-22 Results - ltaw_moments_std_170823 - LIWC Analysis_dic.csv"))
+```
+
+## functions
+
+```{r}
+value_between <- function(vec, start, end){
+  
+  result <- vec[(which(vec == start)):(which(vec == end))]
+  
+  return(result)
+}
+```
+
+## preset
+```{r}
+var_names <- colnames(survey_df)
+
+wellbeing_subscale <- c(value_between(var_names, "pwb_autonomy_tot", "pwb_selfaccept_tot"), "swls_tot", "perma_pos", "perma_neg", value_between(var_names, "wbpro_autonomy", "wbpro_positive_emotions"), value_between(var_names, "wbpro_positive_relationships", "wbpro_vitality"))
+
+wellbeing_df <- survey_df %>%
+  select(all_of(wellbeing_subscale), userid)
+```
+
+## merge data
+```{r}
+moment_sen_merge <- moment_pysenet_df %>%
+  left_join(wellbeing_df, by = "userid")
+```
+
+```{r}
+moment_sen_liwc_df <- moment_sen_merge %>%
+  left_join(select(liwc_wb_df, userid, transcript, Segment:Meaning), by = c("userid", "transcript")) 
+
+moment_sen_liwc_df <- moment_sen_liwc_df%>%
+  left_join(select(liwc_df, userid, transcript, WC:Conversation), by = c("userid", "transcript"))
+```
+
+
+# Sentiment (frequency based) & wellbeing
+
+## Positive sentiment & well-being
+```{r}
+sen_wellbeing_py_df <- moment_sen_merge %>% select(sentiment_py:wbpro_vitality, prompt_category, prompt_construct, userid) %>%
+  filter(prompt_category == "Well-being") %>%
+  select(-prompt_category) %>%
+  mutate(prompt_construct = as.factor(prompt_construct))
+```
+
+```{r}
+sen_wellbeing_py_df %>%
+  select(-sentiment_class_py, -userid, -prompt_construct) %>%
+  gather(wellbeing_dimension, value, -sentiment_py) %>%
+  nest(-wellbeing_dimension) %>%
+  mutate(fit = map(data, ~lm(scale(value) ~ scale(sentiment_py), data = .x)),
+         tidied = map(fit, tidy)) %>%
+  unnest(tidied) %>%
+  filter(term == "scale(sentiment_py)") %>%
+  select(wellbeing_dimension, estimate, p.value) %>%
+  mutate_if(is.numeric, round, 3) %>%
+  arrange(desc(estimate)) %>%
+  kable(format = "html", escape = F) %>%
+kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,position = "center")
+```
+
+### Overall well-being & sentiment
+```{r}
+swls_pysent <- lmer(sentiment_py ~ swls_tot * prompt_construct + (1|userid), data = sen_wellbeing_py_df)
+
+summary(swls_pysent)
+
+plot_model(swls_pysent, type = "int", terms = c("scale(swls_tot)", "prompt_construct"), colors = palette_15)
+```
+
+# Word frequency & overall well-being (LIWC)
+
+## Well-being dictionary
+
+```{r}
+liwc_wb_cor_df <- moment_sen_liwc_df %>%
+  select(swls_tot,Direction:Meaning)
+
+liwc_wb_cor_df %>%
+  gather(liwc_category, value, -swls_tot) %>%
+  nest(-liwc_category) %>%
+  mutate(fit = map(data, ~lm(scale(swls_tot) ~ scale(value), data = .x)),
+         tidied = map(fit, tidy)) %>%
+  unnest(tidied) %>%
+  filter(term == "scale(value)") %>%
+  select(liwc_category, estimate, p.value) %>%
+  mutate(p_adjusted = p.adjust(p.value, method = "hommel")) %>%
+  #mutate_if(is.numeric, round, 3) %>%
+  arrange(desc(estimate)) %>%
+  kable(format = "html", escape = F) %>%
+kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,position = "center")
+```
+
+## Regular LIWC 22
+```{r}
+liwc_wb_cor_df <- moment_sen_liwc_df %>%
+  select(swls_tot,WC.y:Conversation)
+
+liwc_wb_cor_df %>%
+  gather(liwc_category, value, -swls_tot) %>%
+  nest(-liwc_category) %>%
+  mutate(fit = map(data, ~lm(scale(swls_tot) ~ scale(value), data = .x)),
+         tidied = map(fit, tidy)) %>%
+  unnest(tidied) %>%
+  filter(term == "scale(value)") %>%
+  select(liwc_category, estimate, p.value) %>%
+  mutate(p_adjusted = p.adjust(p.value, method = "hommel")) %>%
+  #mutate_if(is.numeric, round, 3) %>%
+  arrange(desc(estimate)) %>%
+  filter(p_adjusted < 0.05) %>%
+  kable(format = "html", escape = F) %>%
+kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,position = "center")
+```
+
+
+# Moment sentiment from student
+
+## Student sentiment & well-being
+```{r}
+student_sentiment_merbe <- student_sentiment_df %>%
+  left_join(select(moment_sen_liwc_df, swls_tot, userid, transcript), by = c("userid", "transcript"))
+```
+
+```{r}
+cor_value <- round(cor(student_sentiment_merbe$swls_tot.x,student_sentiment_merbe$emotion_POSITIVE, method = "spearman", use = "pairwise.complete.obs"), 3)
+
+ggplot(student_sentiment_merbe, aes(x = emotion_POSITIVE, y = swls_tot.x)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, col = "orange") +  # optional: adds regression line
+  annotate("text", x = Inf, y = Inf, label = paste("r =", cor_value), 
+           hjust = 1, vjust = 1, size = 5, color = "darkorange") +
+  labs(x = "Positive sentiment (BERT)", y = "Overall Life Satisfaction")
+```
+
+```{r}
+cor_value <- round(cor(student_sentiment_merbe$swls_tot.x,student_sentiment_merbe$emotion_NEGATIVE, method = "spearman", use = "pairwise.complete.obs"), 3)
+
+ggplot(student_sentiment_merbe, aes(x = emotion_POSITIVE, y = swls_tot.x)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, col = "blue") +  # optional: adds regression line
+  annotate("text", x = Inf, y = Inf, label = paste("r =", cor_value), 
+           hjust = 1, vjust = 1, size = 5, color = "darkblue") +
+  labs(x = "Negative sentiment (BERT)", y = "Overall Life Satisfaction")
+```
+
+
+## correlation between 3 types of sentiment
+```{r}
+sentiment_df <- student_sentiment_merbe %>%
+  left_join(select(moment_sen_liwc_df,perma_pos, perma_neg, tone_pos, tone_neg, emo_pos, emo_neg,sentiment_py,userid, transcript), by = c("userid", "transcript")) %>%
+  select(perma_pos, perma_neg, tone_pos, tone_neg, emo_pos, emo_neg,sentiment_py, emotion_POSITIVE)
+```
+
+```{r}
+install.packages("corrplot")
+
+M<-cor(sentiment_df)
+
+cor.mtest <- function(mat, ...) {
+    mat <- as.matrix(mat)
+    n <- ncol(mat)
+    p.mat<- matrix(NA, n, n)
+    diag(p.mat) <- 0
+    for (i in 1:(n - 1)) {
+        for (j in (i + 1):n) {
+            tmp <- cor.test(mat[, i], mat[, j], ...)
+            p.mat[i, j] <- p.mat[j, i] <- tmp$p.value
+        }
+    }
+  colnames(p.mat) <- rownames(p.mat) <- colnames(mat)
+  p.mat
+}
+# matrix of the p-value of the correlation
+p.mat <- cor.mtest(mtcars)
+
+
+# Leave blank on no significant coefficient
+corrplot(M, type="upper", order="hclust", 
+         p.mat = p.mat, sig.level = 0.01, insig = "blank")
+```
+

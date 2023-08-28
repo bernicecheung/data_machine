@@ -1,7 +1,7 @@
 ---
-title: "LTAW_analysis"
+title: "LTAW_analysis_surveydata"
 author: "Bernice Cheung"
-date: "4/6/2021"
+date: "8/21/2023"
 output:
   html_document:
     code_folding: hide
@@ -27,6 +27,9 @@ library(janitor)
 library(kableExtra)
 library(GPArotation)
 library(here)
+library(RColorBrewer)
+library(broom)
+library(sjPlot)
 ```
 
 # prep{.tab}
@@ -48,7 +51,8 @@ value_between <- function(vec, start, end){
 ```
 
 ## pre-sets
-```{r}
+
+```{r pre-sets}
 var_names <- colnames(survey_df)
 # well-being
 
@@ -58,37 +62,191 @@ wellbeing_subscale <- c(value_between(var_names, "pwb_autonomy_tot", "pwb_selfac
 
 wellbeing_single <- "pwb_00"
 
-main_dv <- c("swls_tot", "sris_reflection_tot", "sris_insight_tot", value_between(var_names, "aniq_awareness_tot", "aniq_tot"))
+pwb_subscale_var <- value_between(var_names, "pwb_autonomy_tot", "pwb_selfaccept_tot")
+wbpro_subscale_var <- c(value_between(var_names, "wbpro_autonomy", "wbpro_positive_emotions"), value_between(var_names, "wbpro_positive_relationships", "wbpro_vitality"))
 
+main_dv <- c("swls_tot", "sris_reflection_tot", "sris_insight_tot", value_between(var_names, "aniq_awareness_tot", "aniq_tot"))
 
 # total observation
 obs_n <- nrow(survey_df)
+
+# demo
+demo_var <- c("demo_gender", "demo_age",value_between(var_names, "demo_education", "demo_family"), "language_prolific", "employment_status_prolific", "demo_race", "student_status_prolific")
 ```
 
+## define aesthetics
+```{r}
+palette <- brewer.pal(n=8, name="Set2")
+palette_sentiment = c(brewer.pal(n = 8,name="Blues")[8], "orange")
+palette_groups = c("No" = brewer.pal(n = 8,name="Blues")[8],
+                  "Yes" = "darkorange",
+                  "full" = palette[1])
+plot_aes = theme_minimal() +
+  theme(legend.position = "top",
+        legend.text = element_text(size = 8),
+        text = element_text(size = 12, family = "Futura Medium"),
+        axis.text = element_text(color = "black"),
+        axis.ticks.y = element_blank())
+```
+
+
+# Well-being descriptive 
+
+## overall well-being descriptive {.tabset}
+
+```{r}
+swls_mean <- mean(survey_df$swls_tot, na.rm = T)
+swls_mean_ns <- mean(survey_df[survey_df$student_status_prolific == "No",]$swls_tot, na.rm = T)
+swls_mean_s <- mean(survey_df[survey_df$student_status_prolific == "Yes",]$swls_tot, na.rm = T)
+group_aes <- data.frame("group" = c("non-student", "student"), 
+                        "group_color" = c(brewer.pal(n = 8,name="Blues")[8], "darkorange"), 
+                        "group_mean" = c(swls_mean_ns, swls_mean_s))
+swls_label <- c("Extremely Dissatisfied", "Dissatisfied", "Slightly Dissatisfied", "Neutral", "Slightly Satisfied", "Satisfied", "Extremely Satisfied")
+```
+
+
+### All participants
+```{r}
+survey_df %>%
+  mutate(student_status_prolific = case_when(student_status_prolific == "DATA_EXPIRED" ~ NA, TRUE ~ student_status_prolific)) %>%
+  filter(!is.na(swls_tot)) %>%
+  ggplot(aes(x=swls_tot, fill = "full")) +
+    geom_density(alpha=0.9, trim = TRUE) +
+    scale_fill_manual(values = palette_groups) +
+    scale_x_continuous(limits = c(5,35), breaks = seq(5, 35, 5), labels = swls_label) +
+    geom_vline(aes(xintercept=swls_mean, color="black"),
+               linetype="dashed", show.legend = FALSE) + 
+    labs(x = "Overall Life Satisfaction") + 
+    plot_aes + 
+    theme(legend.position = "none", axis.text.x = element_text(angle=60, vjust = 0.5))
+```
+
+### non-studenet vs. student
+non-student: 1581; student: 445; NA: 524
+
+```{r}
+survey_df %>%
+  mutate(student_status_prolific = case_when(student_status_prolific == "DATA_EXPIRED" ~ NA, TRUE ~ student_status_prolific)) %>%
+  filter(!is.na(swls_tot)) %>%
+  filter(!is.na(student_status_prolific)) %>%
+  ggplot(aes(x=swls_tot, fill = student_status_prolific)) +
+    geom_density(alpha=0.9, trim = TRUE) +
+    scale_x_continuous(limits = c(5,35), breaks = seq(5, 35, 5), labels = swls_label) +
+    geom_vline(data= group_aes, aes(xintercept=group_mean, color=group_color),
+              linetype="dashed", show.legend = FALSE) + 
+    scale_fill_manual(values = palette_groups) +
+    labs(x = "Overall Life Satisfaction") + 
+    plot_aes + 
+    theme(axis.text.x = element_text(angle=60, vjust = 0.5))
+```
+
+## Well-being dimensions{.tabset}
+
+```{r}
+wellbeing_subscale_mean <- survey_df %>%
+  select(all_of(wellbeing_subscale)) %>%
+  gather(dimension, ratings) %>%
+  group_by(dimension) %>%
+  summarize(dimension_mean = round(mean(ratings, na.rm = T), 2))
+```
+
+
+### Emotion
+```{r}
+survey_df %>%
+  #filter(student_status_prolific == "No") %>%
+  select(perma_neg,perma_pos) %>%
+  gather(dimension, ratings) %>%
+  ggplot(aes(x = ratings, y = dimension, fill = dimension)) +
+  ggridges::geom_density_ridges(color = NA, scale = 1) +
+  scale_x_continuous(limits = c(0,4), breaks = seq(0, 4, 1)) +
+  geom_label(data = filter(wellbeing_subscale_mean, dimension %in% c("perma_neg", "perma_pos")), 
+             aes(y = dimension, x = dimension_mean, label = sprintf("Mean = %s", dimension_mean)), fill = "white") +
+  labs(x = "Ratings") +
+  scale_fill_manual(values = palette_sentiment) +
+  plot_aes +
+  theme(legend.position = "none")
+```
+
+### PWB
+```{r}
+survey_df %>%
+  #filter(student_status_prolific == "No") %>%
+  select(all_of(pwb_subscale_var)) %>%
+  gather(dimension, ratings) %>%
+  ggplot(aes(x = ratings, y = dimension, fill = dimension)) +
+  ggridges::geom_density_ridges(color = NA, scale = 1) +
+  scale_x_continuous(limits = c(3,21), breaks = seq(3, 21, 3)) +
+  geom_label(data = filter(wellbeing_subscale_mean, str_detect(dimension, "pwb_")), 
+             aes(y = dimension, x = dimension_mean, label = sprintf("Mean = %s", dimension_mean)), fill = "white") +
+  labs(x = "Ratings") +
+  scale_fill_manual(values = palette) +
+  plot_aes +
+  theme(legend.position = "none")
+```
+
+### wbpro
+```{r}
+survey_df %>%
+  #filter(student_status_prolific == "No") %>%
+  select(all_of(wbpro_subscale_var)) %>%
+  gather(dimension, ratings) %>%
+  ggplot(aes(x = ratings, y = dimension, fill = dimension)) +
+  ggridges::geom_density_ridges(color = NA, scale = 1) +
+  scale_x_continuous(limits = c(1,9), breaks = seq(1, 9, 1)) +
+  geom_label(data = filter(wellbeing_subscale_mean, str_detect(dimension, "wbpro_")), 
+             aes(y = dimension, x = dimension_mean, label = sprintf("Mean = %s", dimension_mean)), fill = "white") +
+  labs(x = "Ratings") +
+  #scale_fill_manual(values = palette) +
+  plot_aes +
+  theme(legend.position = "none")
+```
 
 # Well-being Assessment
 
 ## Correlations between single item measures and well-being subscale/overall scores
 
 ```{r}
-single_item_cdf <- survey_df %>% select(all_of(wellbeing_subscale), wellbeing_single)
-cor(single_item_cdf, use = "pairwise", method = "spearman") %>%
+single_item_df <- survey_df %>% select(all_of(wellbeing_subscale), wellbeing_single)
+single_cor_df <- cor(single_item_df, use = "pairwise", method = "spearman") %>%
   as.data.frame() %>%
   mutate(subscale = rownames(.)) %>%
   filter(subscale != "pwb_00") %>%
+  arrange(desc(pwb_00)) 
+
+single_cor_df$subscale <- reorder(rownames(single_cor_df), single_cor_df$pwb_00)
+
+single_cor_df %>%
   ggplot(aes(x=subscale, y=pwb_00)) + 
-  geom_col() +
+  geom_col(fill = "darkorange") +
   geom_hline(yintercept=0, linetype="dashed") +
-  labs(title="Correlation between X and other variables", y="Correlation coefficient") +
+  labs(title="Correlation between 1-item wellbeing measures and other variables", y="Correlation coefficient") +
   coord_flip()  
 ```
+
+## distribution comparison
+```{r}
+survey_df %>%
+  mutate(swls_tot_std = scale(swls_tot), 
+         pwb_00_std = scale(pwb_00)) %>%
+  select(swls_tot_std, pwb_00_std) %>%
+  gather(measure, scores) %>%
+  ggplot(aes(x=scores, fill = measure)) +
+    geom_density(alpha=0.9, trim = TRUE) +
+    #scale_x_continuous(limits = c(5,35), breaks = seq(5, 35, 5), labels = swls_label) +
+    scale_fill_manual(values = palette_sentiment) +
+    labs(x = "Standardized score") + 
+    plot_aes
+```
+
 
 ## factor analysis
 
 ```{r}
 # generate a correlational matrix
 wellbeing_subscale_df <- survey_df %>%
-  select(all_of(wellbeing_subscale))
+  select(all_of(wellbeing_subscale)) %>%
+  select(-swls_tot)
 
 wellbeing_subscale_m <- cor(wellbeing_subscale_df, use = "pairwise")
 
@@ -131,10 +289,10 @@ The factors remain the same but some variables have shifted, such as intrinsic m
 # visualization
 loadings <- fa.sort(fa_new_4)$loadings
 loadings <- as.data.frame(unclass(loadings))
-colnames(loadings) <- c("F1","F2", "F3", "F4")
+colnames(loadings) <- c("Positivity","Stability", "Autonomy", "Prosocial")
 loadings$Items <- rownames(loadings)
 loadings.m <- loadings %>% gather(-Items, key = "Factor", value = "Loading")
-colOrder <- c("F1","F2", "F3", "F4")
+colOrder <- c("Positivity","Stability", "Autonomy", "Prosocial")
 rowOrder <- rev(rownames(loadings))
 loadings.m<- arrange(mutate(loadings.m,Items=factor(Items,leve=rowOrder)),Items)
 loadings.m<- arrange(mutate(loadings.m,Factor=factor(Factor,leve=colOrder)),Factor)
@@ -148,9 +306,220 @@ ggplot(loadings.m, aes(Items, abs(Loading), fill=Loading)) +
                        high = "orange", mid = "white", low = "midnightblue", 
                        midpoint=0, guide="colourbar") +
   ylab("Loading Strength") + #improve y-axis label + 
-  ggtitle("The Four Factor Solution from Study 5 Baseline") +
+  ggtitle("The Four Factors of current well-being assessment") +
   geom_hline(yintercept = 0.3, color = "red", linetype="dotted") +
   theme_bw(base_size=10)
+```
+
+# Demographic & well-being{.tabset}
+
+1601/2878 complete cases
+```{r}
+demo_lm_df <- survey_df %>%
+  select(all_of(demo_var), swls_tot) %>%
+  mutate(across(demo_gender:student_status_prolific, ~ case_when(
+    . == "DATA_EXPIRED" ~ NA_character_,
+    . == "I prefer not to answer" ~ NA_character_,
+    TRUE ~ as.character(.)
+  ))) %>%
+  mutate(demo_race_bi = case_when(demo_race != "White/Caucasian" & !is.na(demo_race) ~ "Non-White", 
+                                  TRUE ~ demo_race)) %>%
+  filter(complete.cases(.))
+```
+
+
+## ANOVA{.tabset}
+
+### Individual demographic variable
+```{r}
+demo_lm_df %>%
+  gather(demo_var, value, -swls_tot) %>%
+  nest(-demo_var) %>%
+  mutate(fit = map(data, ~ aov(swls_tot ~ value, data = .x)), 
+         sum = map(fit, summary), 
+         tidied = map(fit, tidy)) %>%
+  unnest(tidied) %>%
+  filter(term == "value") %>%
+  select(demo_var, statistic, p.value) %>%
+  mutate_if(is.numeric, round, 3) %>%
+  arrange(desc(statistic)) %>%
+  kable(format = "html", escape = F) %>%
+kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,position = "center")
+```
+
+### Interaction with gender
+```{r}
+demo_lm_df %>%
+  gather(demo_var, value, -swls_tot, -demo_gender) %>%
+  nest(-demo_var) %>%
+  mutate(fit = map(data, ~ aov(swls_tot ~ value *demo_gender, data = .x)), 
+         sum = map(fit, summary), 
+         tidied = map(fit, tidy)) %>%
+  unnest(tidied) %>%
+  filter(str_detect(term, "value:")) %>%
+  select(demo_var, statistic, p.value) %>%
+  mutate_if(is.numeric, round, 3) %>%
+  arrange(desc(statistic)) %>%
+  kable(format = "html", escape = F) %>%
+kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,position = "center")
+```
+
+### Interaction with age
+```{r}
+demo_lm_df %>%
+  gather(demo_var, value, -swls_tot, -demo_age) %>%
+  nest(-demo_var) %>%
+  mutate(fit = map(data, ~ aov(swls_tot ~ value *demo_age, data = .x)), 
+         sum = map(fit, summary), 
+         tidied = map(fit, tidy)) %>%
+  unnest(tidied) %>%
+  filter(str_detect(term, "value:")) %>%
+  select(demo_var, statistic, p.value) %>%
+  mutate_if(is.numeric, round, 3) %>%
+  arrange(desc(statistic)) %>%
+  kable(format = "html", escape = F) %>%
+kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,position = "center")
+```
+## Interaction with race
+```{r}
+demo_lm_df %>%
+  gather(demo_var, value, -swls_tot, -demo_race_bi) %>%
+  nest(-demo_var) %>%
+  mutate(fit = map(data, ~ aov(swls_tot ~ value *demo_race_bi, data = .x)), 
+         sum = map(fit, summary), 
+         tidied = map(fit, tidy)) %>%
+  unnest(tidied) %>%
+  filter(str_detect(term, "value:")) %>%
+  select(demo_var, statistic, p.value) %>%
+  mutate_if(is.numeric, round, 3) %>%
+  arrange(desc(statistic))
+```
+
+## Visualization{.tabset}
+
+### Income & gender
+```{r}
+demo_lm_df %>%
+  ggplot(
+  aes(x = demo_marital, y = swls_tot, fill = demo_gender)
+) +
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'mean', alpha=0.7, colour=1) +
+  #scale_fill_manual(values = palette) +
+    labs(x = "Marital Status", y = "Overall Life Satisfaction") + 
+    plot_aes
+
+```
+
+```{r}
+demo_lm_df %>%
+  mutate(demo_income = factor(demo_lm_df$demo_income, levels = c("Less than $25,000", "$25,000 - $50,000", "$51,000 - $100,000", "$101,000 - $200,000", "More than $200,000"))) %>%
+  ggplot(
+  aes(x = demo_income, y = swls_tot, fill = demo_income)
+) +
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'mean', alpha=0.7, colour=1) +
+  scale_fill_manual(values = palette) +
+    labs(x = "Income", y = "Overall Life Satisfaction") + 
+    plot_aes +
+  theme(legend.position = "none")
+  
+```
+
+```{r}
+demo_lm_df %>%
+  #mutate(demo_income = factor(demo_lm_df$demo_income, levels = c("Less than $25,000", "$25,000 - $50,000", "$51,000 - $100,000", "$101,000 - $200,000", "More than $200,000"))) %>%
+  ggplot(
+  aes(x = demo_race, y = swls_tot, fill = demo_race)
+) +
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'mean', alpha=0.7, colour=1) +
+  scale_fill_manual(values = palette) +
+    labs(x = "Race", y = "Overall Life Satisfaction") + 
+    plot_aes +
+  theme(legend.position = "none", axis.text.x = element_text(angle=60, vjust = 0.5))
+```
+
+```{r}
+demo_lm_df %>%
+  #mutate(demo_income = factor(demo_lm_df$demo_income, levels = c("Less than $25,000", "$25,000 - $50,000", "$51,000 - $100,000", "$101,000 - $200,000", "More than $200,000"))) %>%
+  ggplot(
+  aes(x = demo_age, y = swls_tot, fill = demo_age)
+) +
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'mean', alpha=0.7, colour=1) +
+  scale_fill_manual(values = palette) +
+    labs(x = "Age", y = "Overall Life Satisfaction") + 
+    plot_aes +
+  theme(legend.position = "none", axis.text.x = element_text(angle=60, vjust = 0.5))
+```
+
+# helpful resources{.tabset}
+
+## Full sample
+```{r}
+survey_df %>%
+  select(contains("resourcehelp_")) %>%
+  select(-"resourcehelp_09_text") %>%
+  gather(resourcehelp) %>%
+  filter(!is.na(value)) %>%
+  mutate(value = reorder(value, value, function(x) -length(x))) %>%
+  ggplot(aes(x = value)) +
+  geom_bar(fill = "darkorange") + 
+  scale_fill_manual(values = palette) + 
+  labs(x = "Helpful Resources to improve life satisfaction") +
+  plot_aes +
+  theme(axis.text.x = element_text(angle=60, vjust = 0.5))
+  
+```
+
+## students
+```{r}
+survey_df %>%
+  select(contains("resourcehelp_"), student_status_prolific) %>%
+  select(-"resourcehelp_09_text") %>%
+  filter(student_status_prolific == "Yes") %>%
+  select(-student_status_prolific) %>%
+  gather(resourcehelp) %>%
+  filter(!is.na(value)) %>%
+  mutate(value = reorder(value, value, function(x) -length(x))) %>%
+  ggplot(aes(x = value)) +
+  geom_bar(fill = "darkorange") + 
+  scale_fill_manual(values = palette) + 
+  plot_aes +
+  theme(axis.text.x = element_text(angle=60, vjust = 0.5))
+```
+
+
+
+# helpful content{.tabset}
+
+## Full Sample
+```{r}
+survey_df %>%
+  select(contains("contenthelp_")) %>%
+  select(-"contenthelp_12_text") %>%
+  gather(contenthelp) %>%
+  filter(!is.na(value)) %>%
+  mutate(value = reorder(value, value, function(x) -length(x))) %>%
+  ggplot(aes(x = value)) +
+  geom_bar(fill = "darkorange") + 
+  scale_fill_manual(values = palette) + 
+  plot_aes +
+  theme(axis.text.x = element_text(angle=60, vjust = 0.5))
+```
+## students
+```{r}
+survey_df %>%
+  select(contains("contenthelp_"), student_status_prolific) %>%
+  select(-"contenthelp_12_text") %>%
+  filter(student_status_prolific == "Yes") %>%
+  select(-student_status_prolific) %>%
+  gather(contenthelp) %>%
+  filter(!is.na(value)) %>%
+  mutate(value = reorder(value, value, function(x) -length(x))) %>%
+  ggplot(aes(x = value)) +
+  geom_bar(fill = "darkorange") + 
+  scale_fill_manual(values = palette) + 
+  plot_aes +
+  theme(axis.text.x = element_text(angle=60, vjust = 0.5))
+
 ```
 
 # Associations between self-awareness, narrative identity & wellbeing
