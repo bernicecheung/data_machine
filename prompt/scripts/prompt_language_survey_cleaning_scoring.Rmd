@@ -118,7 +118,7 @@ Here, we load, check, and de-identify our survey data. We define:
 #survey1 <- rio::import("/Users/kristina/Documents/Surveys/NEW /DONE/00_DATA MACHINE/Prolific Promp Language Study/survey/01_cleaning_scoring/inputs/Prompt Language Study_August 28, 2023_14.35.sav")
 survey1 <- rio::import(here("inputs", raw_file_name_1))
 survey1$survey_name <- survey_name
-survey1$survey_part <- 1
+survey1$survey_part <- "part_01"
 
 #missing ID check
 plyr::count(survey1$PROLIFIC_PID=="")
@@ -146,7 +146,7 @@ attr(survey1_filtered$userid, "label") <- "User IDs that can be used for data me
 #survey2 <- rio::import("/Users/kristina/Documents/Surveys/NEW /DONE/00_DATA MACHINE/Prolific Promp Language Study/survey/01_cleaning_scoring/inputs/Prompt Language Study Addendum_August 28, 2023_14.40.sav")
 survey2 <- rio::import(here("inputs", raw_file_name_2))
 survey2$survey_name <- survey_name
-survey2$survey_part <- 2
+survey2$survey_part <- "part_02"
 
 #missing ID check
 plyr::count(survey2$PROLIFIC_PID=="")
@@ -1212,11 +1212,22 @@ for (col_name in varname[multi_response_idx]) {
 }
 ```
 
+# filter out irrelevant data
+
+## variables related to survey flow
+
+These variables were created to track the randomization of the survey. These are process variables that don't need to be included in the dataset
+```{r}
+exclude_var <- value_between(varname, "P1.1", "P4.3")
+
+surveys_scored <- surveys_scored %>%
+  select(-all_of(exclude_var))
+```
 
 
 # export cleaned/scored dataset
 ```{r b_edit}
-surveys_scored_dict <- create_dictionary(surveys_scored, remove_repeated = F, use_references = F)
+#surveys_scored_dict <- create_dictionary(surveys_scored, remove_repeated = F, use_references = F)
 
 #write.csv(surveys_scored, here("outputs", "prolific_prompt_data_scored.csv"), row.names = F)
 #write.csv(surveys_scored_dict, here("outputs", "prolific_prompt_data_scored_dict.csv"), row.names = F)
