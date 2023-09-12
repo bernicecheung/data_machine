@@ -1,11 +1,12 @@
 "variable","value","label","meta"
-"Prolific_ID",NA,"What is your Prolific ID? Please note that this response should auto-fill with the correct ID","varlab"
-"ID_check",NA,"Please confirm your 24 digit Prolific ID by entering it below.","varlab"
+"userid",NA,"User IDs that can be used for data merging","varlab"
 "Progress",NA,"Progress","varlab"
 "Duration__in_seconds_",NA,"Duration (in seconds)","varlab"
 "RecordedDate",NA,"Recorded Date","varlab"
 "ResponseId",NA,"Response ID","varlab"
 "ExternalReference",NA,"External Data Reference","varlab"
+"Prolific_ID",NA,"What is your Prolific ID? Please note that this response should auto-fill with the correct ID","varlab"
+"ID_check",NA,"Please confirm your 24 digit Prolific ID by entering it below.","varlab"
 "Consent_confirm",NA,"In this study we will ask you to record your voice while answering free-response prompts about your thoughts, feelings, activities, and memories. To confirm that you are eligible to participate, please answer the question below:
 
 
@@ -27,6 +28,61 @@ Are you willing to let this study record your voice when responding to questions
 You may proceed if you were able to successfully record. Were you able to hear your voice playing back on the recording?","varlab"
 "Recording_test",1,"Yes",NA
 "Recording_test",0,"No",NA
+"Demo_gender",NA,"What gender do you identify as?","varlab"
+"Demo_gender",1,"Male",NA
+"Demo_gender",2,"Female",NA
+"Demo_gender",3,"Non-binary / Genderqueer / Genderfluid",NA
+"Demo_gender",4,"I identify with a gender not listed here",NA
+"Demo_gender",-99,"I prefer not to answer",NA
+"Demo_age",NA,"What is your age?","varlab"
+"Demo_age",1,"18-20 years old",NA
+"Demo_age",2,"21-25 years old",NA
+"Demo_age",3,"26-30 years old",NA
+"Demo_age",4,"31-40 years old",NA
+"Demo_age",5,"41+ years old",NA
+"Demo_age",-99,"I prefer not to answer",NA
+"Demo_ethnicity_1",NA,"Please specify your race and/or ethnicity. Select all that apply. White/Caucasian","varlab"
+"Demo_ethnicity_1",1,"White/Caucasian",NA
+"Demo_ethnicity_2",NA,"Please specify your race and/or ethnicity. Select all that apply. Black/African-American","varlab"
+"Demo_ethnicity_2",1,"Black/African-American",NA
+"Demo_ethnicity_3",NA,"Please specify your race and/or ethnicity. Select all that apply. Latinx/Hispanic","varlab"
+"Demo_ethnicity_3",1,"Latinx/Hispanic",NA
+"Demo_ethnicity_4",NA,"Please specify your race and/or ethnicity. Select all that apply. Asian","varlab"
+"Demo_ethnicity_4",1,"Asian",NA
+"Demo_ethnicity_5",NA,"Please specify your race and/or ethnicity. Select all that apply. Native American","varlab"
+"Demo_ethnicity_5",1,"Native American",NA
+"Demo_ethnicity_6",NA,"Please specify your race and/or ethnicity. Select all that apply. Native Hawaiian/Pacific Islander","varlab"
+"Demo_ethnicity_6",1,"Native Hawaiian/Pacific Islander",NA
+"Demo_ethnicity_7",NA,"Please specify your race and/or ethnicity. Select all that apply. Other/Unknown","varlab"
+"Demo_ethnicity_7",1,"Other/Unknown",NA
+"Demo_ethnicity__99",NA,"Please specify your race and/or ethnicity. Select all that apply. I prefer not to answer","varlab"
+"Demo_ethnicity__99",1,"I prefer not to answer",NA
+"Demo_education",NA,"What is the highest level of education you have completed?","varlab"
+"Demo_education",1,"Some high school",NA
+"Demo_education",2,"High school diploma or equivalent (GED)",NA
+"Demo_education",3,"Associate's degree",NA
+"Demo_education",4,"Bachelor's degree",NA
+"Demo_education",5,"Master's degree",NA
+"Demo_education",6,"Ph.D or higher",NA
+"Demo_education",7,"Trade School",NA
+"Demo_education",-99,"I prefer not to answer",NA
+"Demo_marital",NA,"Are you married or living with someone as if you were married?","varlab"
+"Demo_marital",1,"Yes",NA
+"Demo_marital",2,"No",NA
+"Demo_marital",-99,"I prefer not to answer",NA
+"Demo_income",NA,"What is your annual household income?","varlab"
+"Demo_income",1,"Less than $25,000",NA
+"Demo_income",2,"$25,000 - $50,000",NA
+"Demo_income",3,"$51,000 - $100,000",NA
+"Demo_income",4,"$101,000 - $200,000",NA
+"Demo_income",5,"More than $200,000",NA
+"Demo_income",-99,"I prefer not to answer",NA
+"Demo_family",NA,"How many children do you have?","varlab"
+"Demo_family",1,"None",NA
+"Demo_family",2,"1",NA
+"Demo_family",3,"2 - 4",NA
+"Demo_family",4,"More than 4",NA
+"Demo_family",-99,"I prefer not to answer",NA
 "SWLS_1",NA,"In most ways my life is close to my ideal.","varlab"
 "SWLS_1",1,"Strongly disagree",NA
 "SWLS_1",2,"Moderately disagree",NA
@@ -936,9 +992,111 @@ Completely agree",NA
 "PromptGoal_time_Last_Click",NA,"Timing - Last Click","varlab"
 "PromptGoal_time_Page_Submit",NA,"Timing - Page Submit","varlab"
 "PromptGoal_time_Click_Count",NA,"Timing - Click Count","varlab"
+"ResourceHelp_1",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Educational or learning materials","varlab"
+"ResourceHelp_1",1,"Educational or learning materials",NA
+"ResourceHelp_2",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Financial resources","varlab"
+"ResourceHelp_2",1,"Financial resources",NA
+"ResourceHelp_3",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Friends or family","varlab"
+"ResourceHelp_3",1,"Friends or family",NA
+"ResourceHelp_4",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Mentorship or supervision","varlab"
+"ResourceHelp_4",1,"Mentorship or supervision",NA
+"ResourceHelp_5",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Mobile apps for goal/wellness tracking","varlab"
+"ResourceHelp_5",1,"Mobile apps for goal/wellness tracking",NA
+"ResourceHelp_7",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Online communities","varlab"
+"ResourceHelp_7",1,"Online communities",NA
+"ResourceHelp_8",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Religious or spiritual communities","varlab"
+"ResourceHelp_8",1,"Religious or spiritual communities",NA
+"ResourceHelp_9",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Selected Choice Something else not on this list","varlab"
+"ResourceHelp_9",1,"Something else not on this list",NA
 "ResourceHelp_9_TEXT",NA,"What do you think would help you with meeting that goal? Support through… (select all that apply): - Something else not on this list - Text","varlab"
+"ContentHelp_1",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Goal setting","varlab"
+"ContentHelp_1",1,"Goal setting",NA
+"ContentHelp_2",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Habit building","varlab"
+"ContentHelp_2",1,"Habit building",NA
+"ContentHelp_3",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Problem solving","varlab"
+"ContentHelp_3",1,"Problem solving",NA
+"ContentHelp_4",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Time management","varlab"
+"ContentHelp_4",1,"Time management",NA
+"ContentHelp_5",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Belonging","varlab"
+"ContentHelp_5",1,"Belonging",NA
+"ContentHelp_6",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Finding support among friends or family","varlab"
+"ContentHelp_6",1,"Finding support among friends or family",NA
+"ContentHelp_7",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Finding purpose","varlab"
+"ContentHelp_7",1,"Finding purpose",NA
+"ContentHelp_8",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Understanding who I am","varlab"
+"ContentHelp_8",1,"Understanding who I am",NA
+"ContentHelp_9",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Self-compassion","varlab"
+"ContentHelp_9",1,"Self-compassion",NA
+"ContentHelp_10",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Understanding my emotions","varlab"
+"ContentHelp_10",1,"Understanding my emotions",NA
+"ContentHelp_11",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Coping skills","varlab"
+"ContentHelp_11",1,"Coping skills",NA
+"ContentHelp_12",NA,"Of the following topic areas, which do you feel you could use the most help with? - Selected Choice Something else not on this list","varlab"
+"ContentHelp_12",1,"Something else not on this list",NA
 "ContentHelp_12_TEXT",NA,"Of the following topic areas, which do you feel you could use the most help with? - Something else not on this list - Text","varlab"
+"Languishing_1",NA,"In the last month, have you felt like any of the following? Select all that apply: Empty","varlab"
+"Languishing_1",1,"Empty",NA
+"Languishing_2",NA,"In the last month, have you felt like any of the following? Select all that apply: Unsatisfied with life","varlab"
+"Languishing_2",1,"Unsatisfied with life",NA
+"Languishing_3",NA,"In the last month, have you felt like any of the following? Select all that apply: Disappointed in your achievements","varlab"
+"Languishing_3",1,"Disappointed in your achievements",NA
+"Languishing_4",NA,"In the last month, have you felt like any of the following? Select all that apply: Isolated from others","varlab"
+"Languishing_4",1,"Isolated from others",NA
+"Languishing_5",NA,"In the last month, have you felt like any of the following? Select all that apply: Disinterested","varlab"
+"Languishing_5",1,"Disinterested",NA
+"Languishing_6",NA,"In the last month, have you felt like any of the following? Select all that apply: Stuck","varlab"
+"Languishing_6",1,"Stuck",NA
+"Languishing_7",NA,"In the last month, have you felt like any of the following? Select all that apply: Purposeless","varlab"
+"Languishing_7",1,"Purposeless",NA
+"Languishing_8",NA,"In the last month, have you felt like any of the following? Select all that apply: Powerless","varlab"
+"Languishing_8",1,"Powerless",NA
+"Languishing_9",NA,"In the last month, have you felt like any of the following? Select all that apply: Pessimistic about the future","varlab"
+"Languishing_9",1,"Pessimistic about the future",NA
+"Languishing_10",NA,"In the last month, have you felt like any of the following? Select all that apply: Alienated from society","varlab"
+"Languishing_10",1,"Alienated from society",NA
+"Document_Tools_1",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Social media","varlab"
+"Document_Tools_1",1,"Social media",NA
+"Document_Tools_2",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Pen and paper","varlab"
+"Document_Tools_2",1,"Pen and paper",NA
+"Document_Tools_3",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Audio","varlab"
+"Document_Tools_3",1,"Audio",NA
+"Document_Tools_4",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Video","varlab"
+"Document_Tools_4",1,"Video",NA
+"Document_Tools_5",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Photography","varlab"
+"Document_Tools_5",1,"Photography",NA
+"Document_Tools_6",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice Other","varlab"
+"Document_Tools_6",1,"Other",NA
+"Document_Tools_7",NA,"What tools do you use to journal or document your life?  Select all that apply: - Selected Choice None/I don't document my life","varlab"
+"Document_Tools_7",1,"None/I don't document my life",NA
 "Document_Tools_6_TEXT",NA,"What tools do you use to journal or document your life?  Select all that apply: - Other - Text","varlab"
+"Document_Freq",NA,"How often do you document your life?","varlab"
+"Document_Freq",1,"Less than once a month",NA
+"Document_Freq",2,"At least monthly",NA
+"Document_Freq",3,"At least weekly",NA
+"Document_Freq",4,"At least daily",NA
+"Document_Freq",5,"Multiple times a day",NA
+"Document_Benefits_1",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Reduces stress","varlab"
+"Document_Benefits_1",1,"Reduces stress",NA
+"Document_Benefits_2",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Improves mood","varlab"
+"Document_Benefits_2",1,"Improves mood",NA
+"Document_Benefits_3",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Provides a sense of accomplishment","varlab"
+"Document_Benefits_3",1,"Provides a sense of accomplishment",NA
+"Document_Benefits_4",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Better understand myself and my experiences","varlab"
+"Document_Benefits_4",1,"Better understand myself and my experiences",NA
+"Document_Benefits_5",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Improves my memory","varlab"
+"Document_Benefits_5",1,"Improves my memory",NA
+"Document_Benefits_6",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Gain clarity about my thoughts and feelings","varlab"
+"Document_Benefits_6",1,"Gain clarity about my thoughts and feelings",NA
+"Document_Benefits_7",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Identify patterns or underlying themes in my thoughts and emotions","varlab"
+"Document_Benefits_7",1,"Identify patterns or underlying themes in my thoughts and emotions",NA
+"Document_Benefits_8",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Provides a creative outlet for self-expression","varlab"
+"Document_Benefits_8",1,"Provides a creative outlet for self-expression",NA
+"Document_Benefits_9",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Set and achieve goals","varlab"
+"Document_Benefits_9",1,"Set and achieve goals",NA
+"Document_Benefits_10",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Track personal growth and development","varlab"
+"Document_Benefits_10",1,"Track personal growth and development",NA
+"Document_Benefits_11",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Selected Choice Other","varlab"
+"Document_Benefits_11",1,"Other",NA
 "Document_Benefits_11_TEXT",NA,"Do you experience any of the following benefits when you document your life? Select all that apply: - Other - Text","varlab"
 "StoryInterest",NA,"Sharing your story can help you learn more about yourself. If you were going to share your story, would you be interested in a safe and secure digital place where you could self-reflect and talk openly about your life?","varlab"
 "StoryInterest",1,"Very disinterested",NA
@@ -963,9 +1121,10 @@ Thank you so much for sharing your stories, especially since some may have been 
 
 
 Thank you again for your time. Please click the next button to be redirected to Prolific and confirm your completion of today's survey.","varlab"
-"flag_dupe_survey",NA,"TRUE if this observation came from a user who recorded more than one observation; FALSE if this observation came from a unique user","varlab"
-"flag_most_complete",NA,"TRUE if this observation came from a unique user, or was the most complete one among duplicated observations; SAME if the duplicated observations had same progress;
-FALSE if it did not came from a unique user and wasn't the most completed one","varlab"
+"flag_nomatch_prolific",NA,"TRUE if the observation is included in the prolific file but not in the survey data file","varlab"
+"flag_nomatch_survey",NA,"TRUE if the observation is included in the survey data file but not in the prolific file","varlab"
+"flag_dupe_survey",NA,"TRUE: data from userid that have more than 1 occurrence; FALSE: data from unique userid","varlab"
+"flag_most_complete_survey",NA,"TRUE: data from unique userid or has the highest progress among duplicated responses; FALSE: duplicated responses that don’t have the highest progress; SAME: duplicated response that share the same progress","varlab"
 "flag_failed_recording_test",NA,"TRUE if participants failed teh recording test. NAs were retained","varlab"
 "flag_failed_attention",NA,"TRUE if at least 1 attention checks failed; FALSE if 1 attention check passed + 1 missing or failed both; NA if both attention checks are missing","varlab"
 "flag_failed_attention_n",NA,"total number of attention checks failed (NA not counted as failure)","varlab"
@@ -975,6 +1134,15 @@ FALSE if it did not came from a unique user and wasn't the most completed one","
 "flag_rec_include",NA,"TRUE if WB team recommend to include this observation. Criteria include:- at least some survey data
 - did not failed both attention check questions 
 - is the most completed survey if there were duplicates. ","varlab"
+"flag_prolific_check",NA,"TRUE if the observation includes at least one valid survey item response  but can't find a match in the prolific dataset","varlab"
+"flag_prolific_manual_check",NA,"indicates results from manually checking status on Prolific; If it's RETURNED, excluded from the dataset; If it's TIMEOUT, keep in the dataset; if it's NOCHECK, the observation doesn't need manual inspection. ","varlab"
+"resource_help_combine",NA,"coalesced responses of the question 'Do you experience any of the following benefits when you document your life?'","varlab"
+"content_help_combine",NA,"coalesced responses of the question 'Of the following topic areas, which do you feel you could use the most help with?'","varlab"
+"languishing_combine",NA,"coalesced responses of the question 'In the last month, have you felt like any of the following?'","varlab"
+"document_tools_combine",NA,"coalesced responses of the question 'What tools do you use to journal or document your life?","varlab"
+"document_benefits_combine",NA,"coalesced responses of the question 'What do you think would help you with meeting that goal?'","varlab"
+"demo_race_combine",NA,"coalesced responses of the question 'Please specify your race and/or ethnicity.''multiracial' if multiple categories were selected. (Latinx/Hispanic was not included)","varlab"
+"demo_ethnicity",NA,"whether particpants self-identify as Latinx/Hispanic, Is not coalesed with racial categories","varlab"
 "SWLS_tot",NA,"total life satisfaction score","varlab"
 "SWLS_tot_f",NA,"life satisfaction categories","varlab"
 "PERMA_pos",NA,"PERMA Positive Affect","varlab"
