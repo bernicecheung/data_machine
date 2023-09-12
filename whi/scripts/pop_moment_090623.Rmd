@@ -1,0 +1,393 @@
+---
+title: "whi_pop_analysis"
+author: "Bernice Cheung"
+date: "2023-09-06"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    highlight: tango
+    theme: united
+    toc: yes
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+  github_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE)
+options(scipen=999)
+```
+
+# Scope
+1. Basic cleaning of moment data
+    Summary of moment completion
+    Moment "scoring"
+2. cleaned moments - csv
+
+# load packages
+```{r}
+if(!require('pacman')) {
+	install.packages('pacman')
+}
+
+pacman::p_load(tidyverse, labelled, devtools, haven, expss, DT, qwraps2, gtsummary, remotes, readxl, retidytext, openxlsx, reactable, reactablefmtr, ggwordcloud, topicmodels, here, install = TRUE)
+
+library(kableExtra)
+```
+
+# define aesthetics
+```{r}
+palette = c("#772e25", "#c44536", "#ee9b00", "#197278", "#283d3b", "#9CC5A1", "#ADA7C9", "grey50")
+palette_type = c("#c44536", "#ee9b00", "#197278")
+palette_pilot = c("#197278", "#c44536")
+palette_sentiment = c(palette[2], palette[4])
+plot_aes = theme_minimal() +
+  theme(legend.position = "top",
+        legend.text = element_text(size = 8),
+        text = element_text(size = 12, family = "Futura Medium"),
+        axis.text = element_text(color = "black"),
+        axis.ticks.y = element_blank())
+```
+
+# define datasets & variables
+
+```{r}
+moment_df <- read.csv(here("inputs", "labeled_sentiment_whi_moment_pop.csv"))
+survey_df <- read.csv(here("outputs", "whi_df_std_050923.csv"))
+moment_topic_df <- read.csv(here("inputs", "labeled_topics_priority_whi_moment_pop.csv"))
+```
+
+# Qualify of life
+
+## Quality of life in my community (QOL_01)
+```{r}
+hist(survey_df$qol_01)
+```
+
+```{r}
+qol01_df <- moment_df %>%
+  filter(itemid == "QOL_1") %>%
+  left_join(select(survey_df, userid, qol_01), by = "userid") %>%
+  mutate(qol_01_split = case_when(qol_01 > 3 ~ "High", 
+                                  qol_01 < 3 ~ "Low", 
+                                  qol_01 == 3 ~ NA)) %>%
+  filter(!is.na(qol_01_split))
+```
+
+```{r}
+(t_result <- t.test(sentiment_scores ~ qol_01_split, data = qol01_df))
+```
+
+```{r}
+qol01_df %>% 
+  group_by(qol_01_split) %>% 
+  summarise(num=n(),
+              mean = mean(sentiment_scores, na.rm = T), 
+              sem = sd(sentiment_scores) / sqrt(n())) %>%
+  filter(!is.na(qol_01_split)) %>%
+  mutate(myaxis = paste0(qol_01_split, "\n", "n=", num)) %>%
+  ggplot(aes(x=myaxis, y=mean, fill=qol_01_split)) +
+  geom_bar(stat = "identity", position = position_dodge(), width = 0.6) +
+  geom_errorbar(aes(ymin = mean - sem, ymax = mean + sem), 
+                position = position_dodge(0.6), width = 0.25) +
+  geom_jitter(data = qol01_df, aes(x = qol_01_split, y = sentiment_scores, color = qol_01_split), 
+              position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.6), 
+              size = 2, alpha = 0.6) + 
+  labs(title = paste("t-test: p-value =", round(t_result$p.value, 4)), 
+       x = "quality of life in my community", 
+       y = "sentiment score") + 
+  scale_fill_manual(values = palette_pilot) +
+  scale_color_manual(values = palette_pilot) +
+  ylim(-1, 1)
+  
+```
+
+## Social Support (QOL_07)
+```{r}
+hist(survey_df$qol_07)
+```
+
+```{r}
+qol07_df <- moment_df %>%
+  filter(itemid %in% c("QOL_7", "QOL_7.1", "QOL_7.2")) %>%
+  left_join(select(survey_df, userid, qol_07), by = "userid") %>%
+  mutate(qol_07_split = case_when(qol_07 > 3 ~ "High", 
+                                  qol_07 < 3 ~ "Low", 
+                                  qol_07 == 3 ~ NA)) %>%
+  filter(!is.na(qol_07_split))
+```
+
+```{r}
+(t_result <- t.test(sentiment_scores ~ qol_07_split, data = qol07_df))
+```
+
+```{r}
+qol07_df %>% 
+  group_by(qol_07_split) %>% 
+  summarise(num=n(),
+              mean = mean(sentiment_scores, na.rm = T), 
+              sem = sd(sentiment_scores) / sqrt(n())) %>%
+  filter(!is.na(qol_07_split)) %>%
+  mutate(myaxis = paste0(qol_07_split, "\n", "n=", num)) %>%
+  ggplot(aes(x=myaxis, y=mean, fill=qol_07_split)) +
+  geom_bar(stat = "identity", position = position_dodge(), width = 0.6) +
+  geom_errorbar(aes(ymin = mean - sem, ymax = mean + sem), 
+                position = position_dodge(0.6), width = 0.25) +
+  geom_jitter(data = qol07_df, aes(x = qol_07_split, y = sentiment_scores, color = qol_07_split), 
+              position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.6), 
+              size = 2, alpha = 0.6) + 
+  labs(title = paste("t-test: p-value =", round(t_result$p.value, 4)), 
+       x = "satisfaction with social life", 
+       y = "sentiment score") + 
+  scale_fill_manual(values = palette_pilot) +
+  scale_color_manual(values = palette_pilot) +
+  ylim(-1, 1)
+  
+```
+# social determinants of health
+
+
+```{r}
+hist(survey_df$sdoh_tot)
+```
+
+```{r}
+sdoh_df <- moment_df %>%
+  filter(itemid == "SDOH") %>%
+  left_join(select(survey_df, userid, sdoh_tot), by = "userid") %>%
+  mutate(sdoh_split = case_when(sdoh_tot > 3 ~ "High", 
+                                  sdoh_tot < 4 ~ "Low")) %>%
+  filter(!is.na(sdoh_split))
+```
+
+```{r}
+(t_result <- t.test(sentiment_scores ~ sdoh_split, data = sdoh_df))
+```
+
+```{r}
+palette_pilot = c("#c44536", "#197278")
+
+sdoh_df %>% 
+  group_by(sdoh_split) %>% 
+  summarise(num=n(),
+              mean = mean(sentiment_scores, na.rm = T), 
+              sem = sd(sentiment_scores) / sqrt(n())) %>%
+  filter(!is.na(sdoh_split)) %>%
+  mutate(myaxis = paste0(sdoh_split, "\n", "n=", num)) %>%
+  ggplot(aes(x=myaxis, y=mean, fill=sdoh_split)) +
+  geom_bar(stat = "identity", position = position_dodge(), width = 0.6) +
+  geom_errorbar(aes(ymin = mean - sem, ymax = mean + sem), 
+                position = position_dodge(0.6), width = 0.25) +
+  geom_jitter(data = sdoh_df, aes(x = sdoh_split, y = sentiment_scores, color = sdoh_split), 
+              position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.6), 
+              size = 2, alpha = 0.6) + 
+  labs(title = paste("t-test: p-value =", round(t_result$p.value, 4)), 
+       x = "the number of negative determinates of health", 
+       y = "sentiment score") + 
+  scale_fill_manual(values = palette_pilot) +
+  scale_color_manual(values = palette_pilot) +
+  ylim(-1, 1)
+  
+```
+
+```{r}
+cor.test(sdoh_df$sdoh_tot, sdoh_df$sentiment_scores)
+```
+
+```{r}
+correlation <- cor(sdoh_df$sentiment_scores, sdoh_df$sdoh_tot, use = "complete.obs")
+
+# Plot
+ggplot(sdoh_df, aes(x = sdoh_tot, y = sentiment_scores)) +
+  geom_point(alpha = 0.6) + 
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  geom_text(aes(x = Inf, y = Inf, 
+                label = paste("Correlation = ", round(correlation, 2))),
+            vjust = 2, hjust = 1.2, size = 5, color = "blue") +
+  labs(
+    title = "Scatter plot of sentiment_scores vs. sdoh_tot",
+    x = "sdoh_tot",
+    y = "sentiment_scores"
+  )
+```
+
+# moment topic exploration
+
+## QOL_1
+
+```{r}
+moment_topic_df %>%
+  filter(itemid == "QOL_1") %>%
+  group_by(topic_label) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n)) %>%
+  kable(format = "html", escape = F) %>%
+kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,position = "center")
+```
+
+```{r}
+moment_topic_df %>%
+  filter(itemid == "QOL_1") %>%
+  group_by(topic_label) %>%
+  summarise(n = n()) %>%
+  ggplot(aes(x="", y = n, fill = topic_label)) + 
+    geom_bar(stat="identity", width=1) +
+    coord_polar("y", start=0) + 
+  labs(y = "N = 334")
+```
+
+## QOL_1.1
+
+```{r}
+moment_topic_df %>%
+  filter(itemid == "QOL_1.1") %>%
+  group_by(topic_label) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n)) %>%
+  kable(format = "html", escape = F) %>%
+kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,position = "center")
+```
+
+
+```{r}
+moment_topic_df %>%
+  filter(itemid == "QOL_1.1") %>%
+  group_by(topic_label) %>%
+  summarise(n = n()) %>%
+  ggplot(aes(x="", y = n, fill = topic_label)) + 
+    geom_bar(stat="identity", width=1) +
+    coord_polar("y", start=0) + 
+  labs(y = "N = 269")
+```
+
+## SDOH
+
+```{r}
+moment_topic_df %>%
+  filter(itemid == "SDOH") %>%
+  group_by(topic_label) %>%
+  summarise(n = n()) %>%
+  arrange(desc(n)) %>%
+  kable(format = "html", escape = F) %>%
+kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,position = "center")
+```
+
+```{r}
+moment_topic_df %>%
+  filter(itemid == "SDOH") %>%
+  group_by(topic_label) %>%
+  summarise(n = n()) %>%
+  ggplot(aes(x="", y = n, fill = topic_label)) + 
+    geom_bar(stat="identity", width=1) +
+    coord_polar("y", start=0) + 
+  labs(y = "N = 631")
+```
+
+## group by general health
+
+```{r}
+
+# merge dataset
+sf36_gh <- survey_df %>%
+  filter(flag_rec_include == "TRUE") %>%
+  select(userid, sf36_general_health)
+
+hist(sf36_gh$sf36_general_health)
+
+sf36_gh_topic_df <- moment_topic_df %>% 
+  left_join(sf36_gh, by = "userid")
+
+# dichotomize sf36_general_health by its median
+sf36_general_health_median <- median(sf36_gh_topic_df$sf36_general_health, na.rm = T)
+
+sf36_gh_topic_df <- sf36_gh_topic_df %>%
+  mutate(sf36_gh_f = case_when(sf36_general_health > 65 ~ "High", 
+                               sf36_general_health < 65 ~ "Low", 
+                               TRUE ~ NA))
+
+table(sf36_gh_topic_df$sf36_gh_f, useNA = "ifany")
+```
+
+### QOL_1
+
+```{r}
+sf36_gh_topic_df %>%
+  filter(!is.na(sf36_gh_f)) %>%
+  filter(itemid == "QOL_1") %>%
+  group_by(sf36_gh_f,topic_label) %>%
+  summarise(n = n()) %>%
+  arrange(sf36_gh_f, desc(n)) %>%
+  kable(format = "html", escape = F) %>%
+kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,position = "center")
+```
+
+```{r}
+sf36_gh_topic_df %>%
+  filter(!is.na(sf36_gh_f)) %>%
+  filter(itemid == "QOL_1") %>%
+  group_by(sf36_gh_f,topic_label) %>%
+  summarise(n = n()) %>%
+  ggplot(aes(x="", y = n, fill = topic_label)) + 
+    geom_bar(stat="identity", width=1) +
+    coord_polar("y", start=0) + 
+    facet_wrap(~ sf36_gh_f) +
+    labs(y = "N = 631")
+```
+
+
+### QOL_1.1
+
+```{r}
+sf36_gh_topic_df %>%
+  filter(!is.na(sf36_gh_f)) %>%
+  filter(itemid == "QOL_1.1") %>%
+  group_by(sf36_gh_f,topic_label) %>%
+  summarise(n = n()) %>%
+  arrange(sf36_gh_f, desc(n)) %>%
+  kable(format = "html", escape = F) %>%
+kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,position = "center")
+```
+
+```{r}
+sf36_gh_topic_df %>%
+  filter(!is.na(sf36_gh_f)) %>%
+  filter(itemid == "QOL_1.1") %>%
+  group_by(sf36_gh_f,topic_label) %>%
+  summarise(n = n()) %>%
+  ggplot(aes(x="", y = n, fill = topic_label)) + 
+    geom_bar(stat="identity", width=1) +
+    coord_polar("y", start=0) + 
+    facet_wrap(~ sf36_gh_f) +
+    labs(y = "N = 631")
+```
+
+
+### SDOH
+```{r}
+sf36_gh_topic_df %>%
+  filter(!is.na(sf36_gh_f)) %>%
+  filter(itemid == "SDOH") %>%
+  group_by(sf36_gh_f,topic_label) %>%
+  summarise(n = n()) %>%
+  arrange(sf36_gh_f, desc(n)) %>%
+  kable(format = "html", escape = F) %>%
+kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,position = "center")
+```
+
+
+```{r}
+sf36_gh_topic_df %>%
+  filter(!is.na(sf36_gh_f)) %>%
+  filter(itemid == "SDOH") %>%
+  group_by(sf36_gh_f,topic_label) %>%
+  summarise(n = n()) %>%
+  ggplot(aes(x="", y = n, fill = topic_label)) + 
+    geom_bar(stat="identity", width=1) +
+    coord_polar("y", start=0) + 
+    facet_wrap(~ sf36_gh_f) +
+    labs(y = "N = 631")
+```

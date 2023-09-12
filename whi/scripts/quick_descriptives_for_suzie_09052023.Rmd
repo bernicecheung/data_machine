@@ -1,0 +1,300 @@
+---
+title: "Pop-insights quick summary (WHI pre-pilot data)"
+author: "Kristina Dale"
+date: "2023-09-05"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    highlight: tango
+    theme: united
+    toc: yes
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+  github_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE)
+options(scipen=999)
+```
+
+# Scope
+
+  
+# load packages
+```{r}
+if(!require('pacman')) {
+	install.packages('pacman')
+}
+
+pacman::p_load(tidyverse, labelled, devtools, plyr, haven, expss, DT, qwraps2, gtsummary, remotes, readxl, retidytext, openxlsx, reactable, reactablefmtr, ggwordcloud, topicmodels, install = TRUE)
+```
+
+# define aesthetics
+```{r}
+palette = c("#772e25", "#c44536", "#ee9b00", "#197278", "#283d3b", "#9CC5A1", "#ADA7C9", "grey50")
+palette_type = c("#c44536", "#ee9b00", "#197278")
+palette_pilot = c("#c44536", "#197278")
+palette_sentiment = c(palette[2], palette[4])
+plot_aes = theme_minimal() +
+  theme(legend.position = "top",
+        legend.text = element_text(size = 8),
+        text = element_text(size = 12, family = "Futura Medium"),
+        axis.text = element_text(color = "black"),
+        axis.ticks.y = element_blank())
+```
+
+# load & tidy data
+reading in standardized dataset, using only observations recommended for analysis based on data screening; `flag_rec_include` = TRUE. 845 total observations included in analyses.
+```{r}
+data <- rio::import("/Users/kristina/Documents/Surveys/NEW /DONE/00_DATA MACHINE/whi pre-pilot (exploring community trends)/analyses/whi_df_std_050923.csv")
+data_trim <- data %>% filter(flag_rec_include == TRUE)
+data_trim$demo_ethnicity <- data_trim$demo_ethnicity %>% replace_na('non-Latinx/Hispanic')
+
+```
+
+# WE WANT TO: better understand the demographic landscape of our target communities (gender, race, ethnicity, income, education, employment status)
+## SO WE: describe the distribution of demographic characteristics in target communities  
+```{r}
+#some formatting 
+data_trim$demo_age_factor <- cut(x = data_trim$demo_age_int, breaks = c(18, 25, 35, 45, 55, 65, 75, 85))
+
+demo <- data_trim[c("demo_gender", "demo_race_combine", "demo_ethnicity", "demo_education", "demo_income","demo_employment")]
+
+demo[demo == "I prefer not to answer"] <- NA
+
+#demo$demo_ethnicity <- demo$demo_ethnicity %>% replace_na('non-Latinx/Hispanic')
+
+
+demo %>%
+  drop_na() %>%
+  gather(variable, value) %>%
+  ggplot()+
+  geom_bar(aes(x = variable, fill = value),
+           color = " black",
+ width = 0.6, position = position_dodge(0.9), show.legend = F)+
+  geom_text(stat = "count",
+            aes(x = variable,
+                label =  value,
+                y = ..count..,
+                group = value),
+            position = position_dodge(width=.9), vjust = .5, hjust = -.05, size = 1.6, check_overlap = F) + scale_x_discrete(labels=c('Employment Status','Education','Income','Ethnicity', 'Race','Gender'), limits= c( "demo_employment", "demo_education", "demo_income","demo_ethnicity", "demo_race_combine", "demo_gender")) +
+scale_fill_manual(values=rep(palette,length.out=160)) +
+  coord_flip(clip = 'off') +
+  labs(title = "Demographic Distribution of Sample",
+              caption = "Data come from a multi-state sample where n=845",
+              x = "Demographics")
+
+```
+
+# WE WANT TO: better understand the subjective health and well-being, quality of life, and social determinents of health of individuals within target communities 
+
+## SO WE: (1) describe the distribution of subjective health & wellbeing in target communities (sf36)  
+```{r}
+#Visualization settings for rain cloud plots
+source('~/Documents/geom_flat_violin.R')
+
+raincloud_theme = theme(
+  text = element_text(size = 10),
+  axis.title.x = element_text(size = 16),
+  axis.title.y = element_text(size = 16),
+  axis.text = element_text(size = 10),
+  axis.text.x = element_text(angle = 0, vjust = 0.5, size=10),
+  legend.text=element_text(size=16),
+  legend.position = "right",
+  plot.title = element_text(lineheight=.8, face="bold", size = 16),
+  panel.border = element_blank(),
+  panel.grid.minor = element_blank(),
+  panel.grid.major = element_blank(),
+  axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
+  axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'))
+
+
+sf36 <- data_trim[c(308:315)]
+sf36_long <- sf36 %>% 
+  pivot_longer(
+    cols = `sf36_physical_functioning`:`sf36_general_health`, 
+    names_to = "SF",
+    values_to = "value"
+  )
+
+sf36_long$SF_factor <- factor(sf36_long$SF, levels=c('sf36_physical_functioning', 'sf36_ph_limitations', 'sf36_mh_limitations', 'sf36_energy', 'sf36_emotional_wb', 'sf36_social_funct', 'sf36_pain', 'sf36_general_health'),
+                                  labels=c('Physical\nFunctioning', 'Physical Health\nLimitations', 'Mental Health\nLimitations', 'Energy', 'Emotional\nWell-Being', 'Social Functioning', 'Pain', 'General Health'))
+
+ggplot(data = sf36_long, aes(y = as.numeric(value), x = SF_factor, fill = SF_factor)) +
+  geom_flat_violin(position = position_nudge(x = .2, y = 0), alpha = .8, width=1) +
+  geom_point(aes(y = as.numeric(value), color = SF_factor), position = position_jitterdodge(jitter.width = .5, dodge.width = .5, jitter.height = .4), size = .05, shape = 20) +
+  geom_boxplot(width = .1, guides = FALSE, outlier.shape = NA, alpha = 0.5) +
+  theme_classic() +
+  raincloud_theme + theme(legend.position="none", axis.text.x = element_text(angle = 45)) + labs(x="Health Areas", y="Scaled Scores (Percentages)", title = "Distribution of Subjective Physical Health & Wellbeing",
+              caption = "Scaled 0-100 where higher scores indicate the more favorable health state. ") +
+  scale_y_continuous(breaks = seq(0,100, by = 10)) + scale_fill_manual(values=rep(palette,length.out=200))
+
+```
+### SO WE: (1a) describe how individual differences (demographics) impact subjective health & wellbeing (ANOVA demographics --> SF36 scores)
+```{r}
+#to do
+```
+
+## SO WE: (2) describe the distribution of quality of life in target communities (QOL)
+A total score is calculated by adding up the scores for each item. The possible range of scores is 11-55, with higher scores indicating overall better perceived quality of life. It is recommended to examine this scale on both an item level and a total score leval, as items are indicative of specific community needs.
+```{r}
+ggplot(data_trim, aes(x=qol_tot )) +
+  geom_histogram(color="#283d3b", fill="#197278", alpha=0.5, binwidth=1) + scale_x_continuous(breaks = seq(10, 60, by = 10), limits=c(0,60)) +
+        theme_classic() + labs(x = "Quality of Life Total Score")
+
+qol <- data_trim %>%
+  select(contains("qol_")) %>%
+  select(-contains("prompt")) %>%
+  select(-contains("tot"))
+
+qol_long <- qol %>% 
+  pivot_longer(
+    cols = `qol_01`:`qol_10`, 
+    names_to = "item",
+    values_to = "value"
+)
+
+qol_long <- as.data.frame(table(qol_long))
+qol_long <- qol_long[order(qol_long$item, qol_long$value),]
+
+ggplot(qol_long, aes(fill=value, y=Freq, x=item)) + 
+    geom_bar(position="dodge", stat="identity") + scale_x_discrete(labels=c('quality of\n life','the health\n care system','a good\n place to\n raise children','a good place to\n grow old',' economic\n opportunity','a safe\n place to live','the networks\n of support\n for individuals\n and families\n during times\n of stress\n and need','the opportunity\n to contribute\n to and\n participate in\n the community’s\n quality of life','the variety\n of health\n services','number of\n health\n and social\n services'), limits= c("qol_01","qol_02","qol_03","qol_04","qol_05","qol_06","qol_07","qol_08","qol_09","qol_10")) +
+scale_fill_manual(values=rep(palette,length.out=200),name = "Response", labels = c("Strongly Disagee", "", "", "", "Strongly Agree")) +
+  labs(title = "Quality of Life Item Responses",
+       subtitle = "In my community, am satisfied with... \n My community is...",
+      x = "QOL Area") + theme(axis.text.x = element_text(angle = 0, vjust = 0.5, size = 5))
+
+
+```
+### SO WE: (2a) describe how individual differences (demographics) impact quality of life (ANOVA demographics --> QOL total score)
+
+Where ANOVA reports a p-value far below 0.05, it is indicated that there are differences in the means in the groups. To investigate more into the differences between all groups, Tukey’s Test is performed.
+```{r}
+demographics <- c("demo_employment", "demo_education", "demo_income","demo_ethnicity", "demo_race_combine", "demo_gender")
+dependents <- c("qol_tot")
+
+library(broom)
+library(dplyr)
+library(purrr)
+
+anova_qol <- expand.grid(demo = demographics, dep = dependents) %>%
+  rowwise() %>%
+  mutate(
+    model = list(
+      tryCatch(
+        aov(as.formula(paste(dep, "~", demo)), data = data_trim),
+        error = function(e) {
+          message(paste("Error processing:", demo, dep))
+          return(NULL)
+        }
+      )
+    )
+  ) %>%
+  filter(!is.null(model) & !is.null(summary(model[[1]]))) %>%
+  mutate(
+         tidied = list(tidy(model))) %>%
+  unnest(tidied)
+
+#organize & filter
+anova_qol <- anova_qol %>%
+  filter(!term== "Residuals")
+
+anova_qol <- anova_qol[order(anova_qol$statistic),]
+
+anova_qol %>%
+  ggplot(aes(x = reorder(paste(demo, dep, sep = " -> "), -abs(statistic)), y = statistic)) +
+  geom_col(aes(fill = p.value < 0.05)) +
+  coord_flip() +
+  labs(title = "One-way ANOVA: Demographics ~ Quality of Life Total Score",
+       x = "Demographic -> Dependent Variable",
+       y = "test statistic",
+       fill = "Significant") +
+  theme_minimal() + scale_fill_manual(values=rep(palette,length.out=200))
+
+######## good above here trying different appraoch to allow for tukeys post hoc
+
+qol <- data_trim[c("qol_tot", "demo_employment", "demo_education", "demo_income","demo_ethnicity", "demo_race_combine", "demo_gender")]
+
+## perform anova on dependent variables
+qol_aov <- apply(qol[,2:ncol(qol)], 2, function(x) aov(qol_tot ~ x, data = qol))
+
+# Apply Tukey's HSD test to the results of each ANOVA test
+tukey_qol <- sapply(qol_aov, function(x) TukeyHSD(x, "qol_tot")) #breaks here
+
+
+# Convert the results of each ANOVA test into a tidy data frame using the broom package
+aov_res_df <- do.call(rbind, lapply(aov_res, broom::tidy))
+
+# Combine the results of the Tukey HSD tests into a single data frame
+tukey_res_df <- as.data.frame(do.call(rbind, Map(cbind, Name = names(tukey_res), tukey_res)))
+
+
+```
+
+## SO WE: (3) describe the distribution of social determinents of health in target communities
+```{r}
+
+```
+
+
+
+
+
+### how individual differences (demographics) impact quality of life (ANOVA demographics --> QOL_tot)
+
+ 
+
+```{r}
+demographics <- c("demo_healthcare", "demo_marital", "demo_employment", "demo_education", "demo_income","demo_ethnicity", "demo_race_combine", "demo_gender", "demo_age_factor")
+dependents <- c("sf36_physical_functioning", "sf36_ph_limitations", "sf36_mh_limitations", "sf36_energy", "sf36_emotional_wb", "sf36_social_funct", "sf36_pain", "sf36_general_health", "sdoh_tot", "qol_tot")
+
+library(broom)
+library(dplyr)
+library(purrr)
+
+result_df <- expand.grid(demo = demographics, dep = dependents) %>%
+  rowwise() %>%
+  mutate(
+    model = list(
+      tryCatch(
+        aov(as.formula(paste(dep, "~", demo)), data = data_trim),
+        error = function(e) {
+          message(paste("Error processing:", demo, dep))
+          return(NULL)
+        }
+      )
+    )
+  ) %>%
+  filter(!is.null(model) & !is.null(summary(model[[1]]))) %>%
+  mutate(
+         tidied = list(tidy(model))) %>%
+  unnest(tidied)
+
+#organize & filter
+result_df <- result_df %>%
+  filter(!term== "Residuals")
+
+result_df <- result_df[order(result_df$statistic),]
+result_df_trim <- result_df %>%
+  filter(statistic > 10)
+
+result_df_trim %>%
+  ggplot(aes(x = reorder(paste(demo, dep, sep = " -> "), -abs(statistic)), y = statistic)) +
+  geom_col(aes(fill = p.value < 0.05)) +
+  coord_flip() +
+  labs(title = "ANOVA: demographics on QOL, SHOH, & Sf-36 total scores",
+       x = "Demographic -> Dependent Variable",
+       y = "test statistic",
+       fill = "Significant") +
+  theme_minimal() + scale_fill_manual(values=rep(palette,length.out=200))
+
+```
+
+
+
+

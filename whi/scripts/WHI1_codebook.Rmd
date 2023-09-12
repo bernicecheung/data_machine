@@ -1,0 +1,60 @@
+---
+title: "WHI1_codebook"
+author: "Bernice Cheung"
+date: "2023-09-01"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    highlight: tango
+    theme: united
+    toc: yes
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+  pdf_document:
+    toc: yes
+  md_document:
+    variant: markdown_github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r libraries}
+library(tidyverse)
+library(here)
+library(psych)
+library(janitor)
+library(broom)
+library(gt)
+library(gtsummary)
+library(reactable)
+```
+
+# prepping
+
+## load datasets
+```{r}
+# load survey item coding schema
+survey_item_std <- read.csv(here("inputs", "standardize_survey_items.csv"))
+
+# load survey dictionary
+survey_std <- read.csv(here("inputs", "standardize_survey.csv"))
+
+# load standardized dataset
+whi_df_std <- read.csv(here("outputs", "whi_df_std_060923.csv"))
+
+# load variable naming list
+survey_varname_std <- read.csv(here("outputs", "whi_var_summary_060923.csv"))
+
+# load item dictionary
+whi_data_scored_dict <- read.csv(here("outputs", "whi_data_scored_dict.csv"))
+```
+
+## preset
+```{r}
+scale_list <- c("aniq", "perma", "pwb", "sris", "swls", "wbpro")
+```
+

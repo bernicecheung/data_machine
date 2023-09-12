@@ -1,0 +1,333 @@
+---
+title: "WHI pre pilot moment cleaning"
+author: "Kristina Dale"
+date: "2023-08-14"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    highlight: tango
+    theme: united
+    toc: yes
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+  github_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE)
+options(scipen=999)
+```
+
+# Scope
+1. Basic cleaning of moment data
+    Summary of moment completion
+    Moment "scoring"
+2. cleaned moments - csv
+
+# load packages
+```{r}
+if(!require('pacman')) {
+	install.packages('pacman')
+}
+
+pacman::p_load(tidyverse, labelled, devtools, plyr, haven, expss, DT, qwraps2, gtsummary, remotes, readxl, retidytext, openxlsx, reactable, reactablefmtr, ggwordcloud, topicmodels, here, install = TRUE)
+```
+
+# define aesthetics
+```{r}
+palette = c("#772e25", "#c44536", "#ee9b00", "#197278", "#283d3b", "#9CC5A1", "#ADA7C9", "grey50")
+palette_type = c("#c44536", "#ee9b00", "#197278")
+palette_pilot = c("#c44536", "#197278")
+palette_sentiment = c(palette[2], palette[4])
+plot_aes = theme_minimal() +
+  theme(legend.position = "top",
+        legend.text = element_text(size = 8),
+        text = element_text(size = 12, family = "Futura Medium"),
+        axis.text = element_text(color = "black"),
+        axis.ticks.y = element_blank())
+```
+
+# define datasets & variables
+
+## load datasets
+```{r}
+moments <- read.csv(here())
+```
+
+
+
+## load & tidy audio (moment) data 
+*NOTE for iteration: in the future i think the process of getting the moment data, regardless of source will be a bit different, and this step may be replaced by a database query*
+moments collected via CameraTag, see study detail page for details[link]. Raw data comes from AWS transcription service, script from Mike M.
+
+There were 2 identical surveys launched for this study, 1 open to multiple states, 1 open only to Arkansas residents only; some below steps are duplicated for each version -- see the study detail page & outline for details. 
+
+Moments are already collared from 2 versions (sent to the same AWS bucket)
+```{r}
+#moments <- read.csv("/Users/kristina/Documents/Surveys/NEW /DONE/WHI pre pilot/USE THIS/inputs/_a-c2c67490-b7bd-013b-3e40-02c7c2460d41_full.csv")
+
+moments_split <- data.frame(do.call(rbind, strsplit(sub('_', ',', moments$name), ',', fixed = TRUE)))
+colnames(moments_split) <- c("userid", "itemid")
+moments <- cbind(moments, moments_split)
+
+moments_tidy = moments %>%
+  filter(!grepl("test", userid, ignore.case = TRUE)) %>% # tests
+  #filter(!grepl("test", itemid, ignore.case = FALSE)) %>% # tests
+  filter(nchar(userid) > 1) %>% # remove test responses
+  select(-c(description, ip)) #remove cols 
+
+#missing ID check
+count(moments_tidy$userid=="")
+
+#incorrect ID check
+moments_tidy %>%
+  filter(nchar(userid) != 24)
+
+#organize
+moments_tidy <- moments_tidy[c(2,11,12,3:10,1)] 
+```
+
+## Prolific status check {.tabset}
+17 observations were removed based on returned status in prolific. 7402 observations remain.
+```{r}
+prolific_all_states <- read.csv("/Users/kristina/Documents/Surveys/NEW /DONE/WHI pre pilot/USE THIS/inputs/allstates_prolific_export_6430a3fdcea4949acc8d92b1 (2).csv") 
+colnames(prolific_all_states)<-paste(colnames(prolific_all_states),"prolific",sep="_")
+colnames(prolific_all_states)[2] <- "userid"
+prolific_all_states$survey <- "all_states"
+
+prolific_arkansas_sub <- read.csv("/Users/kristina/Documents/Surveys/NEW /DONE/WHI pre pilot/USE THIS/inputs/arkansas_prolific_export_6431c55de649991aa28374b3 (1).csv") 
+colnames(prolific_arkansas_sub)<-paste(colnames(prolific_arkansas_sub),"prolific",sep="_")
+colnames(prolific_arkansas_sub)[2] <- "userid"
+prolific_arkansas_sub$survey <- "arkansas_sub"
+
+prolific <- rbind(prolific_all_states, prolific_arkansas_sub) #merge 
+
+moments_tidy <- moments_tidy %>% left_join(prolific, by = "userid") #theres a lot of missing data/time outs here, total # of observations increases on this join (should be ok will be flagged in no data screen)
+
+moments_tidy$Status_prolific <-moments_tidy$Status_prolific %>% replace_na('TIMEDOUT')
+
+#summarize returned responses
+data_remove_moments <- moments_tidy %>%
+  select(userid, itemid, survey, transcript, duration, number_of_words, mp3_url, recorded_from, app_uuid, uuid, Status_prolific, Submission.id_prolific) %>%
+  unique() %>%
+  filter(Status_prolific =="RETURNED") %>%
+  group_by(userid, itemid, Status_prolific) %>%
+  mutate(detials = "") 
+
+data_remove_moments<- data_remove_moments[order(data_remove_moments$userid),]
+
+data_remove_moments 
+
+moments_tidy = moments_tidy %>%
+  filter(!Status_prolific == "RETURNED") # remove returned moments 
+```
+
+## deduplication & duplicates summary
+Duplication in moment data could have happened if the participant accessed and started the Qualtrics study multiple times, thus accessing the prompts multiple times. 
+*In this particular study, participants were presented with some prompts based on responses to multiple choice questions, and some prompts no matter what. Participants had choices for what specific prompt to respond to in many instances, so it is possible that even though they accessed the study at multiple points, they did not complete the same prompt(s) twice due to multiple choice responses. Because of this, we flag only duplicated itemid's as dupes within a given participant. We retain all duplicated data and flag each response. 
+
+```{r}
+ID_counts_moments <- data.frame(table(moments_tidy$name)) 
+ID_counts_moments<- ID_counts_moments[order(ID_counts_moments$Var1),]
+
+moments_dupes <- ID_counts_moments[ID_counts_moments$Freq > 1,] 
+colnames(moments_dupes) <- c("name", "Freq")
+
+dup_id <- as.vector(moments_dupes$name)
+
+
+moments_tidy <- moments_tidy %>%
+  mutate(dupe_moment = case_when(name %in% dup_id ~ TRUE,
+                                  TRUE ~ FALSE)) %>%
+  group_by(name) %>%
+  dplyr::mutate(
+    max_duration = max(duration),
+    distinct_duration = n_distinct(duration),
+    total_rows = nrow(.)
+  ) %>%
+  mutate(
+    most_complete_moment = case_when(
+      # Unique userid cases
+      dupe_moment == F ~ "TRUE",
+      
+      # Duplicated userid but identical duration
+      dupe_moment == T & total_rows > 1 & distinct_duration == 1 ~ "SAME",
+      
+      # Duplicated userid with non-identical duration
+      dupe_moment == T & duration == max_duration & distinct_duration > 1 ~ "TRUE",
+      dupe_moment == T & duration != max_duration & distinct_duration > 1 ~ "FALSE",
+      
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  select(-max_duration, -distinct_duration, -total_rows) %>%
+  ungroup()
+
+```
+
+# Summarize moments data: total attempted, total valid {.tabset}
+total_attempted = total moments submitted (exlcuding PromptTest)
+total_invalid = total moments where duration=none (excluding PromptTest)
+total_valid = total_attempted - total_invalid
+valid_moment = TRUE --> duration != none & itemid != PromptTest
+             = FALSE --> duration = none OR itemid = PromptTest OR no moment data (NA)
+
+## total valid 
+```{r}
+#adding totals for moments attempted/completed (valid)
+moments_totals <- dcast(unique(moments_tidy), formula = userid ~ itemid, fun.aggregate = length) %>%
+  select(-c(Record_test)) #exclude record_test
+moments_totals <- cbind(moments_totals, total_attempted = rowSums(moments_totals[ , 2:28])) 
+moments_totals <- select(moments_totals, userid, total_attempted)
+moments_tidy <- moments_tidy %>% left_join(moments_totals, by = "userid")
+
+invalid_moments <- moments_tidy %>% filter(duration=="none")
+invalid_moments_totals <- dcast(unique(invalid_moments), formula = userid ~ itemid, fun.aggregate = length) %>%
+  select(-c(Record_test)) #exclude prompt_test
+
+invalid_moments_totals <- cbind(invalid_moments_totals, total_invalid = rowSums(invalid_moments_totals[ , 2:14]))
+invalid_moments_totals <- select(invalid_moments_totals, userid, total_invalid)
+moments_tidy <- moments_tidy %>% left_join(invalid_moments_totals, by = "userid")
+
+moments_tidy$total_invalid <-moments_tidy$total_invalid %>% replace_na(0)
+moments_tidy <- moments_tidy %>%
+  mutate(total_valid = (moments_tidy$total_attempted - moments_tidy$total_invalid))
+
+#flag for invalid moment
+moments_tidy$valid_moment <- ifelse(moments_tidy$duration=="none" | moments_tidy$itemid=="Record_test", "FALSE", "TRUE")
+moments_tidy$valid_moment <-moments_tidy$valid_moment %>% replace_na("FALSE")
+
+moments_tidy %>%
+  select(itemid, userid, valid_moment) %>%
+  mutate(valid_moment = ifelse(valid_moment == "TRUE", "valid", "invalid")) %>%
+  group_by(valid_moment) %>%
+  mutate(count = length(valid_moment)) %>%
+  dplyr::summarize(n = n()) %>%
+  spread(valid_moment, n) %>%
+  mutate(percent_valid = round((valid / (invalid+valid)) * 100, 1))
+
+
+```
+## by prompt 
+```{r}
+moments_tidy %>%
+  filter(grepl("TRUE", valid_moment)) %>%
+  group_by(itemid, valid_moment) %>%
+  dplyr::summarize(n = n()) %>%
+  spread(valid_moment, n)
+```
+
+## by prompt category
+*NOTE: theres probably an easier way to do this where we have some larger prompt library sheet where all of these categories/labels are pre-defined, then we can read that in here and merge by itemid -- but for now, its done manually using the study outline so these are pretty specific to individual study goals*
+```{r}
+moments_tidy$prompt_category <- "Community Needs" 
+moments_tidy$prompt_category <- ifelse(grepl("test", moments_tidy$itemid), "Test", moments_tidy$prompt_category) 
+
+moments_tidy %>%
+  filter(grepl("TRUE", valid_moment)) %>%
+  group_by(prompt_category) %>%
+  dplyr::summarize(n = n()) %>%
+  spread(prompt_category, n)
+
+```
+
+## by prompt construct
+```{r}
+moments_tidy$prompt_construct <- ifelse(grepl("AB", moments_tidy$itemid), "assets and barriers", "") 
+moments_tidy$prompt_construct <- ifelse(grepl("CH", moments_tidy$itemid), "core health", moments_tidy$prompt_construct) 
+moments_tidy$prompt_construct <- ifelse(grepl("QOL", moments_tidy$itemid), "quality of life", moments_tidy$prompt_construct) 
+moments_tidy$prompt_construct <- ifelse(grepl("SDOH", moments_tidy$itemid), "social determinants of health", moments_tidy$prompt_construct) 
+
+
+moments_tidy %>%
+  filter(grepl("TRUE", valid_moment)) %>%
+  group_by(prompt_construct, prompt_category) %>%
+  dplyr::summarize(n = n()) %>%
+  spread(prompt_category, n)
+
+
+```
+
+# label moment data
+add item text column 
+Bernice -- there might be duplicates happening here with the merge w survey data but im not sure 
+```{r}
+moments_tidy <- moments_tidy %>% 
+  mutate(
+    item_text = case_when(
+      itemid == "AB_cancer" ~ "You said that cancer is particularly important to you (in response to things health care organizations are working on), please speak in more detail about a positive change in your community you would like to see as it relates to this topic",
+      itemid == "AB_diabetes" ~ "You said that diabetes is particularly important to you (in response to things health care organizations are working on), please speak in more detail about a positive change in your community you would like to see as it relates to this topic",
+      itemid == "AB_food" ~ "You said that food insecurity is particularly important to you (in response to things health care organizations are working on), please speak in more detail about a positive change in your community you would like to see as it relates to this topic",
+      itemid == "AB_HC" ~ "You said that access to healthcare is particularly important to you (in response to things health care organizations are working on), please speak in more detail about a positive change in your community you would like to see as it relates to this topic",
+      itemid == "AB_housing" ~ "You said that affordable housing is particularly important to you (in response to things health care organizations are working on), please speak in more detail about a positive change in your community you would like to see as it relates to this topic",
+      itemid == "AB_MH" ~ "You said that mental or behavioral health is particularly important to you (in response to things health care organizations are working on), please speak in more detail about a positive change in your community you would like to see as it relates to this topic",
+      itemid == "AB_obesity" ~ "You said that obesityis particularly important to you (in response to things health care organizations are working on), please speak in more detail about a positive change in your community you would like to see as it relates to this topic",
+      itemid == "AB_shots" ~ "You said that immunization is particularly important to you (in response to things health care organizations are working on), please speak in more detail about a positive change in your community you would like to see as it relates to this topic",
+      itemid == "AB_wellness" ~ "You said that wellness education is particularly important to you (in response to things health care organizations are working on), please speak in more detail about a positive change in your community you would like to see as it relates to this topic",
+      itemid == "AB3_11" ~ "How does your body typically feel when you wake up?",
+      itemid == "AB3_15_18" ~ "Describe your current spending habits.",
+      itemid == "AB3_16" ~ "Describe your values and belief system.",
+      itemid == "AB3_2_3" ~ "Describe your current diet and daily eating habits.",
+      itemid == "AB3_20" ~ "How productive do you feel with your current schedule?",
+      itemid == "AB3_21" ~ "How do you incorporate intellectually stimulating activities in your daily life?",
+      itemid == "AB3_4" ~ "Talk about whether you feel able to manage difficulties in your life.",
+      itemid == "AB3_7" ~ "Describe your current living space. How often do you clean/organize your space?",
+      itemid == "AB3_9" ~ "Describe your favorite way to move and be active. How does it make you feel?",
+      itemid == "AB5_neg" ~ "Describe your understanding of the barriers to obtaining effective mental/behavioral health treatment",
+      itemid == "AB5_pos" ~ "Describe what, about your mental/behavioral health care experience worked well.",
+      itemid == "CH12_MH" ~ "Describe the ways in which mental illness has impacted you and your family.",
+      itemid == "CH13_sub" ~ "Describe the ways in which substance abuse has impacted you and your family.",
+      itemid == "QOL_1" ~ "Please speak in more detail about why you responded the way you did - community quality of life",
+      itemid == "QOL_6" ~ "Please speak in more detail about why you responded the way you did - safe community",
+      itemid == "QOL_7" ~ "Please speak in more detail about why you responded the way you did - support networks",
+      itemid == "QOL_8" ~ "Please speak in more detail about why you responded the way you did - group equality",
+      itemid == "SDOH" ~ "Describe some things you worry about",
+      itemid == "Record_test" ~ "Using the microphone widget below, please record the following: Hello, this is a test recording.", 
+      TRUE ~ NA_character_
+    ))
+
+#### in this study, multiple prompt options were presented for QOL prompts, participants were asked to note which prompt option they responded to, or if they responded with general detail (e.g., QOL1 = Please speak in more detail about why you responded the way you did - community quality of life" OR "Describe what goes on in a typical week in your life." ) Here, we adapt the prompt item text based on the multiple choice responses
+
+#read in SCORED STANDARDIZED DATA  & subset out what we need 
+survey <- rio::import("/Users/kristina/Downloads/whi_df_std_150823.csv")
+survey_merge <- survey %>%
+  select(userid, contains("_prompt"))
+
+#merge to get mc responses 
+moments_survey_merge <- moments_tidy %>% left_join(survey_merge, by = "userid")
+
+#change itemid and item_text as needed 
+#qol 1; 2 options
+moments_survey_merge$itemid <- ifelse(moments_survey_merge$itemid == "QOL_1" & moments_survey_merge$qol_01_prompt =="I responded to prompt option 1", "QOL_1.1", moments_survey_merge$itemid )
+moments_survey_merge$item_text <- ifelse(moments_survey_merge$itemid == "QOL_1.1", "Describe what goes on in a typical week in your life.", moments_survey_merge$item_text)
+
+#qol 6; 2 options
+moments_survey_merge$itemid <- ifelse(moments_survey_merge$itemid == "QOL_6" & moments_survey_merge$qol_06_prompt =="I responded to prompt option 1", "QOL_6.1", moments_survey_merge$itemid )
+moments_survey_merge$item_text <- ifelse(moments_survey_merge$itemid == "QOL_6.1", "Describe your neighborhood.", moments_survey_merge$item_text)
+
+#qol 7; 4 options
+#note: qol_07_prompt not recoded to character 
+moments_survey_merge$itemid <- ifelse(moments_survey_merge$itemid == "QOL_7" & moments_survey_merge$qol_07_prompt == 1, "QOL_7.1", moments_survey_merge$itemid )
+moments_survey_merge$item_text <- ifelse(moments_survey_merge$itemid == "QOL_7.1", "Is there a community, online or in person, that you feel you have become a part of?", moments_survey_merge$item_text)
+
+moments_survey_merge$itemid <- ifelse(moments_survey_merge$itemid == "QOL_7" & moments_survey_merge$qol_07_prompt == 2, "QOL_7.2", moments_survey_merge$itemid )
+moments_survey_merge$item_text <- ifelse(moments_survey_merge$itemid == "QOL_7.2", "How satisfied are you with your social life? Why?", moments_survey_merge$item_text)
+
+moments_survey_merge$itemid <- ifelse(moments_survey_merge$itemid == "QOL_7" & moments_survey_merge$qol_07_prompt == 3, "QOL_7.3", moments_survey_merge$itemid )
+moments_survey_merge$item_text <- ifelse(moments_survey_merge$itemid == "QOL_7.3", "Describe your support system - Who is in your support system? How does support make you feel?", moments_survey_merge$item_text)
+
+
+#qol 8; 2 options
+moments_survey_merge$itemid <- ifelse(moments_survey_merge$itemid == "QOL_8" & moments_survey_merge$qol_08_prompt == "I responded to prompt option 1", "QOL_8.1", moments_survey_merge$itemid )
+moments_survey_merge$item_text <- ifelse(moments_survey_merge$itemid == "QOL_8.1", "What challenges are you and people like you in your community facing that others may not be aware of?", moments_survey_merge$item_text)
+
+
+```
+
+```{r}
+write.csv(moments_survey_merge, "/Users/kristina/Documents/Surveys/NEW /DONE/00_DATA MACHINE/whi pre-pilot (exploring community trends)/moments/01_cleaning_scoring/outputs/whi_moments_cleaned.csv")
+```

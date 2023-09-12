@@ -62,12 +62,14 @@ org_varname <- function(dataframe){
     str_detect(scale_prefix, "(?i)flag") ~ "data_screen_flags",
     str_detect(scale_prefix, "(?i)max") ~ "data_screen_flags",
     str_detect(scale_prefix, "(?i)Attention") ~ "attention_check",
-    str_detect(scale_prefix, "(?i)Prompt") ~ "prompt",
+    str_detect(scale_prefix, "(?i)Prompt") ~ "prompt_meta",
+    str_detect(item_suffix, "(?i)Prompt") ~ "prompt_meta",
+    str_detect(item_suffix, "(?i)combine") ~ "coalesced responses",
+    str_detect(item_suffix, "(?i)Text") ~ "supplement responses",
     str_detect(item_suffix, "(?i)_tot") ~ "subscale",
-    str_detect(item_suffix, "(?i)_R") ~ "recoded_item",
-    str_detect(item_suffix, "(?i)prolific") ~ "prolific_metadata", 
+    str_detect(item_suffix, "(?i)_R$") ~ "reverse_scored_item",
+    str_detect(item_suffix, "(?i)prolific") ~ "prolific_metadata",
     str_detect(scale_prefix, "(?i)flag") ~ "data_screen_flags",
-    var_name == "Duration__in_seconds_" ~ "metadata",
     num_item ~ "item",
     !is.na(item_suffix) & !num_item & var_class != "character" ~ "subscale",
     scale_prefix == "outro" ~ "feedback", 
@@ -329,18 +331,18 @@ ori_varname %>%
 
 # standardize prolific data
 ```{r}
-whi_df <- whi_df %>%
-  mutate(Age_prolific = case_when(Age_prolific == "DATA_EXPIRED" ~ NA, 
-                                  TRUE ~ as.numeric(Age_prolific))) %>%
-  dplyr::mutate(across(Sex_prolific:Employment.status_prolific, # recode binary variables into a Boolean
-                ~ case_when(
-                  . == "DATA_EXPIRED" ~ NA,
-                  . == "Prefer not to say" ~ NA,
-                  TRUE ~ .
-                ))) %>%
-  dplyr::mutate(across(c(Status_prolific, Current.u.s.state.of.residence_prolific, Fluent.languages_prolific, Sex_prolific:Employment.status_prolific), # recode binary variables into a Boolean
-                ~ as.factor(.)
-                ))
+# whi_df <- whi_df %>%
+#   mutate(Age_prolific = case_when(Age_prolific == "DATA_EXPIRED" ~ NA, 
+#                                   TRUE ~ as.numeric(Age_prolific))) %>%
+#   dplyr::mutate(across(Sex_prolific:Employment.status_prolific, # recode binary variables into a Boolean
+#                 ~ case_when(
+#                   . == "DATA_EXPIRED" ~ NA,
+#                   . == "Prefer not to say" ~ NA,
+#                   TRUE ~ .
+#                 ))) %>%
+#   dplyr::mutate(across(c(Status_prolific, Current.u.s.state.of.residence_prolific, Fluent.languages_prolific, Sex_prolific:Employment.status_prolific), # recode binary variables into a Boolean
+#                 ~ as.factor(.)
+#                 ))
 ```
 
 
@@ -358,7 +360,7 @@ whi_char_df %>%
 # identify variables that need to be recoded as factors
 chr_col_names <- whi_char_df$var_name 
 
-f_varname <- value_between(chr_col_names, "state", "AB_33_rank_3")
+f_varname <- c(value_between(chr_col_names, "state", "CH_3_15_13"), value_between(chr_col_names, "Sex_prolific", "AB_33_rank_3"))
 f_varname <- f_varname[!grepl("_TEXT$", f_varname)]
 
 # standardize levels
@@ -387,13 +389,15 @@ whi_df_rc <- whi_df_rc %>%
                   . == 1 ~ "I responded to prompt option 1", 
                   . == 2 ~ "I responded with general detial"
                 )),
-         QOL_7_prompt == case_when(
+         QOL_7_prompt = case_when(
            QOL_7_prompt == 1 ~ "I responded to prompt option 1", 
            QOL_7_prompt == 2 ~ "I responded to prompt option 2", 
            QOL_7_prompt == 3 ~ "I responded to prompt option 3", 
            QOL_7_prompt == 4 ~ "I responded with general detail"
          )) %>%
-  mutate(across(contains("_prompt"), as.factor))
+  mutate(across(contains("_prompt"), as.factor)) %>%
+  mutate(Consent_confirm = case_when(Consent_confirm == 1 ~ TRUE))
+
 
 # check all variable class
 org_varname(whi_df_rc) %>%gt()
@@ -420,10 +424,11 @@ whi_rn_sum %>% gt()
 location_var <- value_between(whi_rn_sum$var_name, "state", "wa_county")
 demo_raw_var <- value_between(whi_rn_sum$var_name, "demo_age_house_01", "demo_ethnicity__99")
 ab_raw_var <- value_between(whi_rn_sum$var_name, "ab_ak_01", "ab_07_10")
-ab_raw_var <- ab_raw_var[!grepl("_TEXT$", f_varname)]
+ab_raw_var <- ab_raw_var[!grepl("_text$", ab_raw_var)]
 prolific_demo_var <- value_between(whi_rn_sum$var_name, "current_us_state_of_residence_prolific", "employment_status_prolific")
-ab_coal_var <- value_between(whi_rn_sum$var_name, "arkansas_hc_location_ab_ak", "ab_33_rank_03")
+#ab_coal_var <- value_between(whi_rn_sum$var_name, "arkansas_hc_location_ab_ak_combine", "ab_33_rank_03")
 scale_tot_var <- c("qol_tot", "sdoh_tot", "ch_tot", "prbq_tot")
+rank_var <- value_between(whi_rn_sum$var_name, "ab_02_important_01", "ab_33_rank_03")
 
 
 whi_rn_sum <- whi_rn_sum %>%
@@ -431,10 +436,11 @@ whi_rn_sum <- whi_rn_sum %>%
                                var_name %in% demo_raw_var ~ "demo_raw", 
                                var_name %in% ab_raw_var ~ "assets_barriers_raw", 
                                var_name %in% prolific_demo_var ~ "prolific_demo", 
-                               var_name %in% ab_coal_var ~ "assets_barriers_coal", 
-                               var_name %in% scale_tot_var ~ "scale", 
+                               #var_name %in% ab_coal_var ~ "assets_barriers_coal", 
+                               var_name %in% scale_tot_var ~ "scale",
+                               var_name %in% rank_var ~ "rank_item_response",
                                var_name == "survey_name" ~ "metadata", 
-                               var_name == "demo_race" ~ "demo_coal",
+                               var_name == "duration__in_seconds_" ~ "metadata", 
                                TRUE ~ item_type))
 
 whi_rn_sum %>%

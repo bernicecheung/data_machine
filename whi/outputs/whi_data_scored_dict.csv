@@ -1,6 +1,5 @@
 "variable","value","label","meta"
-"Prolific_ID",NA,"What is your Prolific ID? Please note that this response should auto-fill with the correct ID","varlab"
-"ID_check",NA,"Please confirm your 24 digit Prolific ID by entering it below.","varlab"
+"userid",NA,"User IDs that can be used for data merging","varlab"
 "Progress",NA,"Progress","varlab"
 "Duration__in_seconds_",NA,"Duration (in seconds)","varlab"
 "RecordedDate",NA,"Recorded Date","varlab"
@@ -13,6 +12,8 @@
 Do you consent to participating in this study, and are you willing to let this study record your voice when responding to questions?","varlab"
 "Consent_confirm",1,"Yes",NA
 "Consent_confirm",0,"No",NA
+"Prolific_ID",NA,"What is your Prolific ID? Please note that this response should auto-fill with the correct ID","varlab"
+"ID_check",NA,"Please confirm your 24 digit Prolific ID by entering it below.","varlab"
 "Consent_no",NA,"We appreciate your willingness to participate, unfortunately one or more of your responses or your device settings indicate that you are not eligible to participate in this study. Please close this window and return this study on Prolific so that your account is not penalized by a rejection.","varlab"
 "Recording_test",NA,"Using the microphone widget below, please record the following: ""Hello, this is a test recording."" Please make sure to allow access to your device's microphone. After recording, please click on Review Recording to check that you can hear your voice playing back. If you can't hear your voice, please make sure you have allowed access to your microphone, and that your device's volume is on.
 
@@ -1647,14 +1648,217 @@ get along with other people?","varlab"
 "PRBQ_15",1,"Somewhat difficult",NA
 "PRBQ_15",2,"Very difficult",NA
 "PRBQ_15",3,"Extremely difficult",NA
-"demo_race",NA,"cleaned racial category. 'multiracial' if multiple categories were selected. (Latinx/Hispanic was not included)","varlab"
+"SF36_1",NA,"In general, would you say your health is:","varlab"
+"SF36_1",1,"Excellent",NA
+"SF36_1",2,"Very good",NA
+"SF36_1",3,"Good",NA
+"SF36_1",4,"Fair",NA
+"SF36_1",5,"Poor",NA
+"SF36_2",NA,"Compared to one year ago, how would you rate your health in general now?","varlab"
+"SF36_2",1,"Much better now than one year ago",NA
+"SF36_2",2,"Somewhat better now than one year ago",NA
+"SF36_2",3,"About the same",NA
+"SF36_2",4,"Somewhat worse now than one year ago",NA
+"SF36_2",5,"Much worse now than one year ago",NA
+"SF36_3",NA,"The following items are about activities you might do during a typical day. Does your health now limit you in these activities? If so, how much? - Vigorous activities, such as running, lifting heavy objects, participating in strenuous sports","varlab"
+"SF36_3",1,"Yes, limited a lot",NA
+"SF36_3",2,"Yes, limited a little",NA
+"SF36_3",3,"No, not limited at all",NA
+"SF36_4",NA,"The following items are about activities you might do during a typical day. Does your health now limit you in these activities? If so, how much? - Moderate activities, such as moving a table, pushing a vacuum cleaner, bowling, or playing golf","varlab"
+"SF36_4",1,"Yes, limited a lot",NA
+"SF36_4",2,"Yes, limited a little",NA
+"SF36_4",3,"No, not limited at all",NA
+"SF36_5",NA,"The following items are about activities you might do during a typical day. Does your health now limit you in these activities? If so, how much? - Lifting or carrying groceries","varlab"
+"SF36_5",1,"Yes, limited a lot",NA
+"SF36_5",2,"Yes, limited a little",NA
+"SF36_5",3,"No, not limited at all",NA
+"SF36_6",NA,"The following items are about activities you might do during a typical day. Does your health now limit you in these activities? If so, how much? - Climbing several flights of stairs","varlab"
+"SF36_6",1,"Yes, limited a lot",NA
+"SF36_6",2,"Yes, limited a little",NA
+"SF36_6",3,"No, not limited at all",NA
+"SF36_7",NA,"The following items are about activities you might do during a typical day. Does your health now limit you in these activities? If so, how much? - Climbing one flight of stairs","varlab"
+"SF36_7",1,"Yes, limited a lot",NA
+"SF36_7",2,"Yes, limited a little",NA
+"SF36_7",3,"No, not limited at all",NA
+"SF36_8",NA,"The following items are about activities you might do during a typical day. Does your health now limit you in these activities? If so, how much? - Bending, kneeling, or stooping","varlab"
+"SF36_8",1,"Yes, limited a lot",NA
+"SF36_8",2,"Yes, limited a little",NA
+"SF36_8",3,"No, not limited at all",NA
+"SF36_9",NA,"The following items are about activities you might do during a typical day. Does your health now limit you in these activities? If so, how much? - Walking more than a mile","varlab"
+"SF36_9",1,"Yes, limited a lot",NA
+"SF36_9",2,"Yes, limited a little",NA
+"SF36_9",3,"No, not limited at all",NA
+"SF36_10",NA,"The following items are about activities you might do during a typical day. Does your health now limit you in these activities? If so, how much? - Walking several blocks","varlab"
+"SF36_10",1,"Yes, limited a lot",NA
+"SF36_10",2,"Yes, limited a little",NA
+"SF36_10",3,"No, not limited at all",NA
+"SF36_11",NA,"The following items are about activities you might do during a typical day. Does your health now limit you in these activities? If so, how much? - Walking one block","varlab"
+"SF36_11",1,"Yes, limited a lot",NA
+"SF36_11",2,"Yes, limited a little",NA
+"SF36_11",3,"No, not limited at all",NA
+"SF36_12",NA,"The following items are about activities you might do during a typical day. Does your health now limit you in these activities? If so, how much? - Bathing or dressing yourself","varlab"
+"SF36_12",1,"Yes, limited a lot",NA
+"SF36_12",2,"Yes, limited a little",NA
+"SF36_12",3,"No, not limited at all",NA
+"SF36_13",NA,"During the past 4 weeks, have you had any of the following problems with your work or other regular daily activities as a result of your physical health? - Cut down the amount of time you spent on work or other activities","varlab"
+"SF36_13",1,"Yes",NA
+"SF36_13",2,"No",NA
+"SF36_14",NA,"During the past 4 weeks, have you had any of the following problems with your work or other regular daily activities as a result of your physical health? - Accomplished less than you would like","varlab"
+"SF36_14",1,"Yes",NA
+"SF36_14",2,"No",NA
+"SF36_15",NA,"During the past 4 weeks, have you had any of the following problems with your work or other regular daily activities as a result of your physical health? - Were limited in the kind of work or other activities","varlab"
+"SF36_15",1,"Yes",NA
+"SF36_15",2,"No",NA
+"SF36_16",NA,"During the past 4 weeks, have you had any of the following problems with your work or other regular daily activities as a result of your physical health? - Had difficulty performing the work or other activities (for example, it took extra effort)","varlab"
+"SF36_16",1,"Yes",NA
+"SF36_16",2,"No",NA
+"SF36_17",NA,"During the past 4 weeks, have you had any of the following problems with your work or other regular daily activities as a result of any emotional problems (such as feeling depressed or anxious)? - Cut down the amount of time you spent on work or other activities","varlab"
+"SF36_17",1,"Yes",NA
+"SF36_17",2,"No",NA
+"SF36_18",NA,"During the past 4 weeks, have you had any of the following problems with your work or other regular daily activities as a result of any emotional problems (such as feeling depressed or anxious)? - Accomplished less than you would like","varlab"
+"SF36_18",1,"Yes",NA
+"SF36_18",2,"No",NA
+"SF36_19",NA,"During the past 4 weeks, have you had any of the following problems with your work or other regular daily activities as a result of any emotional problems (such as feeling depressed or anxious)? - Didnt do other activities as carefully as usual","varlab"
+"SF36_19",1,"Yes",NA
+"SF36_19",2,"No",NA
+"SF36_20",NA,"During the past 4 weeks, to what extent has your physical health or emotional problems interfered with your normal social activities with family, friends, neighbors, or other groups?","varlab"
+"SF36_20",1,"Not at all",NA
+"SF36_20",2,"Slightly",NA
+"SF36_20",3,"Moderately",NA
+"SF36_20",4,"Quite a bit",NA
+"SF36_20",5,"Extremely",NA
+"SF36_21",NA,"How much bodily pain have you had during the past 4 weeks?","varlab"
+"SF36_21",1,"None at all",NA
+"SF36_21",2,"Very Mild",NA
+"SF36_21",3,"Mild",NA
+"SF36_21",4,"Moderate",NA
+"SF36_21",5,"Severe",NA
+"SF36_21",6,"Very Severe",NA
+"SF36_22",NA,"During the past 4 weeks, how much did pain interfere with your normal work (including both work outside the home and housework)","varlab"
+"SF36_22",1,"None at all",NA
+"SF36_22",2,"A little",NA
+"SF36_22",3,"A moderate amount",NA
+"SF36_22",4,"Quite a bit",NA
+"SF36_22",5,"Extremely",NA
+"SF36_23",NA,"These questions are about how you feel and how things have been with you during the past 4 weeks. For each question, please give the one answer that comes closest to the way you have been feeling.
+How much of the time during the past 4 weeks... - Did you feel full of pep?","varlab"
+"SF36_23",1,"All of the time",NA
+"SF36_23",2,"Most of the time",NA
+"SF36_23",3,"A good bit of the time",NA
+"SF36_23",4,"Some of the time",NA
+"SF36_23",5,"A little of the time",NA
+"SF36_23",6,"None of the time",NA
+"SF36_24",NA,"These questions are about how you feel and how things have been with you during the past 4 weeks. For each question, please give the one answer that comes closest to the way you have been feeling.
+How much of the time during the past 4 weeks... - Have you been a very nervous person?","varlab"
+"SF36_24",1,"All of the time",NA
+"SF36_24",2,"Most of the time",NA
+"SF36_24",3,"A good bit of the time",NA
+"SF36_24",4,"Some of the time",NA
+"SF36_24",5,"A little of the time",NA
+"SF36_24",6,"None of the time",NA
+"SF36_25",NA,"These questions are about how you feel and how things have been with you during the past 4 weeks. For each question, please give the one answer that comes closest to the way you have been feeling.
+How much of the time during the past 4 weeks... - Have you felt so down in the dumps that nothing could cheer you up?","varlab"
+"SF36_25",1,"All of the time",NA
+"SF36_25",2,"Most of the time",NA
+"SF36_25",3,"A good bit of the time",NA
+"SF36_25",4,"Some of the time",NA
+"SF36_25",5,"A little of the time",NA
+"SF36_25",6,"None of the time",NA
+"SF36_26",NA,"These questions are about how you feel and how things have been with you during the past 4 weeks. For each question, please give the one answer that comes closest to the way you have been feeling.
+How much of the time during the past 4 weeks... - Have you felt calm and peaceful?","varlab"
+"SF36_26",1,"All of the time",NA
+"SF36_26",2,"Most of the time",NA
+"SF36_26",3,"A good bit of the time",NA
+"SF36_26",4,"Some of the time",NA
+"SF36_26",5,"A little of the time",NA
+"SF36_26",6,"None of the time",NA
+"SF36_27",NA,"These questions are about how you feel and how things have been with you during the past 4 weeks. For each question, please give the one answer that comes closest to the way you have been feeling.
+How much of the time during the past 4 weeks... - Did you have a lot of energy?","varlab"
+"SF36_27",1,"All of the time",NA
+"SF36_27",2,"Most of the time",NA
+"SF36_27",3,"A good bit of the time",NA
+"SF36_27",4,"Some of the time",NA
+"SF36_27",5,"A little of the time",NA
+"SF36_27",6,"None of the time",NA
+"SF36_28",NA,"These questions are about how you feel and how things have been with you during the past 4 weeks. For each question, please give the one answer that comes closest to the way you have been feeling.
+How much of the time during the past 4 weeks... - Have you felt downhearted and blue?","varlab"
+"SF36_28",1,"All of the time",NA
+"SF36_28",2,"Most of the time",NA
+"SF36_28",3,"A good bit of the time",NA
+"SF36_28",4,"Some of the time",NA
+"SF36_28",5,"A little of the time",NA
+"SF36_28",6,"None of the time",NA
+"SF36_29",NA,"These questions are about how you feel and how things have been with you during the past 4 weeks. For each question, please give the one answer that comes closest to the way you have been feeling.
+How much of the time during the past 4 weeks... - Did you feel worn out?","varlab"
+"SF36_29",1,"All of the time",NA
+"SF36_29",2,"Most of the time",NA
+"SF36_29",3,"A good bit of the time",NA
+"SF36_29",4,"Some of the time",NA
+"SF36_29",5,"A little of the time",NA
+"SF36_29",6,"None of the time",NA
+"SF36_30",NA,"These questions are about how you feel and how things have been with you during the past 4 weeks. For each question, please give the one answer that comes closest to the way you have been feeling.
+How much of the time during the past 4 weeks... - Have you been a happy person?","varlab"
+"SF36_30",1,"All of the time",NA
+"SF36_30",2,"Most of the time",NA
+"SF36_30",3,"A good bit of the time",NA
+"SF36_30",4,"Some of the time",NA
+"SF36_30",5,"A little of the time",NA
+"SF36_30",6,"None of the time",NA
+"SF36_31",NA,"These questions are about how you feel and how things have been with you during the past 4 weeks. For each question, please give the one answer that comes closest to the way you have been feeling.
+How much of the time during the past 4 weeks... - Did you feel tired?","varlab"
+"SF36_31",1,"All of the time",NA
+"SF36_31",2,"Most of the time",NA
+"SF36_31",3,"A good bit of the time",NA
+"SF36_31",4,"Some of the time",NA
+"SF36_31",5,"A little of the time",NA
+"SF36_31",6,"None of the time",NA
+"SF36_32",NA,"During the past 4 weeks, how much of the time has your physical health or emotional problems interfered with your social activities (like visiting with friends, relatives, etc.)?","varlab"
+"SF36_32",1,"All of the time",NA
+"SF36_32",2,"Most of the time",NA
+"SF36_32",3,"Some of the time",NA
+"SF36_32",4,"A little of the time",NA
+"SF36_32",5,"None of the time",NA
+"SF36_33",NA,"How TRUE or FALSE is each of the following statements for you? - I seem to get sick a little easier than other people","varlab"
+"SF36_33",1,"Definitely true",NA
+"SF36_33",2,"Mostly true",NA
+"SF36_33",3,"Dont know",NA
+"SF36_33",4,"Mostly false",NA
+"SF36_33",5,"Definitely false",NA
+"SF36_34",NA,"How TRUE or FALSE is each of the following statements for you? - I am as healthy as anybody I know","varlab"
+"SF36_34",1,"Definitely true",NA
+"SF36_34",2,"Mostly true",NA
+"SF36_34",3,"Dont know",NA
+"SF36_34",4,"Mostly false",NA
+"SF36_34",5,"Definitely false",NA
+"SF36_35",NA,"How TRUE or FALSE is each of the following statements for you? - I expect my health to get worse","varlab"
+"SF36_35",1,"Definitely true",NA
+"SF36_35",2,"Mostly true",NA
+"SF36_35",3,"Dont know",NA
+"SF36_35",4,"Mostly false",NA
+"SF36_35",5,"Definitely false",NA
+"SF36_36",NA,"How TRUE or FALSE is each of the following statements for you? - My health is excellent","varlab"
+"SF36_36",1,"Definitely true",NA
+"SF36_36",2,"Mostly true",NA
+"SF36_36",3,"Dont know",NA
+"SF36_36",4,"Mostly false",NA
+"SF36_36",5,"Definitely false",NA
+"flag_dupe_survey",NA,"TRUE: data from userid that have more than 1 occurrence; FALSE: data from unique userid","varlab"
+"flag_most_complete_survey",NA,"TRUE: data from unique userid or has the highest progress among duplicated responses; FALSE: duplicated responses that don’t have the highest progress; SAME: duplicated response that share the same progress","varlab"
+"flag_failed_recording_test",NA,"TRUE if participants failed teh recording test. NAs were retained","varlab"
+"flag_no_survey",NA,"TRUE if participants didn't provide any survey data; FALSE if at least 1 survey item was recorded","varlab"
+"max_identical",NA,"The number if identical survey responses in a seqeunce","varlab"
+"max_identical_perc",NA,"The perceptage of identical survey responses in a seqeunce out of all survey items","varlab"
+"flag_rec_include",NA,"TRUE if WB team recommend to include this observation. Criteria include:- at least some survey data
+- did not failed both attention check questions 
+- is the most completed survey if there were duplicates. ","varlab"
+"demo_race_combine",NA,"coalesced responses of the question 'Please specify your race and/or ethnicity.''multiracial' if multiple categories were selected. (Latinx/Hispanic was not included)","varlab"
 "demo_ethnicity",NA,"whether particpants self-identify as Latinx/Hispanic, Is not coalesed with racial categories","varlab"
-"arkansas_HC_location_AB_AK",NA,"In the last 12 months, have you or people in your household gotten health services at any of the places below? Choose all that apply","varlab"
-"healthy_needs_AB_3",NA,"Which of the things below would help you or others in your household to get healthy or stay healthy? Please select all that apply","varlab"
-"adult_HC_barriers_AB_4",NA,"In the last 12 months, which of these problems kept you or other adults in your household from getting the health care or medicine you needed? (Choose all that apply)","varlab"
-"adult_mentalHC_barriers_AB_5",NA,"In the last 12 months, which of these problems kept you or other adults in your household from getting the mental health care you needed? (Choose all that apply)","varlab"
-"child_mentalHC_barriers_AB_6",NA,"In the last 12 months, which of these problems kept children in your household from getting the mental health care they needed? (Choose all that apply)","varlab"
-"teleheath_barriers_AB_7",NA,"In the last 12 months, which of these problems kept you or anyone in your household from getting a telehealth or video visit with a health care worker? Choose all that apply","varlab"
+"arkansas_HC_location_AB_AK_combine",NA,"In the last 12 months, have you or people in your household gotten health services at any of the places below? Choose all that apply","varlab"
+"healthy_needs_AB_3_combine",NA,"Which of the things below would help you or others in your household to get healthy or stay healthy? Please select all that apply","varlab"
+"adult_HC_barriers_AB_4_combine",NA,"In the last 12 months, which of these problems kept you or other adults in your household from getting the health care or medicine you needed? (Choose all that apply)","varlab"
+"adult_mentalHC_barriers_AB_5_combine",NA,"In the last 12 months, which of these problems kept you or other adults in your household from getting the mental health care you needed? (Choose all that apply)","varlab"
+"child_mentalHC_barriers_AB_6_combine",NA,"In the last 12 months, which of these problems kept children in your household from getting the mental health care they needed? (Choose all that apply)","varlab"
+"teleheath_barriers_AB_7_combine",NA,"In the last 12 months, which of these problems kept you or anyone in your household from getting a telehealth or video visit with a health care worker? Choose all that apply","varlab"
 "AB_2_important_1",NA,"The most important things the health care organizations are working on","varlab"
 "AB_2_important_2",NA,"The second important things the health care organizations are working on","varlab"
 "AB_2_important_3",NA,"The third important things the health care organizations are working on","varlab"
@@ -1669,6 +1873,7 @@ get along with other people?","varlab"
 "SDOH_6_R",NA,"During the past 12 months has a lack of reliable transportation kept you from medical appointments, meetings, work, or from getting things needed for daily living?","varlab"
 "SDOH_3_R",NA,"During the past 12 months how often did the food that you bought not last, and you didn’t have money to get more?","varlab"
 "SDOH_7_R",NA,"Stress means a situation in which a person feels tense, restless, nervous or anxious or is unable to sleep at night because their mind is troubled all the time. Within the last 30 days, how often have you felt this kind of stress?","varlab"
+"SDOH_tot",NA,"social determinants of health total score","varlab"
 "CH_1_R",NA,"Have you ever been told by a doctor, nurse, or other health professional that you have high blood pressure?","varlab"
 "CH_2_R",NA,"Have you ever been told by a doctor, nurse or other health professional that your cholesterol is high?","varlab"
 "CH_3_15_1_R",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - a heart attack also called a myocardial infarction?","varlab"
@@ -1684,7 +1889,8 @@ get along with other people?","varlab"
 "CH_3_15_11_R",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - An anxiety disorder?","varlab"
 "CH_3_15_12_R",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - Another serious mental illness, such as bipolar, schizophrenia, or psychosis?","varlab"
 "CH_3_15_13_R",NA,"Has a doctor, nurse, or other health professional ever told you that you had any of the following? - Substance abuse disorder?","varlab"
-"PRBQ_tot",NA,"PRBQ total score","varlab"
+"CH_tot",NA,"core health total score","varlab"
+"PRBQ_tot",NA,"PRBQ(risky behaviors) total score","varlab"
 "SF36_Physical_functioning",NA,"SF36 physical functioning subscale","varlab"
 "SF36_PH_limitations",NA,"SF36 physical health limitations subscale","varlab"
 "SF36_MH_limitations",NA,"SF36 mental health limitations subscale","varlab"
