@@ -1,0 +1,127 @@
+---
+title: "prompt_persona_data"
+author: "Bernice Cheung"
+date: "2023-09-08"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    highlight: tango
+    theme: united
+    toc: yes
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+  github_document:
+    toc: true
+    toc_depth: 2
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = FALSE, warning = FALSE, message = FALSE)
+```
+
+Standardize Let’s Talk About Well-being dataset based on the variable name and demographic dictionary. 
+
+# Prepping {.tabset}
+
+## load libraries
+```{r libraries}
+library(tidyverse)
+library(here)
+library(psych)
+library(janitor)
+library(broom)
+library(gt)
+library(gtsummary)
+library(dplyr)
+```
+
+## load data 
+
+```{r}
+prompt_df <- read.csv(here("outputs", "prolific_prompt_df_std_110923.csv"))
+prompt_var_sum <- read.csv(here("outputs", "prolific_prompt_var_summary_110923.csv"))
+```
+
+## load functions
+```{r}
+factor_summary <- function(df, varname_sum){
+  
+  # extract factor name
+  factor_var_df <- varname_sum %>%
+  filter(var_class == "factor") %>%
+  filter(!str_detect(var_name, "demo_"))
+
+  factor_varname <- factor_var_df$var_name
+  
+  # extract factor data
+  factor_df <- df %>%
+  select(one_of(factor_varname))
+
+  # extract levels and their total number
+  factor_levels <- sapply(factor_df, levels)
+  factor_levels_n <- sapply(factor_levels, length)
+  
+   factor_levels_df <- map_dfr(names(factor_levels), ~ data.frame(var_name = .x, levels = unlist(factor_levels[[.x]]))) %>%
+    nest(factor_levels = c(levels), .by = var_name, .key = "demo_level_name")
+  
+  # combine
+  factor_sum <- data.frame("var_name" = factor_var_df$var_name, 
+                                 "factor_levels_n" = factor_levels_n) %>%
+    left_join(factor_levels_df, by = "var_name")
+  
+  return(factor_sum)
+  
+}
+
+```
+
+# transform the dataset
+```{r}
+# extract categorical variables(factors and booleans)
+varname_trans_df <- prompt_var_sum %>%
+  filter(var_class %in% c("factor", "logical"))
+```
+
+
+
+## variable selection
+
+select item types that are relevant to clustering
+```{r}
+item_type_select <- c("scale", "subscale", "demo", "strength_item", "demo_raw", "data_screen_flags")
+
+
+prompt_var_sum_select <- prompt_var_sum %>%
+  filter(item_type %in% item_type_select | var_name == "userid") %>%
+  filter(var_name != "swls_tot_f") %>%
+  filter(var_name != "demo_ethnicity__99")
+
+varname_select <- prompt_var_sum_select$var_name
+```
+
+## subset and transform dataset
+
+```{r}
+varname_turn_num <- prompt_var_sum_select %>%
+  filter(var_class %in% c("factor", "logical"))
+varname_turn_num <- varname_turn_num$var_name
+
+prompt_df_select_num <- prompt_df %>%
+  select(all_of(varname_select)) %>%
+  mutate(across(all_of(varname_turn_num), as.factor)) %>%
+  mutate(across(all_of(varname_turn_num), as.numeric)) 
+
+write.csv(prompt_df_select_num, here("outputs", "prolific_prompt_select_num.csv"), row.names = F)
+```
+
+## generate a codebook
+
+```{r}
+
+```
+
+
+

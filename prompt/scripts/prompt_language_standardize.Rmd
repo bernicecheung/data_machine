@@ -1,0 +1,465 @@
+---
+title: "prompt_language_standardize"
+author: "Bernice Cheung"
+date: "2023-09-08"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    highlight: tango
+    theme: united
+    toc: yes
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+  github_document:
+    toc: true
+    toc_depth: 2
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = FALSE, warning = FALSE, message = FALSE)
+```
+
+Standardize Let’s Talk About Well-being dataset based on the variable name and demographic dictionary. 
+
+# Prepping {.tabset}
+
+## load libraries
+```{r libraries}
+library(tidyverse)
+library(here)
+library(psych)
+library(janitor)
+library(broom)
+library(gt)
+library(gtsummary)
+library(dplyr)
+```
+
+## load data
+```{r}
+# load cleaned datasets
+prompt_df <- read.csv(here("outputs", "prolific_prompt_data_scored.csv"))
+
+# load item variable dictionary
+#varname_dic <- read.csv(here("outputs", "varname_dic_030823.csv"))
+
+# load demographic level dictionary
+#demo_dic <- read.csv(here("outputs", "demo_level_dic_020823.csv"))
+```
+
+## org_varname function
+A function to organize variable names
+```{r}
+org_varname <- function(dataframe){
+  scale_df <- data.frame("var_name" = colnames(dataframe), 
+                            "var_class" = sapply(dataframe, class)) %>%
+  separate(var_name, into = c("scale_prefix", "item_suffix"), sep = "_", remove = FALSE, extra = "merge") %>%
+  mutate(num_item = grepl("\\d", item_suffix))
+  
+  scale_df <- scale_df %>%
+  mutate(item_type = case_when(
+    str_detect(scale_prefix, "(?i)Consent") ~ "metadata",
+    str_detect(scale_prefix, "(?i)recording") ~ "metadata",
+    str_detect(scale_prefix, "(?i)demo") ~ "demo",
+    str_detect(scale_prefix, "(?i)flag") ~ "data_screen_flags",
+    str_detect(scale_prefix, "(?i)max") ~ "data_screen_flags",
+    str_detect(scale_prefix, "(?i)Attention") ~ "attention_check",
+    str_detect(scale_prefix, "(?i)Prompt") ~ "prompt_meta",
+    str_detect(item_suffix, "(?i)Prompt") ~ "prompt_meta",
+    str_detect(item_suffix, "(?i)combine") ~ "coalesced responses",
+    str_detect(item_suffix, "(?i)Text") ~ "supplement responses",
+    str_detect(item_suffix, "(?i)prolific") ~ "prolific_metadata",
+    str_detect(item_suffix, "(?i)_tot") ~ "subscale",
+    str_detect(item_suffix, "(?i)_R$") ~ "reverse_scored_item",
+    str_detect(scale_prefix, "(?i)flag") ~ "data_screen_flags",
+    num_item ~ "item",
+    !is.na(item_suffix) & !num_item & var_class != "character" ~ "subscale",
+    scale_prefix == "outro" ~ "feedback", 
+    TRUE ~ "metadata"
+  ))
+  
+  return(select(scale_df, -num_item))
+}
+```
+
+## compare_varname function
+
+A function to compare the variable names from the dataset against the dictionary
+```{r}
+compare_varname <- function(varname_dic, df){
+  
+  
+  # add row index to the project dataframe
+  df_compare <- df %>%
+    mutate(row_idx = row_number()) %>%
+    select(var_name, var_class, row_idx)
+  
+  # merge the project dataframe with the variable name dictionary
+  matched_df <- varname_dic %>%
+    left_join(df_compare, by = c("common_name" = "var_name"), suffix =c("_dic", "_df"))
+  
+  # identify unmatched rows from the project dataframe
+  unmatched_df <- anti_join(df_compare, varname_dic, by = c("var_name" = "common_name"))
+  
+  return(list(matched_df = matched_df, unmatched_df = unmatched_df))
+  
+}
+```
+
+## rename_match function
+
+A function to rename variable names based on the naming convention
+
+```{r}
+rename_var_std <- function(df) {
+  df %>%
+    #clean_names() %>% # use janitor::clean_names for a more thorough cleanup
+    rename_with(~ tolower(gsub(".", "_", .x, fixed = TRUE))) %>% # replace "." by "_" and change everything into lower case
+    rename_with(~ str_replace_all(., "(\\d+)", function(x) sprintf("%02d", as.numeric(x))), .cols = everything()) #add padding 0 to all numeric index
+}
+```
+
+## std_var_name function
+
+A function to standardize variable names. It renames matched variables based on the dictionary and renames unmatched variables based on the naming convention
+```{r}
+std_var_name <- function(df, varname_dic){
+  
+  # organize variable name
+  varname_df <- org_varname(df)
+  
+  # rename matched variable
+  # compare the project variable against the variable name dictionary
+  df_compare_results <- compare_varname(varname_dic, varname_df)
+  # subset a dataset with comparable variables 
+  matched_df <- df_compare_results$matched_df
+  # rename the variable names based on the matched names from the dictionary
+  colnames(df)[matched_df$row_idx] <- matched_df$std_varname
+  
+  # rename unmatched variable
+  df_rn <- rename_var_std(df)
+  
+  # organize standardized variable name 
+  varname_df_std <- org_varname(df_rn)  %>% # create a summary table
+    mutate(ori_name = varname_df$var_name) %>%
+    mutate(match_dic = row_number() %in% matched_df$row_idx)
+  
+  std_results <- list(df_std = df_rn, varname_sum_std = varname_df_std)
+  return(std_results)
+}
+```
+
+## value_between
+
+```{r}
+value_between <- function(vec, start, end){
+  
+  result <- vec[(which(vec == start)):(which(vec == end))]
+  
+  return(result)
+}
+```
+
+## as_factor_same
+
+```{r}
+as_factor_same <- function(df, var_names){
+  df_f <- df %>%
+    mutate(across(var_names, ~as.factor(.)))
+  
+  return(df_f)
+}
+```
+
+## as_factor_recode
+```{r}
+as_factor_recode <- function(df, var_names, vec_recode_pattern){
+  df_f <- df %>%
+    mutate(across(var_names, ~as.factor(.))) %>%
+    mutate(across(var_names, ~recode_factor(., !!!vec_recode_pattern)))
+  
+  return(df_f)
+}
+```
+
+
+## demo_summary function
+
+A function to summarize demographic variables and levels
+```{r}
+demo_summary <- function(dataframe){
+  
+  # convert all demo variables into factors
+  demo_df <- dataframe %>%
+    select(contains("Demo")) %>%
+    mutate_all(as.factor)
+  
+  # extract levels and their total number
+  demo_levels <- sapply(demo_df, levels)
+  demo_levels_n <- sapply(demo_levels, length)
+  
+  # transform the levels into a dataframe
+  demo_levels_df <- map_dfr(names(demo_levels), ~ data.frame(demo_var = .x, levels = unlist(demo_levels[[.x]]))) %>%
+    nest(demo_levels = c(levels), .by = demo_var, .key = "demo_level_name")
+  
+  # combine
+  demo_sum <- data.frame("demo_var" = colnames(demo_df), 
+                                 "demo_levels_n" = demo_levels_n) %>%
+    left_join(demo_levels_df, by = "demo_var") %>%
+    unnest(demo_levels)
+  
+  return (demo_sum)
+}
+```
+
+## compare_demo function
+
+A function to compare demographic levels against the dictionary
+```{r}
+compare_demo <- function(demo_dic, df){
+  
+  # organize demographic levels
+  demo_level_df <- demo_summary(df)
+
+  # compare demographic variables and number of levels
+  demo_dic_sum <- demo_dic %>%
+    nest(levels) %>%
+    rename(demo_levels = data)
+  
+  demo_df_sum <- demo_level_df %>%
+    nest(levels) %>%
+    rename(demo_levels = data)
+  
+  demo_sum_compare <- demo_dic_sum %>%
+    full_join(demo_df_sum, by = c("common_name" = "demo_var"), suffix = c("_dic", "_df"))
+  
+  # check demographic variables that are not included in the dataset 
+  missing_demo_var <- anti_join(demo_dic_sum, demo_df_sum, by = c("common_name" = "demo_var"))
+  
+  if(nrow(missing_demo_var) != 0) {
+    missing_demo <- sprintf("Demographic variables that are not included in the dataset: %s \n", missing_demo_var$common_name)
+    cat(missing_demo)
+  } else {
+    cat("All demographic variables from the dictionary are included in the dataset \n")
+  } 
+  
+  # check demographic variables that are not included in the dictionary
+  additional_demo_var <- anti_join(demo_df_sum, demo_dic_sum, by = c("demo_var" = "common_name"))
+
+  if(nrow(additional_demo_var) != 0) {
+    missing_demo <- sprintf("Demographic variables that are not included in the dictionary: %s \n", additional_demo_var$demo_var)
+    cat(missing_demo)
+  } else {
+    cat("No additional demographic varialbe is included in the dataset \n")
+  } 
+  
+  
+  # compare items & subscales
+  demo_compare_eval <- demo_sum_compare %>% 
+  mutate(
+         same_demo_n = identical(demo_levels_n_dic, demo_levels_n_df), # check if the index of items are identical
+         same_demo_level = identical(demo_levels_dic, demo_levels_df)
+         ) # check if the numes of subscales are identical
+  
+  return(demo_compare_eval)
+  
+}
+```
+
+## std_demo_level
+```{r}
+std_demo_level <- function(df, demo_dic) {
+  
+  # standardize demographic levels based on naming conventions
+  df_rl <- df %>%
+    mutate_at(vars(starts_with("demo_")), ~replace(., . == "", NA)) %>% # replace empty strings with NA
+    mutate_at(vars(starts_with("demo_")), ~str_to_lower(.)) # transform all categories into lower_case
+  
+  # compare demographic levels against dictionary
+  demo_sum_compare <- compare_demo(demo_dic, df_rl)
+  
+  # generate a summary of demographic levels
+  demo_level_sum <- demo_summary(df_rl)
+  
+  std_demo_l <- list(df_rl = df_rl, demo_level_sum = demo_level_sum)
+  
+  return(std_demo_l)
+  
+}
+```
+
+## factor_summary
+```{r}
+factor_summary <- function(df, varname_sum){
+  
+  # extract factor name
+  factor_var_df <- varname_sum %>%
+  filter(var_class == "factor") %>%
+  filter(!str_detect(var_name, "demo_"))
+
+  factor_varname <- factor_var_df$var_name
+  
+  # extract factor data
+  factor_df <- df %>%
+  select(one_of(factor_varname))
+
+  # extract levels and their total number
+  factor_levels <- sapply(factor_df, levels)
+  factor_levels_n <- sapply(factor_levels, length)
+  
+   factor_levels_df <- map_dfr(names(factor_levels), ~ data.frame(var_name = .x, levels = unlist(factor_levels[[.x]]))) %>%
+    nest(factor_levels = c(levels), .by = var_name, .key = "demo_level_name")
+  
+  # combine
+  factor_sum <- data.frame("var_name" = factor_var_df$var_name, 
+                                 "factor_levels_n" = factor_levels_n) %>%
+    left_join(factor_levels_df, by = "var_name")
+  
+  return(factor_sum)
+  
+}
+
+```
+
+# A summery of orignal variable names
+
+```{r}
+ori_varname <- org_varname(prompt_df)
+
+ori_varname %>%
+  gt(caption = "Prolific Prompt Language Original Variables")
+```
+
+
+# change item class
+
+## recode character to factor without changing levels
+```{r}
+# check all character variables
+prompt_char_df <- ori_varname %>%
+  filter(var_class == "character")
+
+prompt_char_df %>%
+  gt(caption = "All character variables")
+
+# identify variables that need to be recoded as factors
+chr_col_names <- prompt_char_df$var_name 
+
+f_varname <- c(value_between(chr_col_names, "Demo_gender", "VIS_Strengths"),
+               value_between(chr_col_names, "Goal_1_why", "ValueProp_3_9"),
+               value_between(chr_col_names, "ValueProp_4", "ValueProp_5_9"), 
+               value_between(chr_col_names, "ValueProp_6_1", "ValueProp_6_10"), 
+               value_between(chr_col_names, "ValueProp_7", "ValueProp_8_3"), 
+               value_between(chr_col_names, "ValueProp_9", "ValueProp_10_10"), 
+               value_between(chr_col_names, "Sex_prolific", "P4.3"),
+               value_between(chr_col_names, "status_prolific_api", "SWLS_tot_f"),"Fluent.languages_prolific")
+
+# recode them as factors
+prompt_df_rc <- as_factor_same(prompt_df, f_varname)
+
+# check remaining character variables
+org_varname(prompt_df_rc) %>%
+  filter(var_class == "character")
+```
+
+## recode integer to factor 
+```{r}
+# check all integer variables
+prompt_int_df <- ori_varname %>%
+  filter(var_class == "integer")
+
+prompt_int_df %>%
+  gt(caption = "All integer variables")
+
+# recode variables where 2 = no instead of 0 = no
+recode_no_var <- c("Prompt_4_1A_confirm", "Prompt_4_2A_confirm", "Prompt_1_2B_confirm", "Prompt_2_2B_confirm", "Prompt_1_3A_confirm", "Prompt_7_1_confirm", "Prompt_7_3_confirm", "Prompt_8_3_confirm", "Prompt_8_4_confirm")
+
+prompt_df_rc_corr <- prompt_df_rc %>%
+  mutate(across(all_of(recode_no_var), ~ case_when(. == 2 ~ 0,
+                                                   TRUE ~ .)))
+
+# recode integer into boolean
+recode_varname_bool <- c(grep("_confirm", colnames(prompt_df_rc_corr), value = TRUE), "Recording_test")
+
+prompt_df_rc_bool <- prompt_df_rc_corr %>%
+  mutate(across(all_of(recode_varname_bool), ~ case_when(. == 0 ~ FALSE,
+                                                    . == 1 ~ TRUE)))
+
+# check all variable class
+org_varname(prompt_df_rc_bool) %>%
+  gt()
+```
+
+# Standardize variable names
+
+```{r}
+# rename variable according to the naming convention
+prompt_df_rn <- rename_var_std(prompt_df_rc_bool)
+
+# create a summary table
+prompt_rn_sum <- org_varname(prompt_df_rn) %>%
+  mutate(ori_name = names(prompt_df_rc_bool))
+
+prompt_rn_sum %>% gt()
+```
+
+# change item type
+```{r}
+#metadata variables 
+meta_var <-c("survey_part", "duration__in_seconds_")
+
+
+# adjust item type
+prompt_rn_sum_new <- prompt_rn_sum %>%
+  mutate(item_type = case_when(
+    var_name %in% meta_var ~ "metadata", 
+    str_detect(var_name, "demo_ethnicity_") ~ "demo_raw", 
+    var_name %in% c("pre_valence_01", "pre_arousal_01") ~ "pre_affect", 
+    var_name %in% c("post_valence_01", "post_arousal_01") ~ "post_affect", 
+    var_name == "vis_strengths" ~ "strength_item", 
+    var_name == "study_feedback" ~ "feedback",
+    var_name == "prolific_nowebsite" ~ "prolific_metadata", 
+    var_name == "sfi_goal_orientation_tot" ~ "subscale", 
+    str_detect(var_name, "goal") ~ "goal_item", 
+    str_detect(var_name, "valueprop") ~ "value_prop", 
+    str_detect(var_name, "topic") ~ "topic_label", 
+    str_detect(var_name, "_easy") ~ "prompt_ratings", 
+    str_detect(var_name, "_value") ~ "prompt_ratings", 
+    str_detect(var_name, "_feelgood") ~ "prompt_ratings", 
+    str_detect(var_name, "_feedback") ~ "prompt_feedback", 
+    str_detect(var_name, "_thought") ~ "prompt_thoughts", 
+    var_name %in% c("swls_tot", "swls_tot_f", "rrs_tot", "sfi_tot") ~ "scale", 
+    TRUE ~ item_type
+  )) 
+
+prompt_rn_sum_new %>%
+  gt(caption = "Prolific Prompt Study Standardized Variable Name Summary")
+```
+
+# create a dictionary for all categorical variables
+
+```{r}
+# extract categorical variables(factors and booleans)
+varname_cat_df <- prompt_rn_sum_new %>%
+  filter(var_class %in% c("factor", "logical"))
+
+varname_cat <- varname_cat_df
+```
+
+
+
+
+
+```{r}
+# write outputs
+current_date <- format(Sys.Date(), "%d%m%y")
+
+#write.csv(prompt_df_rn, here("outputs", paste("prolific_prompt_df_std_", current_date, ".csv", sep = "")), row.names = F)
+#write.csv(prompt_rn_sum_new, here("outputs", paste("prolific_prompt_var_summary_", current_date, ".csv", sep = "")), row.names = F)
+#write.csv(demo_level_sum, here("outputs", paste("ltaw_demo_summary_", current_date, ".csv", sep = "")), row.names = F)
+
+```
+

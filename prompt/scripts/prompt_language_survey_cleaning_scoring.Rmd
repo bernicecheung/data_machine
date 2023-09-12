@@ -1,0 +1,1227 @@
+---
+title: "prolific_prompt_language_survey_cleaning"
+author: "Kristina Dale"
+date: "2023-08-29"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    highlight: tango
+    theme: united
+    toc: yes
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+  github_document:
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache = TRUE)
+options(scipen=999)
+```
+
+# load packages
+```{r b_edit}
+if(!require('pacman')) {
+	install.packages('pacman')
+}
+
+# added here and psych package
+pacman::p_load(tidyverse, labelled, devtools, haven, expss, DT, qwraps2, remotes, readxl, retidytext, openxlsx, reactable, reactablefmtr, ggwordcloud, topicmodels,here,psych,rio, install = TRUE)
+```
+
+# define aesthetics
+```{r}
+palette = c("#772e25", "#c44536", "#ee9b00", "#197278", "#283d3b", "#9CC5A1", "#ADA7C9", "grey50")
+palette_type = c("#c44536", "#ee9b00", "#197278")
+palette_pilot = c("#c44536", "#197278")
+palette_sentiment = c(palette[2], palette[4])
+plot_aes = theme_minimal() +
+  theme(legend.position = "top",
+        legend.text = element_text(size = 8),
+        text = element_text(size = 12, family = "Futura Medium"),
+        axis.text = element_text(color = "black"),
+        axis.ticks.y = element_blank())
+```
+
+# define variables & directory
+
+These will change on a per-study basis. Important things to define here may include:
+- the current working directory or project directory (all files should be within this directory)
+- survey name
+- name of raw data file (exported from Qualtrics as .sav)
+- name of prolific data export file (exported from prolific as .csv)
+- expected length of ID variable (for Prolific, 24; for Lotic Labs, 4 [will vary])
+- correct responses for attention checks (see study outline)
+- names of the first and last survey item (this is typically the first item after demographics, and the last item before any value prop/feedback items)
+- [for Prolific studies] dataframe names for post-study prolific status checks (this is to confirm we didnt miss anyone for payment)
+
+```{r}
+survey_name <- "prolific prompt language"
+raw_file_name_1 <- "Prompt Language Study_August 28, 2023_14.35.sav"
+raw_file_name_2 <- "Prompt Language Study Addendum_August 28, 2023_14.40.sav"
+
+prolific_user_file_1_1 <- "prolific_export_649cc00f67944b30b1fac962_part1_try1.csv"
+prolific_user_file_1_2 <- "prolific_export_64ae11e618c4cf67a67025f9_part1_try2.csv"
+prolific_user_file_2 <- "prolific_export_64af2e9f59da46550f687586.csv"
+prolific_id_length <- 24
+
+prolific_status_file_1_1 <- "prompt_study_part1_try1_api_export.csv"
+prolific_status_file_1_2 <- "prompt_study_part1_try2_api_export.csv"
+prolific_status_file_2 <- "prompt_study_part2_api_export.csv"
+
+first_survey1_var <- "SWLS_1"
+last_survey1_var <- "IMI_Reflect_12_1"
+
+first_survey2_var <- "SWLS_1"
+last_survey2_var <- "IMI_Reflect_12_1"
+
+#correct flags
+attention1_correct <- 3
+attention2_correct <- 5
+```
+
+# define functions
+```{r}
+value_between <- function(vec, start, end){
+  
+  result <- vec[(which(vec == start)):(which(vec == end))]
+  
+  return(result)
+}
+```
+
+
+# Basic Cleaning {.tabset}
+1. load & deidentify data 
+  1a. Prolific status check -- merge & address data deletion
+2. deduplication + duplicate summary
+3. summarize consent, terms & NDA (where applicable) + additional participant "electives" (e.g., here "content_recruit")
+4. attention checks & recording test
+5. summarize qualtrics completion (retention/completion rates) 
+
+## load & de-identify Qualtrics data 
+*notes: (1) this is pretty specific to prolific studies, can be adapted as needed [see calarts for example] (2)select line @ end will need to be adapted slightly based on any additional PII collected [see calarts]*
+This study included 2 parts.  Part 1 of the study was rolled out on Prolific in 2 batches, with 2 different recruitment strategies. The original study used the "Balanced Sample" recruitment strategy (keep the sample balanced on sex). To encourage further participation, we re-released the study soon after using the "Standard Sample" recruitment strategy, which has no limits on sex (this is referred to as "try 2" in the code). For the purposes of this report, both of these samples from part 1 are combined. Part 2 was designed as an extention to part 1, whereby participants who completed part 1 were invited back, thus, part 1 and 2 are also combined here. Note that all participants will not have complete data for both parts. This is flagged in this script.    
+    
+Here, we load, check, and de-identify our survey data. We define:
+- Part 1:
+  - total number of observations missing an ID [3], WITH completed survey data and consent [0]
+  - total number of observations after removal of test responses [4223]
+- Part 2:
+  - total number of observations missing an ID [1], WITH completed survey data and consent [0]
+  - total number of observations after removal of test responses [1645]
+```{r}
+#part 1 
+#survey1 <- rio::import("/Users/kristina/Documents/Surveys/NEW /DONE/00_DATA MACHINE/Prolific Promp Language Study/survey/01_cleaning_scoring/inputs/Prompt Language Study_August 28, 2023_14.35.sav")
+survey1 <- rio::import(here("inputs", raw_file_name_1))
+survey1$survey_name <- survey_name
+survey1$survey_part <- 1
+
+#missing ID check
+plyr::count(survey1$PROLIFIC_PID=="")
+survey1$PROLIFIC_PID <- ifelse(survey1$PROLIFIC_PID == "", survey1$Prolific_ID, survey1$PROLIFIC_PID)
+plyr::count(survey1$PROLIFIC_PID=="")
+survey1$PROLIFIC_PID <- ifelse(survey1$PROLIFIC_PID == "", survey1$ID_check, survey1$PROLIFIC_PID)
+plyr::count(survey1$PROLIFIC_PID=="")
+
+subset(survey1, survey1$PROLIFIC_PID=="") #confirm any missing IDs are blank data
+
+survey1_filtered <- survey1 %>%
+  filter(!PROLIFIC_PID == "") %>% # remove test responses
+  filter(nchar(PROLIFIC_PID) == prolific_id_length) %>%
+  filter(!DistributionChannel == "Preview") %>% # remove incomplete responses
+  select(-c(StartDate, EndDate, Status, Finished, RecipientLastName,  IPAddress,RecipientFirstName, RecipientEmail, LocationLatitude, LocationLongitude, DistributionChannel, UserLanguage)) %>% #remove cols #de-identify
+  dplyr::rename(userid = PROLIFIC_PID) %>% # standardize userIDs
+  dplyr::rename(Prompt_6_2_feelgood_1 = Prompt_6_2_feedback_1) %>% # correct typo
+  select(userid, everything()) %>% # move userID to the front
+  mutate(across(where(is.character), ~na_if(., ""))) #convert empty cell into NAs
+
+# add labels 
+attr(survey1_filtered$userid, "label") <- "User IDs that can be used for data merging"
+
+######## part 2
+#survey2 <- rio::import("/Users/kristina/Documents/Surveys/NEW /DONE/00_DATA MACHINE/Prolific Promp Language Study/survey/01_cleaning_scoring/inputs/Prompt Language Study Addendum_August 28, 2023_14.40.sav")
+survey2 <- rio::import(here("inputs", raw_file_name_2))
+survey2$survey_name <- survey_name
+survey2$survey_part <- 2
+
+#missing ID check
+plyr::count(survey2$PROLIFIC_PID=="")
+survey2$PROLIFIC_PID <- ifelse(survey2$PROLIFIC_PID == "", survey2$Prolific_ID, survey2$PROLIFIC_PID)
+plyr::count(survey2$PROLIFIC_PID=="")
+survey2$PROLIFIC_PID <- ifelse(survey2$PROLIFIC_PID == "", survey2$ID_check, survey2$PROLIFIC_PID)
+plyr::count(survey2$PROLIFIC_PID=="")
+
+subset(survey2, survey2$PROLIFIC_PID=="") #confirm any missing IDs are blank data #preview, test
+
+survey2_filtered <- survey2 %>%
+  filter(!PROLIFIC_PID == "") %>% # remove test responses
+  filter(nchar(PROLIFIC_PID) == prolific_id_length) %>%
+  filter(!DistributionChannel == "Preview") %>% # remove incomplete responses
+  select(-c(StartDate, EndDate, Status, Finished, RecipientLastName,  IPAddress,RecipientFirstName, RecipientEmail, LocationLatitude, LocationLongitude, DistributionChannel, UserLanguage)) %>% #remove cols #de-identify
+  dplyr::rename(userid = PROLIFIC_PID) %>% # standardize userIDs
+  select(userid, everything()) %>% # move userID to the front
+  mutate(across(where(is.character), ~na_if(., ""))) #convert empty cell into NAs
+
+
+#fixing a few mistakes in the datasets 
+# Accidentally named the feelgood variable as feedback in Qualtrics, fixing that here
+#survey1_tidy$Prompt_6_2_feelgood_1 <- survey1_tidy$Prompt_6_2_feedback_1 ; survey1_tidy$Prompt_6_2_feedback_1 <- NULL 
+```
+
+## Prolific status check {.tabset}
+
+[For Prolific studies] We flag for un-matched data (userid's) between the Prolific data export and the survey data, which can be used for more manual data checking by primary researcher. 
+
+50 participants returned the part 1 study in Prolific (+2 manual requests for removal), 0 returned part 2 (+1 manual request for removal), effectively revoking consent. There are various reasons for a user to return their survey, which are detailed below where possible. Data coming from these users is removed from the dataset here.  
+*notes for iteration: can add details via excel import/merge of notes?*
+
+### part 1; 2 prolific exports for try 1 and 2 (see above for details)
+
+Number of observations in Prolific website export [3666]
+```{r}
+#try 1
+#prolific1_1 <- read.csv("/Users/kristina/Documents/Surveys/NEW /DONE/00_DATA MACHINE/Prolific Promp Language Study/survey/01_cleaning_scoring/inputs/prolific_export_649cc00f67944b30b1fac962_part1_try1.csv")
+prolific1_1 <- read.csv(here("inputs",prolific_user_file_1_1))
+
+#try 2
+#prolific1_2 <- read.csv("/Users/kristina/Documents/Surveys/NEW /DONE/00_DATA MACHINE/Prolific Promp Language Study/survey/01_cleaning_scoring/inputs/prolific_export_64ae11e618c4cf67a67025f9_part1_try2.csv")
+prolific1_2 <- read.csv(here("inputs",prolific_user_file_1_2))
+
+# merge the two prolific datasets (downloaded from the website)
+prolific1 <- bind_rows(prolific1_1, prolific1_2)
+
+# tidy prolific dataset
+prolific1_tidy <- prolific1 %>%
+  rename_all(~paste0(., "_prolific")) %>% # add suffix
+  dplyr::rename(userid = Participant.id_prolific) %>% # standardize user IDs name
+  dplyr::mutate(across(where(is.character),  # recode null data into NA 
+                       ~  case_when(
+                              . == "DATA_EXPIRED" ~ NA,
+                              . == "Prefer not to say" ~ NA,
+                              TRUE ~ .)))
+```
+
+Number of observations in Prolific API export [4489].
+Among them, [823] were not included in the dataset downloaded from the website
+Prolific Status after cross-referencing both datasets:[see below]   
+```{r}
+# load prolific data from api
+prolific1_1_api <- read.csv(here("inputs", prolific_status_file_1_1)) %>% select(-bonus_payments)
+prolific1_2_api <- read.csv(here("inputs", prolific_status_file_1_2)) %>% select(-bonus_payments)
+
+# merge and rename the two prolific API datasets
+prolific1_api <- bind_rows(prolific1_1_api, prolific1_2_api) %>%
+  rename(status_prolific_api = status) %>%
+  mutate(status_prolific_api = case_match(status_prolific_api,"TIMED-OUT" ~ "TIMEDOUT", .default = status_prolific_api))
+
+# check Prolific participants from API dataset who are missing from the website dataset
+prolific1_missing_website <- anti_join(prolific1_api, prolific1_tidy, by = c("participant_id" = "userid"))$participant_id
+
+# check Prolific participants from website dataset who are missing from the API dataset
+prolific1_missing_api <- anti_join(prolific1_tidy, prolific1_api, by = c("userid" = "participant_id"))$userid
+
+# merge and cross-reference prolific status from the website and API
+prolific1_merge <- prolific1_api %>%
+  full_join(prolific1_tidy, by = c("participant_id" = "userid")) %>%
+  mutate(status_prolific_varify = case_when(status_prolific_api == Status_prolific ~ status_prolific_api, # identical status
+                                            !is.na(status_prolific_api) & is.na(Status_prolific) ~ status_prolific_api, # use the API status if website status is missing
+                                            is.na(status_prolific_api) & !is.na(Status_prolific) ~ Status_prolific, # use the website status if API status is missing
+                                            Status_prolific != status_prolific_api & !is.na(Status_prolific) & status_prolific_api != "TIMEDOUT" ~ "DIFFERENT"  # flag valid but different status
+                                            )) %>%
+  rename(userid = participant_id) %>%
+  mutate(prolific_nowebsite = case_when(userid %in% prolific1_missing_website ~ TRUE, #flag users missing from the website dataset
+                                        TRUE ~ FALSE))
+
+# valid but different status
+table(prolific1_merge$status_prolific_varify, useNA = "ifany")
+
+#add labels
+attr(prolific1_merge$status_prolific_varify, "label") <- "varified status from cross referencing the status downloaded from Prolific website and API"
+attr(prolific1_merge$prolific_nowebsite, "label") <- "TRUE if the participant was recorded in the Prolific API dataset but not in the Prolific website dataset"
+```
+
+Number of participants in Prolific dataset but not in the survey dataset: [366]
+Among them, [1] was approved on Prolific[see userID below]: 
+```{r}
+# check participants from the prolific file that can't match in the survey1 data file
+prolific1_notmatch <- anti_join(prolific1_merge, survey1_filtered, by = "userid")
+
+# check observations from the survey1 data file that can't match in the prolific file
+survey1_notmatch <- anti_join(survey1_filtered, prolific1_merge, by = "userid")
+
+# check number of subjects missing from prolific
+length(unique(prolific1_notmatch$userid))
+
+# check participants from the prolific file who are approved but can't find a match in survey 1 data file
+prolific1_notmatch %>%
+  filter(status_prolific_varify == "APPROVED") %>%
+  select(userid, status_prolific_api)
+```
+
+Manually correct user ID
+```{r}
+# look up matching cases from the survey dataset
+survey1 %>%
+  filter(PROLIFIC_PID == "6632a2b88ee7ba45758fde30b") %>%
+  select(PROLIFIC_PID, ID_check)
+
+# manually correct the userid
+correct_id <- survey1 %>%
+  filter(PROLIFIC_PID == "6632a2b88ee7ba45758fde30b") %>%
+  mutate(PROLIFIC_PID = ID_check) %>%
+  select(-c(StartDate, EndDate, Status, Finished, RecipientLastName,  IPAddress,RecipientFirstName, RecipientEmail, LocationLatitude, LocationLongitude, DistributionChannel, UserLanguage)) %>% #remove cols #de-identify
+  dplyr::rename(userid = PROLIFIC_PID) %>%
+  dplyr::rename(Prompt_6_2_feelgood_1 = Prompt_6_2_feedback_1)
+
+# merge with the survey datset
+survey1_filtered_corr <- survey1_filtered %>%
+  full_join(correct_id)
+```
+
+Merge organized prolific data with correct survey data part 1. 
+Prolific status:[see below]
+```{r}
+survey1_merged <- survey1_filtered_corr %>% 
+  left_join(prolific1_merge, by = "userid")
+
+table(survey1_merged$status_prolific_varify, useNA = "ifany")
+```
+
+
+```{r}
+# flag non-matched observations
+# prolific1_notmatch_id <- unique(prolific1_notmatch$userid)
+# survey1_notmatch_id <- unique(survey1_notmatch$userid)
+# 
+# survey1_match_f <- survey1_merged %>%
+#   mutate(flag_nomatch_prolific = case_when(userid %in% prolific1_notmatch_id ~ TRUE,
+#                                    TRUE ~ FALSE), 
+#          flag_nomatch_survey = case_when(userid %in% survey1_notmatch_id ~ TRUE,
+#                                    TRUE ~ FALSE))
+```
+
+### part 2
+Number of observations in Prolific website export [1553]
+```{r}
+#prolific2 <- read.csv("/Users/kristina/Documents/Surveys/NEW /DONE/00_DATA MACHINE/Prolific Promp Language Study/survey/01_cleaning_scoring/inputs/prolific_export_64af2e9f59da46550f687586.csv")
+prolific2 <- read.csv(here("inputs",prolific_user_file_2))
+
+# tidy prolific dataset
+prolific2_tidy <- prolific2 %>%
+  rename_all(~paste0(., "_prolific")) %>% # add suffix
+  dplyr::rename(userid = Participant.id_prolific) %>% # standardize user IDs name
+  dplyr::mutate(across(where(is.character),  # recode null data into NA 
+                       ~  case_when(
+                              . == "DATA_EXPIRED" ~ NA,
+                              . == "Prefer not to say" ~ NA,
+                              TRUE ~ .)))
+```
+
+Number of observations in Prolific API export [1633].
+Among them, [80] were not included in the dataset downloaded from the website
+Prolific Status after cross-referencing both datasets:[see below]   
+```{r}
+# load prolific data from api
+prolific2_api <- read.csv(here("inputs", prolific_status_file_2)) %>%
+  rename(status_prolific_api = status) %>%
+  mutate(status_prolific_api = case_match(status_prolific_api,"TIMED-OUT" ~ "TIMEDOUT", .default = status_prolific_api))
+
+# check Prolific participants from API dataset who are missing from the website dataset
+prolific2_missing_website <- anti_join(prolific2_api, prolific2_tidy, by = c("participant_id" = "userid"))$participant_id
+
+# check Prolific participants from website dataset who are missing from the API dataset
+prolific2_missing_api <- anti_join(prolific2_tidy, prolific2_api, by = c("userid" = "participant_id"))$userid
+
+# merge and cross-reference prolific status from the website and API
+prolific2_merge <- prolific2_api %>%
+  full_join(prolific2_tidy, by = c("participant_id" = "userid")) %>%
+  mutate(status_prolific_varify = case_when(status_prolific_api == Status_prolific ~ status_prolific_api, # identical status
+                                            !is.na(status_prolific_api) & is.na(Status_prolific) ~ status_prolific_api, # use the API status if website status is missing
+                                            is.na(status_prolific_api) & !is.na(Status_prolific) ~ Status_prolific, # use the website status if API status is missing
+                                            Status_prolific != status_prolific_api & !is.na(Status_prolific) & status_prolific_api != "TIMEDOUT" ~ "DIFFERENT"  # flag valid but different status
+                                            )) %>%
+  rename(userid = participant_id) %>%
+  mutate(prolific_nowebsite = case_when(userid %in% prolific2_missing_website ~ TRUE, #flag users missing from the website dataset
+                                        TRUE ~ FALSE))
+
+# valid but different status
+table(prolific2_merge$status_prolific_varify, useNA = "ifany")
+
+#add labels
+attr(prolific2_merge$status_prolific_varify, "label") <- "varified status from cross referencing the status downloaded from Prolific website and API"
+attr(prolific2_merge$prolific_nowebsite, "label") <- "TRUE if the participant was recorded in the Prolific API dataset but not in the Prolific website dataset"
+```
+
+Number of participants in Prolific dataset but not in the survey dataset: [23]
+Among them, [0] was approved on Prolific[see userID below]: 
+```{r}
+# check participants from the prolific file that can't match in the survey2 data file
+prolific2_notmatch <- anti_join(prolific2_merge, survey2_filtered, by = "userid")
+
+# check observations from the survey2 data file that can't match in the prolific file
+survey2_notmatch <- anti_join(survey2_filtered, prolific2_merge, by = "userid")
+
+# check number of subjects missing from prolific
+length(unique(prolific2_notmatch$userid))
+
+# check participants from the prolific file who are approved but can't find a match in survey 1 data file
+prolific2_notmatch %>%
+  filter(status_prolific_varify == "APPROVED") %>%
+  select(userid, status_prolific_api)
+```
+
+manually check and delete the observation from survey 2 that can't find a match in prolific dataset.  
+```{r}
+survey2_notmatch %>%
+  select(userid, ID_check, Progress)
+
+survey2_filtered_corr <- survey2_filtered %>%
+  filter(userid != "weqwqeqeqweqeqeqeqweqwqw")
+```
+
+Merge organized prolific data with correct survey data part 2. 
+Prolific status:[see below]
+```{r}
+survey2_merged <- survey2_filtered_corr %>% 
+  left_join(prolific2_merge, by = "userid")
+
+table(survey2_merged$status_prolific_varify, useNA = "ifany")
+```
+
+
+## Consent & Terms
+
+### Part 1
+
+Here, we remove observations from participants who revoked consent or did not complete consent upon entering the study. [For Prolific studies] We also identify & remove data from participants who opted to RETURN their response on Prolific, revoking consent. [446]
+- number of observations after removal of no-consent & RETURNED [3778]
+
+```{r}
+# remove data from revoked consent
+survey1_cleaned = survey1_merged %>%
+  filter(!status_prolific_varify == "RETURNED") %>% # remove returned survey1s
+  filter(Consent_confirm == 1) %>% # only include data from confirmed consent
+  filter(!userid == "5ff5f7ad932d56101bf7c90d") %>% # # remove participants who requested to have their data withdrawn
+  filter(!userid == "62b07ac53b83bf0683eda6b6")
+
+
+#summarize returned responses
+data_remove <- survey1_merged %>%
+  select(userid, status_prolific_varify, Submission.id_prolific) %>%
+  unique() %>%
+  filter(status_prolific_varify =="RETURNED") %>%
+  group_by(userid, status_prolific_varify,Submission.id_prolific) %>%
+  mutate(detials = "") 
+data_remove<- data_remove[order(data_remove$userid),]
+
+data_remove 
+
+survey1_merged %>%
+  select(userid, status_prolific_varify) %>%
+  group_by(status_prolific_varify) %>%
+  mutate(count = length(status_prolific_varify)) %>%
+  dplyr::summarize(n = n()) %>%
+  spread(status_prolific_varify, n) %>%
+  mutate(percent_approved = round((APPROVED/ nrow(survey1_merged)) * 100, 1)) %>%
+  mutate(percent_available = round(((APPROVED+TIMEDOUT)/nrow(survey1_merged)) * 100, 1))
+```
+
+### Part 2
+
+Here, we remove observations from participants who revoked consent or did not complete consent upon entering the study. [For Prolific studies] We also identify & remove data from participants who opted to RETURN their response on Prolific, revoking consent. [50]
+- number of observations after removal of no-consent & RETURNED [1594]
+```{r}
+# remove data from revoked consent
+survey2_cleaned = survey2_merged %>%
+  filter(!status_prolific_varify == "RETURNED") %>% # remove returned survey2s
+  filter(Consent_confirm == 1) %>% # only include data from confirmed consent
+  filter(!userid == "60fcfbb717597fae78b71eaf") # remove participants who requested to have their data withdrawn
+
+#summarize returned responses
+data_remove <- survey2_merged %>%
+  select(userid, status_prolific_varify, Submission.id_prolific) %>%
+  unique() %>%
+  filter(status_prolific_varify =="RETURNED") %>%
+  group_by(userid, status_prolific_varify,Submission.id_prolific) %>%
+  mutate(detials = "") 
+data_remove<- data_remove[order(data_remove$userid),]
+
+data_remove 
+
+survey2_merged %>%
+  select(userid, status_prolific_varify) %>%
+  group_by(status_prolific_varify) %>%
+  mutate(count = length(status_prolific_varify)) %>%
+  dplyr::summarize(n = n()) %>%
+  spread(status_prolific_varify, n) %>%
+  mutate(percent_approved = round((APPROVED/ nrow(survey2_merged)) * 100, 1)) %>%
+  mutate(percent_available = round(((APPROVED+TIMEDOUT)/nrow(survey2_merged)) * 100, 1))
+```
+
+# Summarize qualtrics: consent, terms agreement, NDA, attention checks, recording tests, etc {.tabset}
+
+## deduplication & duplicates summary {.tabset}
+Duplication in survey data could have happened if the participant accessed and started the Qualtrics study multiple times. Here, we retain all duplicated data and flag each response, responses are also flagged based on completion.
+
+### part 1
+- total number of duplicate observations [158] from [76] userid's
+- total number of unique observations [3697]
+```{r}
+survey1_dupe_f <- survey1_cleaned %>%
+  group_by(userid) %>%
+  mutate(flag_dupe_survey = duplicated(userid) | rev(duplicated(rev(userid)))) %>% # flag rows with identical userid
+  dplyr::mutate(
+  max_progress = max(Progress),
+  distinct_progress = n_distinct(Progress),
+  total_rows = nrow(.)) %>%
+  mutate(
+    flag_most_complete_survey = case_when(
+      # Unique userid cases
+      flag_dupe_survey == F ~ "TRUE",
+      
+      # Duplicated userid but identical progress
+      flag_dupe_survey == T & total_rows > 1 & distinct_progress == 1 ~ "SAME",
+      
+      # Duplicated userid with non-identical progress
+      flag_dupe_survey == T & Progress == max_progress & distinct_progress > 1 ~ "TRUE",
+      flag_dupe_survey == T & Progress != max_progress & distinct_progress > 1 ~ "FALSE",
+      
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  select(-max_progress, -distinct_progress, -total_rows) %>%
+  ungroup()
+
+attr(survey1_dupe_f$flag_dupe_survey, "label") <- "TRUE: data from userid that have more than 1 occurrence; FALSE: data from unique userid"
+attr(survey1_dupe_f$flag_most_complete_survey, "label") <- "TRUE: data from unique userid or has the highest progress among duplicated responses; FALSE: duplicated responses that don’t have the highest progress; SAME: duplicated response that share the same progress"
+
+table(survey1_dupe_f$flag_dupe_survey)
+length(unique(survey1_dupe_f[survey1_dupe_f$flag_dupe_survey == TRUE,]$userid))
+length(unique(survey1_dupe_f$userid))
+```
+
+### part 2
+- total number of duplicate observations [58] from [29] userid's
+- total number of unique observations [1565]
+```{r}
+survey2_dupe_f <- survey2_cleaned %>%
+  group_by(userid) %>%
+  mutate(flag_dupe_survey = duplicated(userid) | rev(duplicated(rev(userid)))) %>% # flag rows with identical userid
+  dplyr::mutate(
+  max_progress = max(Progress),
+  distinct_progress = n_distinct(Progress),
+  total_rows = nrow(.)) %>%
+  mutate(
+    flag_most_complete_survey = case_when(
+      # Unique userid cases
+      flag_dupe_survey == F ~ "TRUE",
+      
+      # Duplicated userid but identical progress
+      flag_dupe_survey == T & total_rows > 1 & distinct_progress == 1 ~ "SAME",
+      
+      # Duplicated userid with non-identical progress
+      flag_dupe_survey == T & Progress == max_progress & distinct_progress > 1 ~ "TRUE",
+      flag_dupe_survey == T & Progress != max_progress & distinct_progress > 1 ~ "FALSE",
+      
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  select(-max_progress, -distinct_progress, -total_rows) %>%
+  ungroup()
+
+attr(survey2_dupe_f$flag_dupe_survey, "label") <- "TRUE: data from userid that have more than 1 occurrence; FALSE: data from unique userid"
+attr(survey2_dupe_f$flag_most_complete_survey, "label") <- "TRUE: data from unique userid or has the highest progress among duplicated responses; FALSE: duplicated responses that don’t have the highest progress; SAME: duplicated response that share the same progress"
+
+table(survey2_dupe_f$flag_dupe_survey)
+length(unique(survey2_dupe_f[survey2_dupe_f$flag_dupe_survey == TRUE,]$userid))
+length(unique(survey2_dupe_f$userid))
+```
+
+## Failed recording test
+
+### Part 1
+Here, we check recording tests; `flag_failed_recording_test` = TRUE if participants failed the recording test, retaining NA/missing. 
+
+- total number of failed recording tests [11]
+- total number of observations missing data for recording test [54]
+```{r k_edit}
+
+survey1_dupe_f %>%
+  select(userid, Recording_test) %>%
+  unique() %>%
+  gather(Recording_test, value, Recording_test) %>%
+  filter(is.na(value)|value!=1) %>%
+  group_by(Recording_test, value) %>%
+  dplyr::summarize(n = n())
+
+survey1_record_f <- survey1_dupe_f %>%
+  mutate(flag_failed_recording_test = case_when(Recording_test == 0 ~ TRUE, 
+                                                Recording_test == 1 ~ FALSE,
+                                                TRUE ~ NA))
+
+attr(survey1_record_f$flag_failed_recording_test, "label") <- "TRUE if participants failed teh recording test. NAs were retained"
+
+```
+
+Part 2 survey didn't include recording test
+
+## Failed attention check 
+
+### Part 1 
+Here, there were [2] attention checks, correct responses for each are noted in the attention1_correct & attention2_correct objects created at the start of this script
+
+`flag_failed_attention` = FALSE if both attention checks passed
+`flag_failed_attention` = FALSE if 1 attention check passed + 1 missing 
+`flag_failed_attention` = TRUE if at least 1 attention checks failed
+`flag_failed_attention` = NA if both attention checks are missing
+
+`flag_failed_attention_n` = total number of attention checks failed (NA not counted as failure)
+
+- total number passed all attention checks [3555]
+- total number failed 1 attention check [132]
+- total number failed 2 attention checks [5]
+- total number missing data for attention checks [87]
+```{r k_edit}
+
+# add a flag for failed attention check question and a flag for the number of attention check
+survey1_attention_f <- survey1_record_f %>%
+  mutate(flag_failed_attention = case_when(
+    Attention1 == attention1_correct & Attention2 == attention2_correct ~ FALSE, # FALSE if both attention check questions were correct 
+    Attention1 != attention1_correct | Attention2 != attention2_correct ~ TRUE,  # TRUE if get at least 1 attention check question was wrong
+    is.na(Attention1) & is.na(Attention2) ~ NA, # NA if both attention check questions are missing
+    TRUE ~ FALSE # FALSE if there's one question correct and one quetion missing
+  )) %>%
+  rowwise() %>%
+  mutate(flag_failed_attention_n = case_when(
+    flag_failed_attention == T & (is.na(Attention1) | is.na(Attention2)) ~ 1, # if there's a missing data, and an incorrect answer, mark 1
+    TRUE ~ (Attention1 != attention1_correct) + (Attention2 != attention2_correct) # if no missing attention check question, add the number of failed question
+  )) %>%
+  ungroup() %>%
+  as.data.frame()
+
+table(survey1_attention_f$flag_failed_attention_n, useNA = "ifany")
+
+# add label
+attr(survey1_attention_f$flag_failed_attention, "label") <- "TRUE if at least 1 attention checks failed; FALSE if 1 attention check passed + 1 missing or failed both; NA if both attention checks are missing"
+attr(survey1_attention_f$flag_failed_attention_n, "label") <- "total number of attention checks failed (NA not counted as failure)"
+```
+
+Part 2 didn't include any attention check question
+
+# Additional data screening {.tabset}
+
+## relocate
+
+NOTE -- general organization for all datasets should follow this convention:
+**ID's** (may be multiple depending on source); **survey design info** (day, group, part, etc.) **Qualtrics meta data** (progress-external reference); **Consent + recording test**; **Demograohics RAW** (not including collated column for race); **psych surveys raw** (attention checks can stay); **other survey data** (value prop, feedback); **general feedback** (other "in-house" feedback items such as _recruit items, general survey feedback); **prolific meta data** (items ending with _prolific); **prompt meta data** (timers, submit confirmations, etc.); **flags** (internally created flags); **scored data** (any columns created from scoring chunks [demo collated, reverse items, total scores, collated 'select all that apply', etc])
+
+```{r}
+#some quick reorganizing of data
+#part 1
+survey1_relocate <- survey1_attention_f %>%
+  relocate(c('userid','Prolific_ID', 'ID_check', 'Group', 'survey_part'), .before = Progress) %>%
+  relocate(
+    starts_with(c('Prompt_')), .after = IMI_Reflect_12_1) %>%
+  relocate(
+    starts_with(c('ValueProp_')), .after = IMI_Reflect_12_1) %>%
+  relocate(
+    ends_with(c('_topic', '_easy_1','_value_1','_feelgood_1','_thoughts','_feedback')), .after = ValueProp_10_10_TEXT) %>%
+  relocate(
+    ends_with('_prolific'), .after = Study_Feedback)
+
+#part 2
+survey2_relocate <- survey2_dupe_f %>%
+  relocate(c('userid','Prolific_ID', 'ID_check', 'survey_part'), .before = Progress) %>%
+  relocate(
+    starts_with(c('Prompt_')), .after = IMI_Reflect_12_1) %>%
+  relocate(
+    starts_with(c('Goal_')), .after = IMI_Reflect_12_1) %>%
+  relocate(
+    ends_with(c('_topic', '_easy_1','_value_1','_feelgood_1','_thoughts','_feedback')), .after = Goal_2_why) %>%
+  relocate(
+    ends_with('_prolific'), .after = Study_Feedback)
+
+```
+
+
+## Missing all survey data {.tabset}
+Here, we flag observations with little to no survey progress, as defined by `first_survey_var` & `last_survey_var`
+
+### part 1
+
+- total number of observations missing all survey data [70]
+```{r b_edit}
+# extract survey item variables
+survey1_var <- value_between(colnames(survey1_relocate), first_survey1_var, last_survey1_var)
+
+survey_survey1_f <- survey1_relocate %>%
+  mutate(flag_no_survey = (rowSums(is.na(dplyr::select(., all_of(survey1_var)))) == length(dplyr::select(., all_of(survey1_var)))))
+
+table(survey_survey1_f$flag_no_survey, useNA = "ifany")
+
+attr(survey_survey1_f$flag_no_survey, "label") <- "TRUE if participants didn't provide any survey data; FALSE if at least 1 survey item was recorded"
+```
+
+### part 2
+
+- total number of observations missing all survey data [0]
+```{r b_edit}
+# extract survey item variables
+survey2_var <- value_between(colnames(survey2_relocate), first_survey2_var, last_survey2_var)
+
+survey_survey2_f <- survey2_relocate %>%
+  mutate(flag_no_survey = (rowSums(is.na(dplyr::select(., all_of(survey2_var)))) == length(dplyr::select(., all_of(survey2_var)))))
+
+table(survey_survey2_f$flag_no_survey, useNA = "ifany")
+
+attr(survey_survey2_f$flag_no_survey, "label") <- "TRUE if participants didn't provide any survey data; FALSE if at least 1 survey item was recorded"
+```
+
+## Data quality: repetitive responses in a sequence {.tabset}
+Here, we flag participants who provided identical responses in a long sequence. 
+
+### part 1
+- highest percentage of identical sequential responses [30%] - A reasonable range
+```{r b_edit}
+# calculate the number of survey item 
+item_n <- ncol(select(survey_survey1_f, all_of(survey1_var)))
+
+survey1_screen <- survey_survey1_f %>%
+  mutate(max_identical = apply(select(., all_of(survey1_var)), 1, function(x) {max(rle(x)$lengths)}), 
+         max_identical_perc = round((max_identical/item_n)*100), 
+         flag_identical_sequence = FALSE)
+
+describe(survey1_screen$max_identical_perc)
+
+attr(survey1_screen$max_identical, "label") <- "The number if identical survey responses in a seqeunce"
+attr(survey1_screen$max_identical_perc, "label") <- "The percentage of identical survey responses in a seqeunce out of all survey items"
+```
+#### part 2
+- highest percentage of identical sequential responses [56%]
+- Number of observation with >50% identical responses [1]
+This is slightly higher than we would expect to see. 
+Here, we flag using `flag_identical_sequence` where: `flag_identical_sequence` = TRUE if `max_identical_perc` > 50.
+```{r b_edit}
+# calculate the number of survey item 
+item_n <- ncol(select(survey_survey2_f, all_of(survey2_var)))
+
+survey2_screen <- survey_survey2_f %>%
+  mutate(max_identical = apply(select(., all_of(survey2_var)), 1, function(x) {max(rle(x)$lengths)}), 
+         max_identical_perc = round((max_identical/item_n)*100), 
+         flag_identical_sequence = case_when(max_identical_perc > 50 ~ TRUE,
+                                             TRUE ~ FALSE))
+
+describe(survey2_screen$max_identical_perc)
+
+attr(survey2_screen$max_identical, "label") <- "The number if identical survey responses in a seqeunce"
+attr(survey2_screen$max_identical_perc, "label") <- "The percentage of identical survey responses in a seqeunce out of all survey items"
+attr(survey2_screen$flag_identical_sequence, "label") <- "TRUE if more than 50% of survey responses had identical responses"
+sum(survey2_screen$flag_identical_sequence == TRUE)
+```
+
+
+## Study duration {.tabset}
+This will vary per study. Here, we examine the distribution of survey duration, based on our expected completion time. 
+
+### part 1
+Here, the expected completion time was [45 minutes], so we evaluate the distribution based on a [2-hour] duration window
+- average duration in minutes [~59]
+```{r b_edit}
+# subset completed observations
+survey1_complete <- survey1_screen %>%
+  filter(flag_most_complete_survey!="FALSE") %>% #filter dupes & no survey data
+  mutate(Progress = ifelse(Progress == 100, "complete", "incomplete")) %>%
+  filter(Progress == "complete") %>%
+  mutate(duration = Duration__in_seconds_/60) # transform survey duration into minutes
+
+# check overall duration
+describe(survey1_complete$duration)
+
+# check duration distribution within 2 hours
+hist(survey1_complete[survey1_complete$duration < 120,]$duration)
+
+```
+
+Additionally, we further examine those responses with a particularly SHORT completion time [less than 10 minutes] & combine these data with other data screening results. 
+
+- notes on potentially "bad" data: [none]
+```{r b_edit}
+survey1_complete %>%
+  filter(duration < 10) %>%
+  select(flag_no_survey, duration, flag_failed_recording_test, flag_failed_attention_n, max_identical_perc)
+```
+
+### part 2
+Here, the expected completion time was [25 minutes], so we evaluate the distribution based on a [1-hour] duration window
+- average duration in minutes [~27]
+```{r b_edit}
+# subset completed observations
+survey2_complete <- survey2_screen %>%
+  filter(flag_most_complete_survey!="FALSE") %>% #filter dupes & no survey2 data
+  mutate(Progress = ifelse(Progress == 100, "complete", "incomplete")) %>%
+  filter(Progress == "complete") %>%
+  mutate(duration = Duration__in_seconds_/60) # transform survey2 duration into minutes
+
+# check overall duration
+describe(survey2_complete$duration)
+
+# check duration distribution within 2 hours
+hist(survey2_complete[survey2_complete$duration < 60,]$duration)
+
+```
+
+To further examine those responses with a completion time of less than 7 minutes, we pair these data with other data screening results. Considering all screening, the data quality here looks fine. Therefore, no flag is necessary based on survey2 duration. 
+```{r b_edit}
+survey2_complete %>%
+  filter(duration < 7) %>%
+  select(flag_no_survey, duration, max_identical_perc) #no flag_failed_recording_test,  flag_failed_attention_n
+```
+
+## Summarize data screening results {.tabset}
+
+Here, we evaluate all data screening efforts, and flag observations whereby: 
+- at least some survey data exists 
+- did not failed both attention check questions 
+- is the most completed survey if there were duplicates. 
+
+### part 1
+
+Observations identified as "recommended for analyses" are flagged in the `flag_rec_include` column (=TRUE)
+- total number of recommended observations [3658]
+```{r b_edit}
+survey1_tidy <- survey1_screen %>%
+  mutate(flag_rec_include = case_when(flag_most_complete_survey != FALSE & flag_no_survey == FALSE & flag_failed_attention_n != 2 ~ TRUE,
+                                      TRUE ~ FALSE))
+
+table(survey1_tidy$flag_rec_include, useNA = "ifany")
+
+# add label
+attr(survey1_tidy$flag_rec_include, "label") <- "TRUE if WB team recommend to include this observation. Criteria include:- at least some survey data
+- did not fail both attention check questions 
+- is the most completed survey if there were duplicates. "
+```
+
+
+### part 2
+
+Observations identified as "recommended for analyses" are flagged in the `flag_rec_include` column (=TRUE)
+- total number of recommended observations [1566]
+```{r b_edit}
+survey2_tidy <- survey2_screen %>%
+  mutate(flag_rec_include = case_when(flag_most_complete_survey != FALSE & flag_no_survey == FALSE ~ TRUE,
+                                      TRUE ~ FALSE))
+
+table(survey2_tidy$flag_rec_include, useNA = "ifany")
+
+# add labels
+
+attr(survey2_tidy$flag_rec_include, "label") <- "TRUE if WB team recommend to include this observation. Criteria include:- at least some survey data
+- did not fail both attention check questions 
+- is the most completed survey if there were duplicates. "
+```
+KRISTINA STOPPED HERE
+# Summarize qualtrics completion info {.tabset}
+## part 1 
+Overall in part 1, there are 3615 cases of complete data (~95.7%), when accounting for data screening (i.e., only evaluating completeness of observations where `flag_rec_include` = TRUE), there are 3600 cases of complete data (~98%)
+```{r}
+survey1_tidy %>%
+  select(survey_name, userid, Progress) %>%
+  mutate(Progress = ifelse(Progress == 100, "complete", "incomplete")) %>%
+  group_by(Progress) %>%
+    mutate(count = length(survey_name)) %>%
+  dplyr::summarize(n = n()) %>%
+  spread(Progress, n) %>%
+  mutate(percent_complete = round((complete / (complete+incomplete)) * 100, 1))
+
+## rec include only 
+survey1_tidy %>%
+  select(survey_name, userid, Progress, flag_rec_include) %>%
+  filter(flag_rec_include!="FALSE") %>% #filter dupes 
+  mutate(Progress = ifelse(Progress == 100, "complete", "incomplete")) %>%
+  group_by(Progress) %>%
+    mutate(count = length(survey_name)) %>%
+  dplyr::summarize(n = n()) %>%
+  spread(Progress, n) %>%
+  mutate(percent_complete = round((complete / (complete+incomplete)) * 100, 1))
+
+```
+
+## part 2
+Overall in part 2, there are 1552 cases of complete data (~97%), when accounting for data screening (i.e., only evaluating completeness of observations where `flag_rec_include` = TRUE), there are again 1552 cases of complete data, but the screening brings us to ~99%
+```{r}
+survey2_tidy %>%
+  select(survey_name, userid, Progress) %>%
+  mutate(Progress = ifelse(Progress == 100, "complete", "incomplete")) %>%
+  group_by(Progress) %>%
+    mutate(count = length(survey_name)) %>%
+  dplyr::summarize(n = n()) %>%
+  spread(Progress, n) %>%
+  mutate(percent_complete = round((complete / (complete+incomplete)) * 100, 1))
+
+## no dupes
+survey2_tidy %>%
+  select(survey_name, userid, Progress, flag_rec_include) %>%
+  filter(flag_rec_include!="FALSE") %>% #filter dupes 
+  mutate(Progress = ifelse(Progress == 100, "complete", "incomplete")) %>%
+  group_by(Progress) %>%
+    mutate(count = length(survey_name)) %>%
+  dplyr::summarize(n = n()) %>%
+  spread(Progress, n) %>%
+  mutate(percent_complete = round((complete / (complete+incomplete)) * 100, 1))
+
+```
+
+## multi-part completion rate
+Data is merged in long format (i.e., participants who completed both parts 1 and 2 will have 2 rows of data; 1 for each part [or more when considering duplicate responses]). Overall, there are 1565 participants who completed both part 1 and part 2.  
+```{r}
+
+survey2_tidy$flag_both_parts <- TRUE
+
+# merge  
+survey_tidy <- full_join(survey1_tidy, survey2_tidy) %>%
+  mutate(flag_both_parts = case_when(is.na(flag_both_parts) ~ FALSE,
+                                    TRUE ~ flag_both_parts))
+
+#survey_tidy <- survey_tidy[order(survey_tidy$userid),] #lose lables 
+
+all_parts <- intersect(survey1_tidy$userid, survey2_tidy$userid) %>% unique()
+plyr::count(all_parts)
+
+### organize columns (see above for structure)
+survey_tidy <- survey_tidy %>%
+  relocate(c('userid','Prolific_ID', 'ID_check', 'Group', 'survey_part'), .before = Progress) %>%
+  relocate(
+    starts_with(c('Prompt_')), .after = IMI_Reflect_12_1) %>%
+  relocate(
+    starts_with(c('ValueProp_')), .after = IMI_Reflect_12_1) %>%
+  relocate(
+    starts_with('Goal'), .before  = ValueProp_1) %>%
+  relocate(
+    ends_with(c('_topic', '_easy_1','_value_1','_feelgood_1','_thoughts','_feedback')), .after = ValueProp_10_10_TEXT) %>%
+  relocate(
+    ends_with('_prolific'), .after = Study_Feedback)
+
+attr(survey_tidy$flag_both_parts,"label") <- "TRUE if this person participanted both parts of the study"
+```
+
+
+# code & score qualtrics data {.tabset}
+1. recode demographics to character
+2. psychological surveys
+
+## recode numeric to character for value prop + feedback 
+```{r}
+# generate a dictionary
+survey_tidy_dict <- create_dictionary(survey_tidy, remove_repeated = F, use_references = F)
+
+# transform the dictionary into a list 
+dict_list <- split(select(survey_tidy_dict, -meta), survey_tidy_dict$variable)
+
+varname <- names(dict_list)
+
+# all demographic from the survey item
+demo_idx <- which(grepl("Demo_", varname))
+
+# extract all categorical variables
+valueprop_idx <- which(grepl("^ValueProp_", varname) & !grepl("_TEXT$", varname) & !grepl("ValueProp_9", varname))
+VIS_idx <- which(grepl("VIS_Strengths", varname))
+goal_why_idx <- c(which(grepl("Goal_1_why", varname)), which(grepl("Goal_2_why", varname)))
+
+##
+multi_response_idx <- c(demo_idx, valueprop_idx, VIS_idx, goal_why_idx)
+
+# subset these variables from the dictionary list
+recode_dict_list <- dict_list[multi_response_idx]
+
+# replace response with variable label
+survey_catvar_r <- survey_tidy
+survey_catvar_r[names(recode_dict_list)] <- Map(function(x, y) {
+    tmp <- with(y,  setNames(label, value)[as.character(x)])
+     tmp[is.na(tmp)] <- x[is.na(tmp)]
+     tmp}, survey_tidy[names(recode_dict_list)], recode_dict_list)
+
+
+# surveys_scored <- survey_tidy
+# surveys_scored[names(recode_dict_list)] <- Map(function(x, y) {
+#     tmp <- with(y,  setNames(label, value)[as.character(x)])
+#      tmp[is.na(tmp)] <- x[is.na(tmp)]
+#      tmp}, survey_tidy[names(recode_dict_list)], recode_dict_list)
+# 
+# surveys_scored <- surveys_scored %>% #fills demo for multi-day studies #consent not filled here, consented in both parts
+#    group_by(userid) %>%
+#    fill(starts_with("Demo"), .direction = "downup") %>% ungroup
+# 
+# surveys_scored <- surveys_scored[order(surveys_scored$userid),] 
+
+```
+
+## coalesce multiple responses
+value prop _5 (VP5_hearing_stories_feels), _6 (VP6_sharing_stories_feels), _8 (VP8_hear_stories_type), _10 (VP10_background_identify)
+```{r}
+survey_comb_r <- survey_catvar_r %>%
+   mutate(
+          ValueProp_5_combine = case_when(
+            rowSums(!is.na(select(., ValueProp_5_1:ValueProp_5_9))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., ValueProp_5_1:ValueProp_5_9))) == 1 ~ as.character(do.call(coalesce, select(., ValueProp_5_1:ValueProp_5_9))),
+            rowSums(!is.na(select(., ValueProp_5_1:ValueProp_5_9))) > 1 ~ "multiple"), 
+          
+          ValueProp_6_combine = case_when(
+            rowSums(!is.na(select(., ValueProp_6_1:ValueProp_6_10))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., ValueProp_6_1:ValueProp_6_10))) == 1 ~ as.character(do.call(coalesce, select(., ValueProp_6_1:ValueProp_6_10))),
+            rowSums(!is.na(select(., ValueProp_6_1:ValueProp_6_10))) > 1 ~ "multiple"), 
+          
+          ValueProp_8_combine = case_when(
+            rowSums(!is.na(select(., ValueProp_8_1:ValueProp_8_3))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., ValueProp_8_1:ValueProp_8_3))) == 1 ~ as.character(do.call(coalesce, select(., ValueProp_8_1:ValueProp_8_3))),
+            rowSums(!is.na(select(., ValueProp_8_1:ValueProp_8_3))) > 1 ~ "multiple"),
+          
+          ValueProp_10_combine = case_when(
+            rowSums(!is.na(select(., ValueProp_10_1:ValueProp_10_10))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., ValueProp_10_1:ValueProp_10_10))) == 1 ~ as.character(do.call(coalesce, select(., ValueProp_10_1:ValueProp_10_10))),
+            rowSums(!is.na(select(., ValueProp_10_1:ValueProp_10_10))) > 1 ~ "multiple"))
+
+
+attr(survey_comb_r$ValueProp_5_combine, "label") <- "coalesced responses of the question 'Hearing the stories of others would make me feel: '"
+attr(survey_comb_r$ValueProp_6_combine, "label") <- "coalesced responses of the question 'Sharing my own story in a secure place as a means to self-reflect would make me feel:'"
+attr(survey_comb_r$ValueProp_8_combine, "label") <- "coalesced responses of the question 'I would like to hear stories from individuals'"
+attr(survey_comb_r$ValueProp_10_combine, "label") <- "coalesced responses of the question 'Finally, we would like to learn a little more about you and your background.'"
+```
+
+
+## demographics
+recoded from numeric to character; parse race/ethnicity variables 
+```{r k_edit}
+survey_demo_r <- survey_comb_r %>%
+  mutate(Demo_ethnicity__99 = NA) %>% # "I prefer not to answer" into NA
+  mutate(demo_race_combine = case_when( # coalesce race
+    rowSums(!is.na(select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))) == 0 ~ NA_character_,
+    rowSums(!is.na(select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))) == 1 ~ as.character(do.call(coalesce, select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))),
+    rowSums(!is.na(select(., Demo_ethnicity_1:Demo_ethnicity_7, -Demo_ethnicity_3))) > 1 ~ "multiracial")) %>% # ethnicity is not considered for multiracial
+  dplyr::mutate(demo_ethnicity = Demo_ethnicity_3) # differciate between race and ethnicity
+
+attr(survey_demo_r$demo_race_combine, "label") <- "coalesced responses of the question 'Please specify your race and/or ethnicity.''multiracial' if multiple categories were selected. (Latinx/Hispanic was not included)"
+attr(survey_demo_r$demo_ethnicity, "label") <- "whether particpants self-identify as Latinx/Hispanic, Is not coalesed with racial categories"
+
+```
+
+
+## SWLS
+A total score is calculated by adding up the scores for each item. The possible range of scores is 5-35, with a score of 20 representing a neutral point on the scale. Scores between 5-9 indicate the respondent is extremely dissatisfied with life, whereas scores between 31-35 indicate the respondent is extremely satisfied.
+```{r}
+# calculate life satisfaction sum score & recode categories
+surveys_scored <- survey_demo_r %>%
+  mutate(SWLS_tot = rowSums(select(., contains("SWLS_"))), # compute the sum score
+         SWLS_tot_f = case_when(5 <= SWLS_tot & SWLS_tot <= 9 ~ "Extremely Dissatisfied",  # categorize the sum score
+                                10 <= SWLS_tot & SWLS_tot <= 14 ~ "Dissatisfied",
+                                15 <= SWLS_tot & SWLS_tot <= 19 ~ "Slightly Dissatisfied",
+                                SWLS_tot == 20 ~ "Neutral",
+                                21 <= SWLS_tot & SWLS_tot <= 25 ~ "Slightly Satisfied",
+                                26 <= SWLS_tot & SWLS_tot <= 30 ~ "Satisfied",
+                                31 <= SWLS_tot & SWLS_tot <= 35 ~ "Extremely Satisfied")) %>%
+  mutate(SWLS_tot_f = as.factor(SWLS_tot_f))
+
+# add variable labels
+attr(surveys_scored$SWLS_tot, "label") <- "total life satisfaction score"
+attr(surveys_scored$SWLS_tot_f, "label")  <- "life satisfaction categories"
+
+```
+
+## PERMA
+Positive affect is calculated as the average of PERMA positive emotions items 1,3,6
+Negative affect is calculated as the average of PERMA positive emotions items 2,4,5
+```{r}
+surveys_scored <- cbind(surveys_scored, PERMA_pos = rowSums(surveys_scored[, grepl("PERMA_1|PERMA_3|PERMA_6", names(surveys_scored))])/3)
+attr(surveys_scored$PERMA_pos, "label") = "PERMA Positive Affect"
+
+surveys_scored <- cbind(surveys_scored, PERMA_neg = rowSums(surveys_scored[, grepl("PERMA_2|PERMA_4|PERMA_5", names(surveys_scored))])/3)
+attr(surveys_scored$PERMA_neg, "label") = "PERMA Negative Affect"
+
+```
+
+## PWB
+Q1, Q2, Q3, Q8, Q9, Q11, Q12, Q13, Q17, and Q18 should be reverse-scored.
+**NOTE: response options were anchored incorrectly, reverse score opposite of what is noted (items 4,5,6,7,10,14,15,16 reversed)**
+Reverse-scored items are worded in the opposite direction of what the scale is
+measuring. The formula for reverse-scoring an item is:
+((Number of scale points) + 1) - (Respondent’s answer)
+
+The Autonomy subscale items are Q15R,Q17,Q18. The Environmental Mastery subscale
+items are Q4R, Q8, Q9. The Personal Growth subscale items are Q11, Q12, Q14R. The
+Positive Relations with Others subscale items are Q6R, Q13, Q16R. The Purpose in Life subscale items are Q3, Q7R, Q10R. The Self-Acceptance subscale items are Q1, Q2, and Q5R. 
+
+To calculate subscale scores for each participant, sum respondents’ answers to each subscale’s items. Higher scores mean higher levels of psychological well-being.
+```{r}
+surveys_scored <- surveys_scored %>% #reverse score
+  mutate(PWB_4_R = 8 - PWB_4,
+         PWB_5_R = 8 - PWB_5,
+         PWB_6_R = 8 - PWB_6,
+         PWB_7_R = 8 - PWB_7,
+         PWB_10_R = 8 - PWB_10,
+         PWB_14_R = 8 - PWB_14,
+         PWB_15_R = 8 - PWB_15,
+         PWB_16_R = 8 - PWB_16)
+
+# surveys_scored = apply_labels(surveys_scored,
+#                       PWB_4_R = "PWB_4 Reverse Scored",
+#                       PWB_5_R = "PWB_5 Reverse Scored",
+#                       PWB_6_R = "PWB_6 Reverse Scored",
+#                       PWB_7_R = "PWB_7 Reverse Scored",
+#                       PWB_10_R = "PWB_10 Reverse Scored",
+#                       PWB_14_R = "PWB_14 Reverse Scored",
+#                       PWB_15_R = "PWB_15 Reverse Scored",
+#                       PWB_16_R = "PWB_16 Reverse Scored",
+#                       PWB_Purpose2_R = "PWB_Purpose4 Reverse Scored",
+#                       PWB_Purpose3_R = "PWB_Purpose3 Reverse Scored")
+
+#autonomy Q15R,Q17,Q18.
+surveys_scored <- cbind(surveys_scored, PWB_Autonomy_tot = rowSums(surveys_scored[,  grepl("\\bPWB_15_R\\b|\\bPWB_17\\b|\\bPWB_18\\b", names(surveys_scored))]))
+
+#Environmental Mastery Q4R, Q8, Q9
+surveys_scored <- cbind(surveys_scored, PWB_EnvMas_tot = rowSums(surveys_scored[,  grepl("\\bPWB_4_R\\b|\\bPWB_8\\b|\\bPWB_9\\b", names(surveys_scored))]))
+
+#Personal Growth Q11, Q12, Q14R.
+surveys_scored <- cbind(surveys_scored, PWB_Growth_tot = rowSums(surveys_scored[,  grepl("\\bPWB_11\\b|\\bPWB_12\\b|\\bPWB_14_R\\b", names(surveys_scored))]))
+
+#Positive Relations with Others Q6R, Q13, Q16R.
+surveys_scored <- cbind(surveys_scored, PWB_PosRelations_tot = rowSums(surveys_scored[,  grepl("\\bPWB_6_R\\b|\\bPWB_13\\b|\\bPWB_16_R\\b", names(surveys_scored))]))
+
+#Purpose in Life Q3, Q7R, Q10R. 
+#added additional purpose subscale items from longer PWB given study design focused on PURPOSE
+surveys_scored <- cbind(surveys_scored, PWB_Purpose_tot = rowSums(surveys_scored[,  grepl("\\bPWB_3\\b|\\bPWB_7_R\\b|\\bPWB_10_R\\b", names(surveys_scored))]))
+#surveys_scored <- cbind(surveys_scored, PWB_PurposeFULL_tot = rowSums(surveys_scored[,  grepl("\\bPWB_3\\b|\\bPWB_7_R\\b|\\bPWB_10_R\\b|\\bPWB_Purpose2_R\\b|\\bPWB_Purpose3_R\\b|\\bPWB_Purpose1\\b|\\bPWB_Purpose4\\b", names(surveys_scored))]))
+
+#Self-Acceptance Q1, Q2, Q5R
+surveys_scored <- cbind(surveys_scored, PWB_SelfAccept_tot = rowSums(surveys_scored[,  grepl("\\bPWB_1\\b|\\bPWB_2\\b|\\bPWB_5_R\\b", names(surveys_scored))]))
+
+# assign label to subscale sum score
+attr(surveys_scored$PWB_Autonomy_tot, "label") <- "PWB18 Autonomy Subscale Sum Score"
+attr(surveys_scored$PWB_EnvMas_tot, "label") <- "PWB18 Environmental Subscale Sum Score"
+attr(surveys_scored$PWB_Growth_tot, "label") <- "PWB18 Growth Subscale Sum Score"
+attr(surveys_scored$PWB_PosRelations_tot, "label") <- "PWB18 ositive Relations with Others Subscale Sum Score"
+attr(surveys_scored$PWB_Purpose_tot, "label") <- "PWB18 Purpose in Life Subscale Sum Score"
+#attr(surveys_scored$PWB_PurposeFULL_tot, "label") <- "PWB42 Purpose in Life Subscale Sum Score"
+attr(surveys_scored$PWB_SelfAccept_tot, "label") <- "PWB18 Acceptance Subscale Sum Score"
+
+
+# surveys_scored = apply_labels(surveys_scored,
+#                       PWB_Autonomy_tot = "PWB18 Autonomy Subscale",
+#                       PWB_EnvMas_tot = "PWB18 Environmental Mastery Subscale",
+#                       PWB_Growth_tot = "PWB18 Growth Subscale",
+#                       PWB_PosRelations_tot = "PWB18 Positive Relations with Others Subscale",
+#                       PWB_Purpose_tot = "PWB18 Purpose in Life Subscale",
+#                       PWB_PurposeFULL_tot = "PWB42 Purpose in Life Subscale",
+#                       PWB_SelfAccept_tot = "PWB18 Self Acceptance Subscale")
+```
+
+## SRIS
+Items 2,3,7,8,9 reverse scored. 
+The self-reflection subscale items are 1,4,6,10,11,12. The insight subscale items are 2R,3R,5,7R,8R,9R
+```{r}
+surveys_scored <- surveys_scored %>% #reverse score
+  mutate(SRIS12_2_R = 8 - SRIS12_2,
+         SRIS12_3_R = 8 - SRIS12_3,
+         SRIS12_7_R = 8 - SRIS12_7,
+         SRIS12_8_R = 8 - SRIS12_8,
+         SRIS12_9_R = 8 - SRIS12_9) 
+
+# surveys_scored = apply_labels(surveys_scored,
+#          SRIS12_2_R = "SRIS12_2 Reverse Scored",
+#          SRIS12_3_R = "SRIS12_3 Reverse Scored",
+#          SRIS12_7_R = "SRIS12_7 Reverse Scored",
+#          SRIS12_8_R = "SRIS12_8 Reverse Scored",
+#          SRIS12_9_R = "SRIS12_9 Reverse Scored")
+
+#self-reflection 
+surveys_scored <- cbind(surveys_scored, SRIS_reflection_tot = rowSums(surveys_scored[,  grepl("\\bSRIS12_1\\b|\\bSRIS12_4\\b|\\bSRIS12_6\\b|\\bSRIS12_10\\b|\\bSRIS12_11\\b|\\bSRIS12_12\\b", names(surveys_scored))]))
+
+surveys_scored <- cbind(surveys_scored, SRIS_insight_tot = rowSums(surveys_scored[,  grepl("\\bSRIS12_2_R\\b|\\bSRIS12_3_R\\b|\\bSRIS12_5\\b|\\bSRIS12_7_R\\b|\\bSRIS12_8_R\\b|\\bSRIS12_9_R\\b", names(surveys_scored))]))
+
+attr(surveys_scored$SRIS_reflection_tot, "label") <- "SRIS Self Reflection Scale Sum Score"
+attr(surveys_scored$SRIS_insight_tot, "label") <- "SRIS Self Insight Scale Sum Score"
+
+
+# surveys_scored = apply_labels(surveys_scored,
+#          SRIS_reflection_tot = "SRIS Self Reflection Scale",
+#          SRIS_insight_tot = "SRIS Insight Scale")
+
+```
+
+## RRS
+The RRS is a revision of the original, longer Response Styles Questionnaire. Here, we use an adapted, 5-item version. Total scores are calculated by summing RRS 1-5. 
+```{r}
+surveys_scored <- cbind(surveys_scored, RRS_tot = rowSums(surveys_scored[, grepl("RRS_1|RRS_2|RRS_3|RRS_4|RRS_5", names(surveys_scored))]))
+attr(surveys_scored$RRS_tot, "label") = "Ruminative Response Scale total score"
+
+```
+
+##SFI
+Items 1,2,4,5 are reverse scored. Higher scores indicate greater solutions focussed thinking
+
+Goal orientation subscale: sum of items 9,10,11,12
+Resource Activation subscale: sum of items 3,6,7,8
+Problem Disengagement subscale: sum of items 1R,2R,4R,5R
+Total score: sum of subscale scores
+
+
+NOTE: scale is supposed to be 6-point, here it is 7
+```{r}
+surveys_scored <- surveys_scored %>% #reverse score
+  mutate(SFI_1_R = 8 - SFI_1,
+         SFI_2_R = 8 - SFI_2,
+         SFI_4_R = 8 - SFI_4,
+         SFI_5_R = 8 - SFI_5)
+
+#goal orientation
+surveys_scored <- cbind(surveys_scored, SFI_goal_orientation_tot = rowSums(surveys_scored[,  grepl("\\bSFI_9\\b|\\bSFI_10\\b|\\bSFI_11\\b|\\bSFI_12\\b", names(surveys_scored))]))
+
+#resource activation
+surveys_scored <- cbind(surveys_scored, SFI_resource_activation_tot = rowSums(surveys_scored[,  grepl("\\bSFI_3\\b|\\bSFI_6\\b|\\bSFI_7\\b|\\bSFI_8\\b", names(surveys_scored))]))
+
+#problem disengagement
+surveys_scored <- cbind(surveys_scored, SFI_problem_disengagement_tot = rowSums(surveys_scored[,  grepl("\\bSFI_1_R\\b|\\bSFI_2_R\\b|\\bSFI_4_R\\b|\\bSFI_5_R\\b", names(surveys_scored))]))
+
+surveys_scored <- cbind(surveys_scored, SFI_tot = rowSums(surveys_scored[,  grepl("\\bSFI_goal_orientation_tot\\b|\\bSFI_resource_activation_tot\\b|\\bSFI_problem_disengagement_tot\\b", names(surveys_scored))]))
+
+attr(surveys_scored$SFI_goal_orientation_tot, "label") <- "SFI Goal Orientation Scale Sum Score"
+attr(surveys_scored$SFI_resource_activation_tot, "label") <- "SFI Resource Activation Scale Sum Score"
+attr(surveys_scored$SFI_problem_disengagement_tot, "label") <- "SFI Problem Disengagement Scale Sum Score"
+attr(surveys_scored$SFI_tot, "label") <- "SFI total score"
+```
+
+
+## IMI
+An adapted 3-item version was used, 1 item from each of the interest/enjoyment subscale (IMI_1), value/usefulness (IMI_2), and perceived choice (IMI_12). 
+
+```{r}
+# rename IMI subscales
+surveys_scored <- surveys_scored %>%
+  rename(IMI_Reflect_enjoyment = IMI_Reflect_1_1, 
+         IMI_Reflect_usefulness = IMI_Reflect_2_1, 
+         IMI_Reflect_choice = IMI_Reflect_12_1 )
+```
+
+# add labels
+```{r}
+# reassign attributions for variables included in the 
+for (col_name in varname[multi_response_idx]) {
+  attributes(surveys_scored[[col_name]]) <- attributes(survey_tidy[[col_name]])
+}
+```
+
+
+
+# export cleaned/scored dataset
+```{r b_edit}
+surveys_scored_dict <- create_dictionary(surveys_scored, remove_repeated = F, use_references = F)
+
+#write.csv(surveys_scored, here("outputs", "prolific_prompt_data_scored.csv"), row.names = F)
+#write.csv(surveys_scored_dict, here("outputs", "prolific_prompt_data_scored_dict.csv"), row.names = F)
+
+
+#write.csv(surveys_scored, "/Users/kristina/Documents/Surveys/NEW /DONE/00_DATA MACHINE/Prolific Promp Language Study/survey/01_cleaning_scoring/outputs/prolific_prompt_language_survey_cleaned_scored.csv", row.names = F)
+#write.csv(surveys_scored_dict, "/Users/kristina/Documents/Surveys/NEW /DONE/00_DATA MACHINE/Prolific Promp Language Study/survey/01_cleaning_scoring/outputs/DICT_prolific_prompt_language_survey_cleaned_scored.csv", row.names = F)
+```
