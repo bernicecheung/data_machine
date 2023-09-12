@@ -34,6 +34,8 @@ library(reactable)
 ```
 
 # prepping
+
+## load datasets
 ```{r}
 # load survey item coding schema
 survey_item_std <- read.csv(here("inputs", "standardize_survey_items.csv"))
@@ -42,13 +44,18 @@ survey_item_std <- read.csv(here("inputs", "standardize_survey_items.csv"))
 survey_std <- read.csv(here("inputs", "standardize_survey.csv"))
 
 # load standardized dataset
-ltab_df_std <- read.csv(here("outputs", "ltaw_df_std_110823.csv"))
+ltab_df_std <- read.csv(here("outputs", "ltaw_df_std_050923.csv"))
 
 # load variable naming list
-survey_varname_std <- read.csv(here("outputs", "ltaw_var_summary_110823.csv"))
+survey_varname_std <- read.csv(here("outputs", "ltaw_var_summary_050923.csv"))
 
 # load item dictionary
 ltab_data_scored_dict <- read.csv(here("outputs", "LTAW_data_scored_dict.csv"))
+```
+
+## preset
+```{r}
+scale_list <- c("aniq", "perma", "pwb", "sris", "swls", "wbpro")
 ```
 
 # Let's Talk About Wellbeing Overview
@@ -72,13 +79,48 @@ study_idx <- unique(ltab_df_std$servey_name)
 
 The index of the present dataset is `r study_idx`. This dataset includes `r obs` observations from `r unique_obs` participants.It contains Survey Items, Demographics, Moments, Open-ended questions related to content recommendation and Value prop questions. No repeated measures. 
 
+# Data Overview
+
+## Naming Convention
+
+1. survey items are named based on [scale name]_[item index/subscale name]. 
+     
+2. The suffix "_r" indicates that the item is a reverse-score item. Reverse-score items are questions rephrased in the opposite way as the other items in the scale. Without further specification, these items are recoded by [max scaled number + 1] - [raw score]. These reverse-score items are used to calculate the (sub)scale score instead of the raw scores.   
+     
+3. The suffix"_combine" indicates that the item is a coalesced item. If participants are asked to select all applicable options for a question, then its corresponding coalesced item will indicates if they selected more than one option or the single option that they selected. 
+
+## Data Screening Flags
+```{r}
+
+item_dict <- ltab_data_scored_dict %>%
+  filter(is.na(value))
+
+
+screen_df <- survey_varname_std %>%
+  select(-scale_prefix, -item_suffix) %>%
+  left_join(select(item_dict, variable, label), by = c("ori_name" = "variable")) %>%
+  filter(item_type == "data_screen_flags")
+
+screen_df %>%
+    reactable(striped = TRUE,
+            filterable = TRUE,   resizable = TRUE)
+
+```
+
+## Analysis Recommendation
+
+1. Use variables included in the subscale overview as metrics of psychological status. 
+2. Include cases marked by the flag_rec_include in the analysis
+
+
 # Scale Level Overview
 
 ```{r}
 
 scale_df <- survey_std %>%
+  filter(scale_prefix %in% scale_list) %>%
   filter(item_suffix == "") %>%
-  select(-item_suffix, -calculation)
+  select(-item_suffix, -calculation, -range)
 
 scale_df %>%
   reactable(striped = TRUE,
@@ -188,26 +230,40 @@ ltab_demo_sum %>%
             filterable = TRUE,   resizable = TRUE)
 ```
 
-
-# Data Screening Flags
-```{r}
-
-item_dict <- ltab_data_scored_dict %>%
-  filter(is.na(value))
-
-
-screen_df <- survey_varname_std %>%
-  select(-scale_prefix, -item_suffix) %>%
-  left_join(select(item_dict, variable, label), by = c("ori_name" = "variable")) %>%
-  filter(item_type == "data_screen_flags")
-
-screen_df %>%
-    reactable(striped = TRUE,
-            filterable = TRUE,   resizable = TRUE)
-
-```
-
 # all data label
+
+item_type explanation:   
+     
+* metadata: data related to survey status (e.g. survey id; duration; progress). 
+   
+* demo: demographic related data. 
+   
+* demo_raw: options for demographic related questions that allow participants to select applicable options. Each variable indicates if participant selected the option as one of their responses.   
+   
+* item: psychological survey item. In most cases, they shouldn't be included in any analysis. 
+   
+* attention_check: filler questions aims to check participants attention. No need to be included in any analysis. 
+   
+* subscale: scores that should be used as the metrics of a dimension of a psychological construct(status).
+   
+* scale: scores that should be used as the overall metrics of a psychological construct(status). 
+   
+* prompt_meta: data related to moment collection.  
+    
+* content_rec_raw: options for questions related to content recommendation that allow participants to select applicable options. Each variable indicates if participant selected the option as one of their responses.
+     
+* value_prop_raw: options for questions related to value proposition that allow participants to select applicable options. Each variable indicates if participant selected the option as one of their responses.   
+     
+* prolific_metadata: data related to survey status that were recorded by the survey platform (Prolific).  
+     
+* prolific_demo: demographic data that were collected by the survey platform (Prolific).   
+      
+* data_screen_flags: records of data cleaning & screening process
+     
+* coalesced responses: coalesced responses for questions that allow participants to select all applicable responses.
+     
+* reverse_scored_item: Reversed score items based on the coding schema of the standardized scales. In most cases, they shouldn't be included in any analysis. 
+
 
 ```{r}
 all_data <- survey_varname_std %>%

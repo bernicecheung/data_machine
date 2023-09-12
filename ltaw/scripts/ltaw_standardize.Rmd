@@ -67,10 +67,11 @@ org_varname <- function(dataframe){
     str_detect(scale_prefix, "(?i)flag") ~ "data_screen_flags",
     str_detect(scale_prefix, "(?i)max") ~ "data_screen_flags",
     str_detect(scale_prefix, "(?i)Attention") ~ "attention_check",
-    str_detect(scale_prefix, "(?i)Prompt") ~ "prompt",
+    str_detect(scale_prefix, "(?i)Prompt") ~ "prompt_meta",
+    str_detect(item_suffix, "(?i)combine") ~ "coalesced responses",
     str_detect(item_suffix, "(?i)_tot") ~ "subscale",
-    str_detect(item_suffix, "(?i)_R") ~ "recoded_item",
-    str_detect(item_suffix, "(?i)prolific") ~ "prolific_metadata", 
+    str_detect(item_suffix, "(?i)_R$") ~ "reverse_scored_item",
+    str_detect(item_suffix, "(?i)prolific") ~ "prolific_metadata",
     str_detect(scale_prefix, "(?i)flag") ~ "data_screen_flags",
     num_item ~ "item",
     !is.na(item_suffix) & !num_item & var_class != "character" ~ "subscale",
@@ -348,10 +349,14 @@ f_varname <- c(value_between(chr_col_names, "Demo_gender", "ResourceHelp_9"),
                value_between(chr_col_names, "ContentHelp_1", "ContentHelp_12"), 
                value_between(chr_col_names, "Languishing_1", "Document_Tools_7"), 
                value_between(chr_col_names, "Document_Freq", "Document_Benefits_11"), 
-               value_between(chr_col_names, "Sex_prolific", "SWLS_tot_f"))
+               value_between(chr_col_names, "Sex_prolific", "SWLS_tot_f"), "Status_prolific", "Fluent.languages_prolific")
 
 # recode them as factors
 ltaw_df_rc <- as_factor_same(ltaw_df, f_varname)
+
+# check remaining character variables
+org_varname(ltaw_df_rc) %>%
+  filter(var_class == "character")
 ```
 
 ## recode integer to factor 
@@ -411,7 +416,7 @@ ltaw_rn_sum %>% gt()
 ```{r}
 # extract variables related to content recommendation and goal-setting
 content_rec_varname_raw <- value_between(ltaw_rn_sum$var_name, "resourcehelp_01", "contenthelp_12_text")
-content_rec_varname <- c(value_between(ltaw_rn_sum$var_name, "promptgoal_confirm", "promptgoal_time_click_count"), "resourcehelp_09_text", "contenthelp_12_text")
+content_rec_varname <- c("resourcehelp_09_text", "contenthelp_12_text")
 
 # extract variables related to value prop
 value_prop_varname_raw <- value_between(ltaw_rn_sum$var_name, "languishing_01", "document_benefits_11")
