@@ -964,6 +964,11 @@ value prop _5 (VP5_hearing_stories_feels), _6 (VP6_sharing_stories_feels), _8 (V
 ```{r}
 survey_comb_r <- survey_catvar_r %>%
    mutate(
+          ValueProp_3_combine = case_when(
+            rowSums(!is.na(select(., ValueProp_3_1:ValueProp_3_9))) == 0 ~ NA_character_,
+            rowSums(!is.na(select(., ValueProp_3_1:ValueProp_3_9))) == 1 ~ as.character(do.call(coalesce, select(., ValueProp_5_1:ValueProp_5_9))),
+            rowSums(!is.na(select(., ValueProp_3_1:ValueProp_3_9))) > 1 ~ "multiple"), 
+          
           ValueProp_5_combine = case_when(
             rowSums(!is.na(select(., ValueProp_5_1:ValueProp_5_9))) == 0 ~ NA_character_,
             rowSums(!is.na(select(., ValueProp_5_1:ValueProp_5_9))) == 1 ~ as.character(do.call(coalesce, select(., ValueProp_5_1:ValueProp_5_9))),
@@ -985,6 +990,7 @@ survey_comb_r <- survey_catvar_r %>%
             rowSums(!is.na(select(., ValueProp_10_1:ValueProp_10_10))) > 1 ~ "multiple"))
 
 
+attr(survey_comb_r$ValueProp_3_combine, "label") <- "coalesced responses of the question 'How do you engage in self-reflection? '"
 attr(survey_comb_r$ValueProp_5_combine, "label") <- "coalesced responses of the question 'Hearing the stories of others would make me feel: '"
 attr(survey_comb_r$ValueProp_6_combine, "label") <- "coalesced responses of the question 'Sharing my own story in a secure place as a means to self-reflect would make me feel:'"
 attr(survey_comb_r$ValueProp_8_combine, "label") <- "coalesced responses of the question 'I would like to hear stories from individuals'"
@@ -1227,10 +1233,10 @@ surveys_scored <- surveys_scored %>%
 
 # export cleaned/scored dataset
 ```{r b_edit}
-#surveys_scored_dict <- create_dictionary(surveys_scored, remove_repeated = F, use_references = F)
+surveys_scored_dict <- create_dictionary(surveys_scored, remove_repeated = F, use_references = F)
 
-#write.csv(surveys_scored, here("outputs", "prolific_prompt_data_scored.csv"), row.names = F)
-#write.csv(surveys_scored_dict, here("outputs", "prolific_prompt_data_scored_dict.csv"), row.names = F)
+write.csv(surveys_scored, here("outputs", "prolific_prompt_data_scored.csv"), row.names = F)
+write.csv(surveys_scored_dict, here("outputs", "prolific_prompt_data_scored_dict.csv"), row.names = F)
 
 
 #write.csv(surveys_scored, "/Users/kristina/Documents/Surveys/NEW /DONE/00_DATA MACHINE/Prolific Promp Language Study/survey/01_cleaning_scoring/outputs/prolific_prompt_language_survey_cleaned_scored.csv", row.names = F)
