@@ -360,6 +360,9 @@ attr(prolific2_merge$prolific_nowebsite, "label") <- "TRUE if the participant wa
 
 
 ```{r}
+prolific1_merge <- prolific1_merge %>%mutate(survey_part = "part_01")
+prolific2_merge <- prolific2_merge %>%mutate(survey_part = "part_02")
+
 prolific_tidy_merge <- rbind(prolific1_merge, prolific2_merge)
 #write.csv(prolific_tidy_merge, here("outputs", "prolific_tidy_merge.csv"), row.names = F)
 ```
