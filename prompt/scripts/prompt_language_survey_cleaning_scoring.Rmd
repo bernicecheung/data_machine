@@ -358,6 +358,13 @@ attr(prolific2_merge$status_prolific_varify, "label") <- "varified status from c
 attr(prolific2_merge$prolific_nowebsite, "label") <- "TRUE if the participant was recorded in the Prolific API dataset but not in the Prolific website dataset"
 ```
 
+
+```{r}
+prolific_tidy_merge <- rbind(prolific1_merge, prolific2_merge)
+#write.csv(prolific_tidy_merge, here("outputs", "prolific_tidy_merge.csv"), row.names = F)
+```
+
+
 Number of participants in Prolific dataset but not in the survey dataset: [23]
 Among them, [0] was approved on Prolific[see userID below]: 
 ```{r}
