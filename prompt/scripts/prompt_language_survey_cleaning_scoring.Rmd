@@ -808,6 +808,47 @@ attr(survey1_tidy$flag_rec_include, "label") <- "TRUE if WB team recommend to in
 - is the most completed survey if there were duplicates. "
 ```
 
+check duplicated subjects in recommended observations
+```{r}
+(survey1_dup_rec <- survey1_tidy %>%
+  filter(flag_rec_include == TRUE) %>%
+  filter(duplicated(userid) | duplicated(userid, fromLast = TRUE)) %>%
+  select(userid, flag_rec_include, flag_most_complete_survey, Progress, Duration__in_seconds_, RecordedDate) %>%
+  arrange(userid))
+
+survey1_dup_rec_id <- unique(survey1_dup_rec$userid)
+```
+
+only mark as recommended inclusion for the first attempt
+
+```{r}
+# add a column indicating the order of survey attempts
+survey1_attempts <- survey1_screen %>%
+  mutate(RecordedDate = as.POSIXct(RecordedDate, format="%Y-%m-%d %H:%M:%S", tz="UTC")) %>%
+  arrange(userid, RecordedDate) %>%
+  group_by(userid) %>%
+  mutate(attempt_order = row_number()) %>%
+  ungroup()
+
+attr(survey1_attempts$attempt_order, "label") <- "The number represent the order of the recorded survey for participants who conducted the survey multiple times"
+```
+
+```{r}
+
+survey1_tidy <- survey1_attempts %>%
+  mutate(flag_rec_include = case_when(flag_most_complete_survey != FALSE & flag_no_survey == FALSE & flag_failed_attention_n != 2 ~ TRUE,
+                                      TRUE ~ FALSE)) %>%
+  mutate(flag_rec_include = case_when(userid %in% survey1_dup_rec_id & attempt_order > 1 ~ FALSE,
+                                      TRUE ~ flag_rec_include))
+
+table(survey1_tidy$flag_rec_include, useNA = "ifany")
+
+# add label
+attr(survey1_tidy$flag_rec_include, "label") <- "TRUE if WB team recommend to include this observation. Criteria include:- at least some survey data
+- did not fail both attention check questions 
+- is the most completed survey if there were duplicates. "
+```
+
 
 ### part 2
 
@@ -824,8 +865,53 @@ table(survey2_tidy$flag_rec_include, useNA = "ifany")
 
 attr(survey2_tidy$flag_rec_include, "label") <- "TRUE if WB team recommend to include this observation. Criteria include:- at least some survey data
 - did not fail both attention check questions 
-- is the most completed survey if there were duplicates. "
+- is the most completed survey if there were duplicates. 
+- if the completion rate were identical across duplicates, the first one will be recommended"
 ```
+
+check duplicated subjects in recommended observations
+```{r}
+(survey2_dup_rec <- survey2_tidy %>%
+  filter(flag_rec_include == TRUE) %>%
+  filter(duplicated(userid) | duplicated(userid, fromLast = TRUE)) %>%
+  select(userid, flag_rec_include, flag_most_complete_survey, Progress, Duration__in_seconds_, RecordedDate) %>%
+  arrange(userid))
+
+survey2_dup_rec_id <- unique(survey2_dup_rec$userid)
+```
+
+only mark as recommended inclusion for the first attempt
+
+```{r}
+# add a column indicating the order of survey attempts
+survey2_attempts <- survey2_screen %>%
+  mutate(RecordedDate = as.POSIXct(RecordedDate, format="%Y-%m-%d %H:%M:%S", tz="UTC")) %>%
+  arrange(userid, RecordedDate) %>%
+  group_by(userid) %>%
+  mutate(attempt_order = row_number()) %>%
+  ungroup()
+
+attr(survey2_attempts$attempt_order, "label") <- "The number represent the order of the recorded survey for participants who conducted the survey multiple times"
+```
+
+```{r}
+survey2_tidy <- survey2_attempts %>%
+  mutate(flag_rec_include = case_when(flag_most_complete_survey != FALSE & flag_no_survey == FALSE ~ TRUE,
+                                      TRUE ~ FALSE)) %>%
+  mutate(flag_rec_include = case_when(userid %in% survey2_dup_rec_id & attempt_order > 1 ~ FALSE,
+                                      TRUE ~ flag_rec_include))
+
+table(survey2_tidy$flag_rec_include, useNA = "ifany")
+
+# add label
+attr(survey2_tidy$flag_rec_include, "label") <- "TRUE if WB team recommend to include this observation. Criteria include:- at least some survey data
+- did not fail both attention check questions 
+- is the most completed survey if there were duplicates. 
+- if the completion rate were identical across duplicates, the first one will be recommended"
+```
+
+
+
 KRISTINA STOPPED HERE
 # Summarize qualtrics completion info {.tabset}
 ## part 1 
@@ -909,6 +995,11 @@ survey_tidy <- survey_tidy %>%
     ends_with('_prolific'), .after = Study_Feedback)
 
 attr(survey_tidy$flag_both_parts,"label") <- "TRUE if this person participanted both parts of the study"
+```
+```{r}
+# export cleaned data
+#write.csv(survey1_tidy, here("outputs", "survey1_tidy.csv"), row.names = F)
+#write.csv(survey2_tidy, here("outputs", "survey2_tidy.csv"), row.names = F)
 ```
 
 
@@ -1238,8 +1329,8 @@ surveys_scored <- surveys_scored %>%
 ```{r b_edit}
 surveys_scored_dict <- create_dictionary(surveys_scored, remove_repeated = F, use_references = F)
 
-write.csv(surveys_scored, here("outputs", "prolific_prompt_data_scored.csv"), row.names = F)
-write.csv(surveys_scored_dict, here("outputs", "prolific_prompt_data_scored_dict.csv"), row.names = F)
+#write.csv(surveys_scored, here("outputs", "prolific_prompt_data_scored.csv"), row.names = F)
+#write.csv(surveys_scored_dict, here("outputs", "prolific_prompt_data_scored_dict.csv"), row.names = F)
 
 
 #write.csv(surveys_scored, "/Users/kristina/Documents/Surveys/NEW /DONE/00_DATA MACHINE/Prolific Promp Language Study/survey/01_cleaning_scoring/outputs/prolific_prompt_language_survey_cleaned_scored.csv", row.names = F)
