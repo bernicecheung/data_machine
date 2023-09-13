@@ -1,0 +1,248 @@
+---
+title: "prompt_language_moment_cleaning"
+author: "Bernice Cheung"
+date: "2023-09-13"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Prepping {.tabset}
+
+## load libraries
+```{r libraries}
+library(tidyverse)
+library(here)
+library(psych)
+library(janitor)
+library(broom)
+library(gt)
+library(gtsummary)
+library(dplyr)
+```
+
+## load dataset
+
+```{r}
+# moment data
+moments <- read.csv(here("inputs", "moment_transcriptions_full_230720.csv"))
+
+# mapping file
+moment_mapping_1 <- read.csv(here("inputs", "prompts_mapping.csv"))
+moment_mapping_2 <- read.csv(here("inputs", "prompts_part2_mapping.csv"))
+
+# prolific data
+prolific_df <- read.csv(here("outputs", "prolific_tidy_merge.csv"))
+```
+
+# data cleaning
+
+## tidy moment dataset
+```{r}
+moments_tidy <- moments %>%
+  separate(name, into = c("userid", "itemid"), sep = "_", extra = "merge") %>% #seperate the name column into userid & itemid by the first "_"
+  filter(str_detect(userid, "^[0-9]")) %>% # exclude testing cases by filtering only userid that starts with numbers
+    filter(nchar(userid) > 5) %>% # remove test responses
+  filter(str_detect(itemid, "^(prompt|Prompt)")) %>% # include rows that has itemid starting with prompt
+  select(-c(description, ip)) %>% #remove empty & identifiable variables
+  rename(duration_moment = duration,
+         created_at_moment = created_at)
+```
+
+## merge moment prompt
+```{r}
+# merge the two mapping datasets
+moment_mapping_1 <- moment_mapping_1 %>% mutate(survey_part = "part_01")
+moment_mapping_2 <- moment_mapping_2 %>% mutate(survey_part = "part_02")
+moment_mapping_merge <- rbind(moment_mapping_1, moment_mapping_2)
+
+# merge with moment data
+moments_map_df <- moments_tidy %>%
+  left_join(moment_mapping_merge, by = c("itemid" = "item_ID"))
+```
+
+
+## merge with prolific data
+```{r}
+moments_merge <- moments_map_df %>%
+  left_join(select(prolific_df, userid, survey_part, status_prolific_varify), by = c("userid", "survey_part")) 
+```
+
+# data screening {.tabset}
+
+## exclude observations with revoked consent
+(278 observations) from users are excluded from the dataset (120 participants) due to revoked consent.
+```{r}
+moments_consent <- moments_merge %>%
+  replace_na(list(status_prolific_varify = "TIMEOUT")) %>% # replace "TIMEDOUT"
+  filter(!status_prolific_varify == "RETURNED") # exclude observation with returned(revoked) consent 
+
+moments_remove <- moments_merge %>% filter(status_prolific_varify == "RETURNED")
+uni_exclude_id <- length(unique(moments_remove$userid))
+
+# Make sure participants who requested to have their data withdrawn are not in the dataset (see tracking sheet)
+moments_consent = moments_consent %>%
+  filter(!userid == "5ff5f7ad932d56101bf7c90d")
+moments_consent = moments_consent %>%
+  filter(!userid == "60fcfbb717597fae78b71eaf")
+moments_consent = moments_consent %>%
+  filter(!userid == "62b07ac53b83bf0683eda6b6")
+
+```
+
+## screen for valid moment
+
+moments are screened based on item type and duration.
+`flag_invalid_moment`= TRUE if either the duration is none or the item type is PromptTest
+`flag_invalid_moment`= FALSE for all other moments
+```{r}
+moments_valid <- moments_consent %>%
+  mutate(flag_invalid_moment = case_when(duration_moment == "none" | itemid == "PromptTest" ~ TRUE,
+                                  TRUE ~ FALSE))
+
+table(moments_valid$flag_invalid_moment, useNA = "ifany")
+attr(moments_valid$flag_invalid_moment, "label") <- "TRUE if either the duration is none or the item type is PromptTest"
+```
+
+## screen for duplicates
+
+moments are screened based on duplicated item type within each participants.  
+`flag_dup_moment`= TRUE if there are more than one identical item type within a userid (all duplicated moments are marked)
+`flag_dup_moment`= NA if the moments are invalid 
+`flag_dup_moment`= FALSE for all other moments.  
+
+*In this particular study, participants were randomly presented with a subset (1/5 Narrative, 5/15 Well-being) of a larger pool of possible prompt options + 1 Goal prompt*, so it is possible that even though they accessed the study at multiple points, they did not complete the same prompt(s) twice due to randomization. Because of this, we flag only duplicated itemid's as dupes within a given participant. We retain all duplicated data and flag each response.
+
+```{r k_edit}
+moments_dup <- moments_valid %>%
+  group_by(userid) %>%
+  mutate(flag_dup_moment = case_when(flag_invalid_moment == TRUE ~ NA, 
+                                     is_duplicate = duplicated(itemid) | duplicated(itemid, fromLast = TRUE) ~ TRUE, 
+                                     TRUE ~ FALSE)) %>%
+  ungroup()
+
+table(moments_dup$flag_dup_moment, useNA = "ifany")
+
+# store the cleaned dataset
+moments_clean <- moments_dup
+
+attr(moments_clean, "label") <- "TRUE if there are more than one identical item type within a userid (all duplicated moments are marked); NA if the moments are invalid "
+```
+
+# Summary {.tabset}
+
+## by prompt 
+```{r}
+moments_clean %>%
+  filter(flag_invalid_moment == FALSE) %>%
+  group_by(itemid) %>%
+  dplyr::summarize(total_valid_moments = n())
+```
+
+## by prompt category
+*NOTE: theres probably an easier way to do this where we have some larger prompt library sheet where all of these categories/labels are pre-defined, then we can read that in here and merge by itemid -- but for now, its done manually using the study outline*
+```{r}
+#prompts 1-4 = wellbeing #prompt 11 = wellbeing
+#prompts 5-6 = non-reflective
+#prompts 7-9 = intervention: _solutions_problems, _reframing, _strengths
+#prompt 10 = open ended #prompt 15 = open ended
+#prompt 12 & 13 = desired insights
+#prompt 14 = goals
+
+
+moments_clean$prompt_category <- ifelse(grepl("Prompt_1_|Prompt_2_|Prompt_3_|Prompt_4_|Prompt_11", moments_clean$itemid), "Well-being", "") 
+moments_clean$prompt_category <- ifelse(grepl("Prompt_5_|Prompt_6_", moments_clean$itemid), "Non-reflective", moments_clean$prompt_category) 
+moments_clean$prompt_category <- ifelse(grepl("Prompt_7_", moments_clean$itemid), "Intervention_solutions_problems", moments_clean$prompt_category) 
+moments_clean$prompt_category <- ifelse(grepl("Prompt_8_", moments_clean$itemid), "Intervention_reframing", moments_clean$prompt_category) 
+moments_clean$prompt_category <- ifelse(grepl("Prompt_9_", moments_clean$itemid), "Intervention_strengths", moments_clean$prompt_category) 
+
+moments_clean$prompt_category <- ifelse(grepl("Prompt_10|Prompt_15", moments_clean$itemid), "Open ended", moments_clean$prompt_category) 
+moments_clean$prompt_category <- ifelse(grepl("Prompt_12_|Prompt_13", moments_clean$itemid), "Desired Insights", moments_clean$prompt_category) 
+moments_clean$prompt_category <- ifelse(grepl("Prompt_14_", moments_clean$itemid), "Goals", moments_clean$prompt_category) 
+moments_clean$prompt_category <- ifelse(grepl("PromptTest", moments_clean$itemid), "Test", moments_clean$prompt_category) 
+
+
+moments_clean %>%
+  filter(flag_invalid_moment == FALSE) %>%
+  group_by(prompt_category) %>%
+  dplyr::summarize(total_valid_moments = n())
+
+```
+
+## by prompt construct
+```{r}
+
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_1_", moments_clean$itemid), "awareness", "") 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_2_", moments_clean$itemid), "insight", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_3_", moments_clean$itemid), "purpose", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_4_", moments_clean$itemid), "connection", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_5_", moments_clean$itemid), "info-gathering", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_6_", moments_clean$itemid), "fun", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_7_1", moments_clean$itemid), "problem focused", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_7_2|Prompt_7_3", moments_clean$itemid), "solution focused", moments_clean$prompt_construct) 
+
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_8_1", moments_clean$itemid), "problem solving", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_8_2", moments_clean$itemid), "redemption", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_8_3", moments_clean$itemid), "agency", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_8_4", moments_clean$itemid), "exception", moments_clean$prompt_construct) 
+
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_9_", moments_clean$itemid), "strengths", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_10|Prompt_15", moments_clean$itemid), "open ended", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_11", moments_clean$itemid), "self-insight", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_12_", moments_clean$itemid), "desired insights", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_13", moments_clean$itemid), "desired insights benefit", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("PromptTest", moments_clean$itemid), "Test", moments_clean$prompt_construct) 
+moments_clean$prompt_construct <- ifelse(grepl("Prompt_14_", moments_clean$itemid), "Goals", moments_clean$prompt_construct) 
+
+
+
+moments_clean %>%
+  filter(flag_invalid_moment == FALSE) %>%
+  group_by(prompt_construct) %>%
+  dplyr::summarize(total_valid_moments = n())
+
+```
+
+## by prompt framing (language)
+```{r}
+moments_clean$prompt_framing <- ifelse(grepl("_1A", moments_clean$itemid), "open", "") 
+moments_clean$prompt_framing <- ifelse(grepl("_1B", moments_clean$itemid), "closed", moments_clean$prompt_framing) 
+moments_clean$prompt_framing <- ifelse(grepl("_2A", moments_clean$itemid), "positive", moments_clean$prompt_framing) 
+moments_clean$prompt_framing <- ifelse(grepl("_2B", moments_clean$itemid), "negative", moments_clean$prompt_framing) 
+moments_clean$prompt_framing <- ifelse(grepl("_3A", moments_clean$itemid), "temporal orientation", moments_clean$prompt_framing) 
+moments_clean$prompt_framing <- ifelse(grepl("_3B", moments_clean$itemid), "non-temporal", moments_clean$prompt_framing) 
+```
+
+# organize moment data
+```{r}
+moments_org <- moments_clean %>%
+  mutate(prompt_framing = case_when(prompt_framing == "" ~ NA,
+                                    TRUE ~ prompt_framing), 
+         survey_name = "prolific prompt language") %>%
+  select(userid, prompt_idx = itemid, prompt_text, transcript, duration_moment, number_of_words, words_per_minute, prompt_category, prompt_construct, prompt_framing, flag_invalid_moment, flag_dup_moment, survey_name, survey_part, uuid, created_at_moment, mp3_url, recorded_from, app_uuid)
+```
+
+```{r}
+
+prompt_df <- moments_org %>%
+  select(prompt_idx, prompt_category,prompt_construct, prompt_framing, prompt_text) %>%
+  unique() %>%
+  filter(!prompt_category == "Test") %>%
+  arrange(prompt_category) %>%
+  mutate(prompt_id = sprintf("prompt_%02d", row_number())) %>% #probably need to change this, starts at 1
+  mutate(prompt_study = TRUE)
+
+```
+
+```{r}
+#write.csv(moments_org, here("outputs", "prompt_language_moment_clean.csv"), row.names = F)
+#write.csv(prompt_df, here("outputs", "prompt_moment_dict.csv"), row.names = F)
+```
+
