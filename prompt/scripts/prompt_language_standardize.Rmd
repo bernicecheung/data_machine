@@ -42,7 +42,7 @@ library(dplyr)
 ```{r}
 # load cleaned datasets
 prompt_df <- read.csv(here("outputs", "prolific_prompt_data_scored.csv"))
-
+prompt_df_dic <- read.csv(here("outputs", "prolific_prompt_data_scored_dict.csv"))
 # load item variable dictionary
 #varname_dic <- read.csv(here("outputs", "varname_dic_030823.csv"))
 
@@ -293,36 +293,27 @@ std_demo_level <- function(df, demo_dic) {
 
 ## factor_summary
 ```{r}
-factor_summary <- function(df, varname_sum){
-  
-  # extract factor name
-  factor_var_df <- varname_sum %>%
-  filter(var_class == "factor") %>%
-  filter(!str_detect(var_name, "demo_"))
-
-  factor_varname <- factor_var_df$var_name
+factor_summary <- function(df, varname_factor){
   
   # extract factor data
   factor_df <- df %>%
-  select(one_of(factor_varname))
+  select(all_of(varname_factor))
 
   # extract levels and their total number
   factor_levels <- sapply(factor_df, levels)
   factor_levels_n <- sapply(factor_levels, length)
   
-   factor_levels_df <- map_dfr(names(factor_levels), ~ data.frame(var_name = .x, levels = unlist(factor_levels[[.x]]))) %>%
-    nest(factor_levels = c(levels), .by = var_name, .key = "demo_level_name")
+  # organize factor levels into a dataframe with level index
+  factor_levels_df <- map_dfr(names(factor_levels), ~ data.frame(var_name = .x, levels = unlist(factor_levels[[.x]]))) %>%
+    group_by(var_name) %>%
+    mutate(level_idx = row_number())
   
-  # combine
-  factor_sum <- data.frame("var_name" = factor_var_df$var_name, 
-                                 "factor_levels_n" = factor_levels_n) %>%
-    left_join(factor_levels_df, by = "var_name")
-  
-  return(factor_sum)
+  return(factor_levels_df)
   
 }
 
 ```
+
 
 # A summery of orignal variable names
 
@@ -353,17 +344,19 @@ f_varname <- c(value_between(chr_col_names, "Demo_gender", "VIS_Strengths"),
                value_between(chr_col_names, "ValueProp_4", "ValueProp_5_9"), 
                value_between(chr_col_names, "ValueProp_6_1", "ValueProp_6_10"), 
                value_between(chr_col_names, "ValueProp_7", "ValueProp_8_3"), 
-               value_between(chr_col_names, "ValueProp_9", "ValueProp_10_10"), 
-               value_between(chr_col_names, "Sex_prolific", "P4.3"),
-               value_between(chr_col_names, "status_prolific_api", "SWLS_tot_f"),"Fluent.languages_prolific")
+               value_between(chr_col_names, "ValueProp_10_1", "ValueProp_10_10"), 
+               value_between(chr_col_names, "Sex_prolific", "Employment.status_prolific"),
+               value_between(chr_col_names, "status_prolific_api", "SWLS_tot_f"))
 
 # recode them as factors
 prompt_df_rc <- as_factor_same(prompt_df, f_varname)
 
 # check remaining character variables
 org_varname(prompt_df_rc) %>%
-  filter(var_class == "character")
+  filter(var_class == "character") %>%
+  gt()
 ```
+
 
 ## recode integer to factor 
 ```{r}
@@ -390,20 +383,46 @@ prompt_df_rc_bool <- prompt_df_rc_corr %>%
 
 # check all variable class
 org_varname(prompt_df_rc_bool) %>%
+  filter(var_class == "integer") %>%
   gt()
 ```
+
+## change booleans to character
+
+Empty character variables will automatically transformed into a logic. 
+```{r}
+# check all boolean variables
+prompt_b_df <- org_varname(prompt_df_rc_bool) %>%
+  filter(var_class == "logical")
+
+prompt_b_varname <- prompt_b_df$var_name
+  
+prompt_b_df %>%
+  gt(caption = "All boolean variables")
+
+# extract variable names that need to be change into other class
+empty_var <- prompt_b_varname[str_detect(prompt_b_varname, "thoughts")]
+
+prompt_df_rc_chr <- prompt_df_rc_bool %>%
+  mutate(across(all_of(empty_var), as.character))
+```
+
+
 
 # Standardize variable names
 
 ```{r}
 # rename variable according to the naming convention
-prompt_df_rn <- rename_var_std(prompt_df_rc_bool)
+prompt_df_rn <- rename_var_std(prompt_df_rc_chr)
 
 # create a summary table
 prompt_rn_sum <- org_varname(prompt_df_rn) %>%
-  mutate(ori_name = names(prompt_df_rc_bool))
+  mutate(ori_name = names(prompt_df_rc_chr))
 
 prompt_rn_sum %>% gt()
+
+# chanage the class for recordeddate
+prompt_rn_sum$var_class[which(prompt_rn_sum$var_name == "recordeddate")] <- "date_time"
 ```
 
 # change item type
@@ -411,17 +430,21 @@ prompt_rn_sum %>% gt()
 #metadata variables 
 meta_var <-c("survey_part", "duration__in_seconds_")
 
+# value prop option variables
+vp_option_var <- c(sprintf("valueprop_03_%02d", seq(1, 9)), sprintf("valueprop_05_%02d", seq(1, 9)), sprintf("valueprop_06_%02d", seq(1, 10)), sprintf("valueprop_08_%02d", seq(1, 3)), sprintf("valueprop_10_%02d", seq(1, 10)))
 
 # adjust item type
 prompt_rn_sum_new <- prompt_rn_sum %>%
   mutate(item_type = case_when(
     var_name %in% meta_var ~ "metadata", 
-    str_detect(var_name, "demo_ethnicity_") ~ "demo_raw", 
+    str_detect(var_name, "demo_ethnicity_") ~ "demo_race_options", 
     var_name %in% c("pre_valence_01", "pre_arousal_01") ~ "pre_affect", 
     var_name %in% c("post_valence_01", "post_arousal_01") ~ "post_affect", 
+    var_name %in% vp_option_var ~ "value_prop_options",
     var_name == "vis_strengths" ~ "strength_item", 
     var_name == "study_feedback" ~ "feedback",
     var_name == "prolific_nowebsite" ~ "prolific_metadata", 
+    var_name == "attempt_order" ~ "metadata", 
     var_name == "sfi_goal_orientation_tot" ~ "subscale", 
     str_detect(var_name, "goal") ~ "goal_item", 
     str_detect(var_name, "valueprop") ~ "value_prop", 
@@ -439,26 +462,58 @@ prompt_rn_sum_new %>%
   gt(caption = "Prolific Prompt Study Standardized Variable Name Summary")
 ```
 
-# create a dictionary for all categorical variables
+# create a dictionary for all factors
 
 ```{r}
-# extract categorical variables(factors and booleans)
-varname_cat_df <- prompt_rn_sum_new %>%
-  filter(var_class %in% c("factor", "logical"))
+# extract factor variables
+varname_df_f <- prompt_rn_sum_new %>%
+  filter(var_class %in% c("factor"))
 
-varname_cat <- varname_cat_df
+varname_f <- varname_df_f$var_name
+
+# organize factors and their levels into a dataframe
+factor_levels_df <- factor_summary(prompt_df_rn, varname_f)
 ```
 
+```{r}
+# merge variable summary with data dictionary
+prompt_std_dic <- prompt_df_dic %>%
+  full_join(prompt_rn_sum_new, by = c("variable" = "ori_name")) %>%
+  full_join(factor_levels_df, by = "var_name") %>%
+  filter(is.na(value) | (var_class == "integer" & !is.na(value))) %>%
+  select(var_name, var_class, item_type, label, value, levels, level_idx, ori_name = variable, scale_prefix, item_suffix)
+```
 
+## add session labels
+```{r}
+# load cleaned dataset for each session
+survey1_tidy <- read.csv(here("outputs", "survey1_tidy.csv"))
+survey2_tidy <- read.csv(here("outputs", "survey2_tidy.csv"))
 
+# extract varialbe names
+survey1_varname <- colnames(survey1_tidy)
+survey2_varname <- colnames(survey2_tidy)
+
+# variables unique to survey 1
+survey1_unique_var <- setdiff(survey1_varname, survey2_varname)
+survey2_unique_var <- setdiff(survey2_varname, survey1_varname)
+shared_var <- intersect(survey1_varname, survey2_varname)
+
+prompt_std_dic <- prompt_std_dic %>%
+  mutate(survey_part = case_when(ori_name %in% survey1_unique_var ~ "part_01", 
+                                 ori_name %in% survey2_unique_var ~ "part_02", 
+                                 ori_name %in% shared_var ~ "both",
+                                 TRUE ~ NA)) %>%
+  relocate(survey_part, .before = ori_name)
+```
 
 
 ```{r}
 # write outputs
 current_date <- format(Sys.Date(), "%d%m%y")
 
-#write.csv(prompt_df_rn, here("outputs", paste("prolific_prompt_df_std_", current_date, ".csv", sep = "")), row.names = F)
-#write.csv(prompt_rn_sum_new, here("outputs", paste("prolific_prompt_var_summary_", current_date, ".csv", sep = "")), row.names = F)
+write.csv(prompt_df_rn, here("outputs", paste("prolific_prompt_df_std_", current_date, ".csv", sep = "")), row.names = F)
+write.csv(prompt_std_dic, here("outputs", paste("prolific_prompt_codebook_", current_date, ".csv", sep = "")), row.names = F)
 #write.csv(demo_level_sum, here("outputs", paste("ltaw_demo_summary_", current_date, ".csv", sep = "")), row.names = F)
 
 ```
