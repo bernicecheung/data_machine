@@ -1,0 +1,67 @@
+---
+title: "prompt_language_data_transform"
+author: "Bernice Cheung"
+date: "2023-09-13"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Prepping {.tabset}
+
+## load libraries
+```{r libraries}
+library(tidyverse)
+library(here)
+library(psych)
+library(janitor)
+library(broom)
+library(gt)
+library(gtsummary)
+library(dplyr)
+```
+
+## load data
+```{r}
+# load cleaned datasets
+prompt_df <- read.csv(here("outputs", "prolific_prompt_df_std_120923.csv"))
+prompt_df_dict <- read.csv(here("outputs", "prolific_prompt_codebook_120923.csv"))
+```
+
+# Transform into long-format with only assigned prompts
+
+## transform prompt related variables
+
+```{r}
+# select relevant item type 
+select_item_type <- c("topic_label", "prompt_ratings", "prompt_thoughts", "prompt_feedback", "prompt_meta")
+
+# extract relevant variable name
+select_var_df <- prompt_df_dict %>% filter(item_type %in% select_item_type)
+select_var <- unique(select_var_df$var_name)
+```
+
+```{r}
+# transform into wide format
+prompt_df_1_l <- prompt_df %>%
+  filter(survey_part == "part_01") %>%
+  filter(flag_rec_include == TRUE) %>%
+  select(userid, all_of(select_var)) %>%
+  gather(variable, value, -userid) %>%
+  mutate(
+    prompt_idx = str_extract(variable, "(?<=prompt_)[0-9_]+[a-z]?"),
+    prompt_variable = str_replace_all(variable, "^prompt_[0-9_]+[a-z]?_", "")) %>%
+  mutate(
+    prompt_idx = ifelse(str_detect(prompt_idx, "_[a-z]$"), str_remove(prompt_idx, "_[a-z]$"), prompt_idx)) %>%
+  filter(!is.na(value)) %>%
+  select(-variable) %>%
+  spread(prompt_variable, value)
+```
+
