@@ -135,8 +135,6 @@ table(moments_dup$flag_dup_moment, useNA = "ifany")
 
 # store the cleaned dataset
 moments_clean <- moments_dup
-
-attr(moments_clean, "label") <- "TRUE if there are more than one identical item type within a userid (all duplicated moments are marked); NA if the moments are invalid "
 ```
 
 # Summary {.tabset}
