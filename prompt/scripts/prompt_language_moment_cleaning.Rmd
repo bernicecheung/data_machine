@@ -40,6 +40,9 @@ moment_mapping_2 <- read.csv(here("inputs", "prompts_part2_mapping.csv"))
 
 # prolific data
 prolific_df <- read.csv(here("outputs", "prolific_tidy_merge.csv"))
+
+# prompt dictionary
+prompt_dic <- read.csv(here("inputs", "prompt_dict.csv"))
 ```
 
 # data cleaning
@@ -228,6 +231,7 @@ moments_org <- moments_clean %>%
          survey_name = "prolific prompt language") %>%
   select(userid, prompt_idx = itemid, prompt_text, transcript, duration_moment, number_of_words, words_per_minute, prompt_category, prompt_construct, prompt_framing, flag_invalid_moment, flag_dup_moment, survey_name, survey_part, uuid, created_at_moment, mp3_url, recorded_from, app_uuid)
 ```
+
 
 ```{r}
 
