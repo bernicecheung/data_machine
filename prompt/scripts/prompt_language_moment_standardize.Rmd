@@ -189,3 +189,12 @@ prompt_std_dic$label[which(prompt_std_dic$var_name == "flag_dup_moment")] <- "TR
 prompt_std_dic$label[which(prompt_std_dic$var_name == "prompt_id")] <- "The prompt index from the prompt dictionary"
 ```
 
+```{r}
+# write outputs
+current_date <- format(Sys.Date(), "%d%m%y")
+
+#write.csv(prompt_df_rn, here("outputs", paste("prolific_prompt_moment_std_", current_date, ".csv", sep = "")), row.names = F)
+#write.csv(prompt_std_dic, here("outputs", paste("prolific_prompt_moment_codebook_", current_date, ".csv", sep = "")), row.names = F)
+#write.csv(demo_level_sum, here("outputs", paste("ltaw_demo_summary_", current_date, ".csv", sep = "")), row.names = F)
+
+```
