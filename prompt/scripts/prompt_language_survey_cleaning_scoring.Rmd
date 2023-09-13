@@ -240,6 +240,7 @@ prolific1_merge <- prolific1_api %>%
 table(prolific1_merge$status_prolific_varify, useNA = "ifany")
 
 #add labels
+attr(prolific1_merge$status_prolific_api, "label") <- "prolific status from the dataset extracted via API"
 attr(prolific1_merge$status_prolific_varify, "label") <- "varified status from cross referencing the status downloaded from Prolific website and API"
 attr(prolific1_merge$prolific_nowebsite, "label") <- "TRUE if the participant was recorded in the Prolific API dataset but not in the Prolific website dataset"
 ```
@@ -352,6 +353,7 @@ prolific2_merge <- prolific2_api %>%
 table(prolific2_merge$status_prolific_varify, useNA = "ifany")
 
 #add labels
+attr(prolific2_merge$status_prolific_api, "label") <- "prolific status from the dataset extracted via API"
 attr(prolific2_merge$status_prolific_varify, "label") <- "varified status from cross referencing the status downloaded from Prolific website and API"
 attr(prolific2_merge$prolific_nowebsite, "label") <- "TRUE if the participant was recorded in the Prolific API dataset but not in the Prolific website dataset"
 ```
@@ -699,6 +701,7 @@ describe(survey1_screen$max_identical_perc)
 
 attr(survey1_screen$max_identical, "label") <- "The number if identical survey responses in a seqeunce"
 attr(survey1_screen$max_identical_perc, "label") <- "The percentage of identical survey responses in a seqeunce out of all survey items"
+attr(survey1_screen$flag_identical_sequence, "label") <- "TRUE if more than 50% of survey responses had identical responses"
 ```
 #### part 2
 - highest percentage of identical sequential responses [56%]
