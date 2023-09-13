@@ -1,0 +1,191 @@
+---
+title: "prompt_language_moment_standardize"
+author: "Bernice Cheung"
+date: "2023-09-13"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Prepping {.tabset}
+
+## load libraries
+```{r libraries}
+library(tidyverse)
+library(here)
+library(psych)
+library(janitor)
+library(broom)
+library(gt)
+library(gtsummary)
+library(dplyr)
+```
+
+## load data
+```{r}
+# load cleaned datasets
+moment_df <- read.csv(here("outputs", "prompt_language_moment_clean.csv"))
+
+# load prompt dictionary
+prompt_dic <- read.csv(here("outputs", "prompt_moment_dict.csv"))
+```
+
+## org_varname function
+A function to organize variable names
+```{r}
+org_moment_varname <- function(dataframe){
+  scale_df <- data.frame("var_name" = colnames(dataframe), 
+                            "var_class" = sapply(dataframe, class)) %>%
+  separate(var_name, into = c("scale_prefix", "item_suffix"), sep = "_", remove = FALSE, extra = "merge") %>%
+  mutate(num_item = grepl("\\d", item_suffix))
+  
+  scale_df <- scale_df %>%
+  mutate(item_type = case_when(
+    str_detect(scale_prefix, "(?i)flag") ~ "data_screen_flags",
+    var_name %in% c("duration_moment", "number_of_words", "words_per_minute") ~ "moment_engagement", 
+    var_name == "transcript" ~ "moment",
+    str_detect(scale_prefix, "(?i)Prompt") ~ "prompt_meta",
+    var_name %in% c("prompt_category", "prompt_construct", "prompt_framing") ~ "prompt_character",
+    TRUE ~ "metadata"
+  ))
+  
+  return(select(scale_df, -num_item))
+}
+```
+
+## rename_match function
+
+A function to rename variable names based on the naming convention
+
+```{r}
+rename_var_std <- function(df) {
+  df %>%
+    #clean_names() %>% # use janitor::clean_names for a more thorough cleanup
+    rename_with(~ tolower(gsub(".", "_", .x, fixed = TRUE))) %>% # replace "." by "_" and change everything into lower case
+    rename_with(~ str_replace(., "(\\d+)", function(x) sprintf("%02d", as.numeric(x))), .cols = everything()) #add padding 0 to all numeric index
+}
+```
+
+## as_factor_same
+```{r}
+as_factor_same <- function(df, var_names){
+  df_f <- df %>%
+    mutate(across(var_names, ~as.factor(.)))
+  
+  return(df_f)
+}
+```
+
+## factor_summary
+```{r}
+factor_summary <- function(df, varname_factor){
+  
+  # extract factor data
+  factor_df <- df %>%
+  select(all_of(varname_factor))
+
+  # extract levels and their total number
+  factor_levels <- sapply(factor_df, levels)
+  factor_levels_n <- sapply(factor_levels, length)
+  
+  # organize factor levels into a dataframe with level index
+  factor_levels_df <- map_dfr(names(factor_levels), ~ data.frame(var_name = .x, levels = unlist(factor_levels[[.x]]))) %>%
+    group_by(var_name) %>%
+    mutate(level_idx = row_number())
+  
+  return(factor_levels_df)
+  
+}
+
+```
+
+# add prompt_id 
+merge prompt id from the prompt dictionary
+```{r}
+moment_df_merge <- moment_df %>%
+  left_join(select(prompt_dic, prompt_idx, prompt_id), by = "prompt_idx")
+```
+
+# A summery of orignal variable names
+
+```{r}
+ori_varname <- org_moment_varname(moment_df_merge)
+
+ori_varname %>%
+  gt(caption = "Prolific Prompt Language Original Variables")
+
+ori_var <- ori_varname$var_name
+```
+
+# change item class
+
+```{r}
+# transform duration into numeric 
+prompt_df_rc <- moment_df_merge %>%
+  mutate(duration_moment = ifelse(duration_moment == "none", NA, duration_moment), 
+         duration_moment = as.numeric(duration_moment), 
+         words_per_minute = ifelse(words_per_minute == "none", NA, words_per_minute), 
+         words_per_minute = as.numeric(words_per_minute))
+
+# change moment character variables into factors
+f_name<- c("prompt_category", "prompt_construct", "prompt_framing")
+# recode them as factors
+prompt_df_rc <- as_factor_same(prompt_df_rc, f_name)
+
+# check remaining character variables
+org_moment_varname(prompt_df_rc) %>%
+  filter(var_class == "character") %>%
+  gt()
+```
+
+## standardize variable names & prompt_idx
+```{r}
+# rename variable according to the naming convention
+prompt_df_rn <- rename_var_std(prompt_df_rc) %>%
+  mutate(prompt_idx = str_replace_all(prompt_idx, "Prompt_", "")) %>%
+  mutate(prompt_idx = str_replace_all(prompt_idx, "(?<=^|_)([0-9]{1}(?=[^0-9]|$))", "0\\1")) %>%
+  mutate(prompt_idx = tolower(prompt_idx))
+
+prompt_df_rn_sum <- org_moment_varname(prompt_df_rn) %>%
+    mutate(ori_var = ori_var) 
+
+
+prompt_df_rn_sum %>%
+  gt()
+```
+
+# create a moment_codebook
+
+## summarize factor
+```{r}
+# organize factors and their levels into a dataframe
+factor_levels_df <- factor_summary(prompt_df_rn, f_name)
+```
+
+```{r}
+# merge variable summary with data dictionary
+prompt_std_dic <- prompt_df_rn_sum %>%
+  full_join(factor_levels_df, by = "var_name") %>%
+  mutate(label = NA,
+         data_source = "moment_transcript") %>%
+  select(var_name, var_class, item_type, label, levels, level_idx, ori_name = ori_var, data_source, scale_prefix, item_suffix)
+```
+
+```{r}
+# add some labels
+prompt_std_dic$label[which(prompt_std_dic$var_name == "userid")] <- "User IDs that can be used for data merging"
+prompt_std_dic$label[which(prompt_std_dic$var_name == "prompt_idx")] <- "The prompt index created specifically for the prompt language study"
+prompt_std_dic$label[which(prompt_std_dic$var_name == "prompt_text")] <- "The prompt given to the participants"
+prompt_std_dic$label[which(prompt_std_dic$var_name == "transcript")] <- "transcription of the moment data"
+prompt_std_dic$label[which(prompt_std_dic$var_name == "flag_invalid_moment")] <- "TRUE if either the duration is none or the item type is PromptTest"
+prompt_std_dic$label[which(prompt_std_dic$var_name == "flag_dup_moment")] <- "TRUE if there are more than one identical item type within a userid (all duplicated moments are marked); NA if the moments are invalid"
+prompt_std_dic$label[which(prompt_std_dic$var_name == "prompt_id")] <- "The prompt index from the prompt dictionary"
+```
+
